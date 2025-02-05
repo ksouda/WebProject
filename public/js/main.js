@@ -1,10 +1,3 @@
-/**
-* Template Name: Arsha
-* Template URL: https://bootstrapmade.com/arsha-free-bootstrap-html-template-corporate/
-* Updated: Aug 07 2024 with Bootstrap v5.3.3
-* Author: BootstrapMade.com
-* License: https://bootstrapmade.com/license/
-*/
 
 (function() {
   "use strict";
@@ -47,18 +40,6 @@
   });
 
   /**
-   * Toggle mobile nav dropdowns
-   */
-  document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
-    navmenu.addEventListener('click', function(e) {
-      e.preventDefault();
-      this.parentNode.classList.toggle('active');
-      this.parentNode.nextElementSibling.classList.toggle('dropdown-active');
-      e.stopImmediatePropagation();
-    });
-  });
-
-  /**
    * Preloader
    */
   const preloader = document.querySelector('#preloader');
@@ -94,10 +75,11 @@
    */
   function aosInit() {
     AOS.init({
-      duration: 600,
+      duration: 1000,
       easing: 'ease-in-out',
       once: true,
-      mirror: false
+      mirror: false,
+      offset: 100
     });
   }
   window.addEventListener('load', aosInit);
@@ -127,64 +109,6 @@
   }
 
   window.addEventListener("load", initSwiper);
-
-  /**
-   * Animate the skills items on reveal
-   */
-  document.addEventListener('DOMContentLoaded', function () {
-    // Assurez-vous que l'élément de la barre de progression est déjà chargé avant d'ajouter l'animation
-    let skillsAnimation = document.querySelectorAll('.skills-animation');
-  
-    skillsAnimation.forEach((item) => {
-      new Waypoint({
-        element: item,
-        offset: '80%',  // Ajuste cet offset si tu souhaites un autre déclenchement de l'animation
-        handler: function (direction) {
-          let progress = item.querySelectorAll('.progress .progress-bar');
-          progress.forEach(el => {
-            // Ajouter une animation de transition
-            el.style.transition = 'width 1s ease';
-            el.style.width = el.getAttribute('aria-valuenow') + '%';
-          });
-        }
-      });
-    });
-    
-  });
-
-  /**
-   * Init isotope layout and filters
-   */
-  document.querySelectorAll('.isotope-layout').forEach(function(isotopeItem) {
-    let layout = isotopeItem.getAttribute('data-layout') ?? 'masonry';
-    let filter = isotopeItem.getAttribute('data-default-filter') ?? '*';
-    let sort = isotopeItem.getAttribute('data-sort') ?? 'original-order';
-
-    let initIsotope;
-    imagesLoaded(isotopeItem.querySelector('.isotope-container'), function() {
-      initIsotope = new Isotope(isotopeItem.querySelector('.isotope-container'), {
-        itemSelector: '.isotope-item',
-        layoutMode: layout,
-        filter: filter,
-        sortBy: sort
-      });
-    });
-
-    isotopeItem.querySelectorAll('.isotope-filters li').forEach(function(filters) {
-      filters.addEventListener('click', function() {
-        isotopeItem.querySelector('.isotope-filters .filter-active').classList.remove('filter-active');
-        this.classList.add('filter-active');
-        initIsotope.arrange({
-          filter: this.getAttribute('data-filter')
-        });
-        if (typeof aosInit === 'function') {
-          aosInit();
-        }
-      }, false);
-    });
-
-  });
-
   /**
    * Correct scrolling position upon page load for URLs containing hash links.
    */
@@ -296,6 +220,49 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
+window.addEventListener('scroll', function() {
+  AOS.refresh(); // Rafraîchit AOS lors du scroll
+});
+
+
+function showCategory(category) {
+  // Cacher les deux catégories (produits et matériaux)
+  let produits = document.getElementById('produits');
+  let materiaux = document.getElementById('materiaux');
+  
+  // Boutons des catégories
+  let produitsBtn = document.getElementById('btn-produits');
+  let materiauxBtn = document.getElementById('btn-materiaux');
+  
+  // Masquer les deux catégories
+  produits.style.display = 'none';
+  materiaux.style.display = 'none';
+  
+  // Réinitialiser les classes actives et inactives
+  produitsBtn.classList.remove('active');
+  produitsBtn.classList.add('inactive');
+  materiauxBtn.classList.remove('active');
+  materiauxBtn.classList.add('inactive');
+  
+  // Si on clique sur "Produits"
+  if (category === 'produits') {
+    produits.style.display = 'flex';  
+    produitsBtn.classList.add('active');  // Appliquer la classe active au bouton Produits
+    produitsBtn.classList.remove('inactive');  // Retirer la classe inactive du bouton Produits
+  } 
+  // Si on clique sur "Matériaux"
+  else if (category === 'materiaux') {
+    console.log("materiaux")
+    materiaux.style.display = 'flex';
+    materiauxBtn.classList.add('active');  // Appliquer la classe active au bouton Matériaux
+    materiauxBtn.classList.remove('inactive');  // Retirer la classe inactive du bouton Matériaux
+  }
+}
+
+// Afficher les produits par défaut au chargement
+document.addEventListener("DOMContentLoaded", function() {
+  showCategory('produits');  // Afficher Produits par défaut
+});
 
 
 

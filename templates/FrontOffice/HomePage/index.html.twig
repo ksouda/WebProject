@@ -1,6 +1,6 @@
 {% extends 'FrontOffice/HomePage/base.html.twig' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}EDAYETNA{% endblock %}
 
 {% block body %}
 
@@ -13,14 +13,14 @@
         <div class="row gy-4">
           <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
             <h1>L'Artisanat à Portée de Clic</h1>
-            <p>We are team of talented designers making websites with Bootstrap</p>
+            <p>Un Savoir-Faire Ancestral au Service de l'Avenir</p>
             <div class="d-flex">
-              <a href="#about" class="btn-get-started">Get started</a>
-              <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
+              <a href="#about" class="btn-get-started">C'est parti !</a>
+              <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Voir la vidéo</span></a>
             </div>
           </div>
           <div class="col-lg-6 order-1 order-lg-1 hero-img" data-aos="zoom-out" data-aos-delay="200">
-            <img src="img/hero.png" class="img-fluid animated" alt="">
+            <img src="{{asset('img/hero.png')}}" class="img-fluid animated" alt="">
           </div>
         </div>
       </div>
@@ -87,7 +87,7 @@
 
     </section><!-- /Clients Section -->
 
-    <!-- About Section -->
+    <!-- a propos de nous Section -->
     <section id="about" class="about section">
 
       <!-- Section Title -->
@@ -185,20 +185,20 @@
 
     </section><!-- /Why Us Section -->
 
-    <!-- Call To Action Section -->
+    <!-- Rejoignez nous Section -->
     <section id="call-to-action" class="call-to-action section dark-background">
 
-      <img src="img/cta-bg1.jpeg" alt="">
+      <img src="img/cta-bg.jpeg" alt="">
 
       <div class="container">
 
         <div class="row" data-aos="zoom-in" data-aos-delay="100">
           <div class="col-xl-9 text-center text-xl-start">
-            <h3>Call To Action</h3>
-            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            <h3>Rejoignez notre communauté</h3>
+            <p>Offrez à votre quotidien la beauté et l'authenticité des produits artisanaux tunisiens ! Chaque pièce est le fruit d’un savoir-faire unique, imprégné de traditions séculaires. En choisissant l'artisanat tunisien, vous soutenez des artisans talentueux tout en apportant une touche d'exception à votre vie.</p>
           </div>
           <div class="col-xl-3 cta-btn-container text-center">
-            <a class="cta-btn align-middle" href="#">Call To Action</a>
+            <a class="cta-btn align-middle" href="#">Inscrivez-vous!</a>
           </div>
         </div>
 
@@ -206,146 +206,120 @@
 
     </section><!-- /Call To Action Section -->
 
-    <!-- Portfolio Section -->
+    <!-- Boutique Section -->
     <section id="portfolio" class="portfolio section">
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Portfolio</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <h2>Boutique</h2>
+        <p>Laissez parler votre créativité : créations uniques et matériaux pour donner vie à vos idées.</p>
       </div><!-- End Section Title -->
-
+      
       <div class="container">
 
-        <div class="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">
+        <div class="" data-layout="masonry" data-sort="original-order">
 
-          <ul class="portfolio-filters isotope-filters">
-            <li data-filter="*" class="filter-active">All</li>
-            <li data-filter=".filter-app">App</li>
-            <li data-filter=".filter-product">Card</li>
-            <li data-filter=".filter-branding">Web</li>
-          </ul><!-- End Portfolio Filters -->
+          <!-- Buttons to filter products or materials -->
+          <div class="container4" data-aos="fade-up">
+            <div class="btn-group">
+              <button id="btn-produits" class=" btn-primary" onclick="showCategory('produits')">Produits</button>
+              <button id="btn-materiaux" class=" btn-primary" onclick="showCategory('materiaux')">Matériaux</button>
+            </div>
+          </div>
 
-          <div class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <img src="img/masonry-portfolio/masonry-portfolio-1.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>App 1</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-1.jpg" title="App 1" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+          <!-- Product and Material Display -->
+          <div class="container">
+            <div id="produits" class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+              <!-- Example Product 1 -->
+              <div class="col-lg-4 col-md-6 portfolio-item ">
+                <img src="img/masonry-portfolio/1.jpeg" class="img-fluid" alt="">
+                <div class="portfolio-info">
+                  <h4>Tasses et sous-tasses</h4>
+                  <p>Pour les amateurs de café et de thé</p>
+                  <a href="img/masonry-portfolio/1.jpeg" title="Product 1" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                  <!-- <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+                </div>
               </div>
-            </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
-              <img src="img/masonry-portfolio/masonry-portfolio-2.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Product 1</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-2.jpg" title="Product 1" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              <!-- Example Product 2 -->
+              <div class="col-lg-4 col-md-6 portfolio-item">
+                <img src="img/masonry-portfolio/2.jpeg" class="img-fluid" alt="">
+                <div class="portfolio-info">
+                  <h4>Bagues</h4>
+                  <p>L’art du fait main, à chaque doigt</p>
+                  <a href="img/masonry-portfolio/2.jpeg" title="Product 1" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                  <!-- <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+                </div>
               </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
-              <img src="img/masonry-portfolio/masonry-portfolio-3.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Branding 1</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-3.jpg" title="Branding 1" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+              
+              <!-- Example Product 3 -->
+              <div class="col-lg-4 col-md-6 portfolio-item">
+                <img src="img/masonry-portfolio/3.jpeg" class="img-fluid" alt="">
+                <div class="portfolio-info">
+                  <h4>Coussins</h4>
+                  <p>Confort et style réunis dans nos coussins faits main</p>
+                  <a href="img/masonry-portfolio/3.jpeg" title="Product 1" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                  <!-- <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+                </div>
               </div>
-            </div><!-- End Portfolio Item -->
+            </div>
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <img src="img/masonry-portfolio/masonry-portfolio-4.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>App 2</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-4.jpg" title="App 2" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
+            <div id="materiaux" class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+              <!-- Example Material 1 -->
+              <div class="col-lg-4 col-md-6 portfolio-item">
+                <img src="img/masonry-portfolio/argile.jpeg" class="img-fluid" alt="Argile sans cuisson">
+                <div class="portfolio-info">
+                  <h4>Argile sans cuisson</h4>
+                  <a href="img/masonry-portfolio/argile.jpeg" title="Material 1" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                  <!-- <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+                </div>
               </div>
-            </div><!-- End Portfolio Item -->
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
-              <img src="img/masonry-portfolio/masonry-portfolio-5.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Product 2</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-5.jpg" title="Product 2" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
+                <!-- Example Material 2 -->
+                <div class="col-lg-4 col-md-6 portfolio-item">
+                  <img src="img/masonry-portfolio/laines.jpeg" class="img-fluid" alt="laine">
+                  <div class="portfolio-info">
+                    <h4>Laines en coton</h4>
+                    <a href="img/masonry-portfolio/laines.jpeg" title="Material 1" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                    <!-- <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+                  </div>
+                </div>
 
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
-              <img src="img/masonry-portfolio/masonry-portfolio-6.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Branding 2</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-6.jpg" title="Branding 2" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-app">
-              <img src="img/masonry-portfolio/masonry-portfolio-7.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>App 3</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-7.jpg" title="App 3" data-gallery="portfolio-gallery-app" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-product">
-              <img src="img/masonry-portfolio/masonry-portfolio-8.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Product 3</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-8.jpg" title="Product 3" data-gallery="portfolio-gallery-product" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-            <div class="col-lg-4 col-md-6 portfolio-item isotope-item filter-branding">
-              <img src="img/masonry-portfolio/masonry-portfolio-9.jpg" class="img-fluid" alt="">
-              <div class="portfolio-info">
-                <h4>Branding 3</h4>
-                <p>Lorem ipsum, dolor sit</p>
-                <a href="img/masonry-portfolio/masonry-portfolio-9.jpg" title="Branding 2" data-gallery="portfolio-gallery-branding" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a>
-              </div>
-            </div><!-- End Portfolio Item -->
-
-          </div><!-- End Portfolio Container -->
-
+                <!-- Example Material 3 -->
+                <div class="col-lg-4 col-md-6 portfolio-item">
+                  <img src="img/masonry-portfolio/perles.jpeg" class="img-fluid" alt="laine">
+                  <div class="portfolio-info">
+                    <h4>Des perles</h4>
+                    <a href="img/masonry-portfolio/perles.jpeg" title="Material 1" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                    <!-- <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
+                  </div>
+                </div>
+          </div>
         </div>
-
+      </div><!-- End Portfolio Container -->
       </div>
-
+        </div>
     </section><!-- /Portfolio Section -->
 
-    <!-- Team Section -->
+    <!-- Equipe Section -->
     <section id="team" class="team section light-background ">
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Team</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <h2>DevElite</h2>
+        <p> Un groupe des ingénieurs spécialisés dans le développement web, dédiés à créer des solutions numériques modernes et innovantes/p>
       </div><!-- End Section Title -->
 
       <div class="container">
 
         <div class="row gy-4">
 
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="col-lg-6" data-aos="fade-up" >
             <div class="team-member d-flex align-items-start">
-              <div class="pic"><img src="img/team/team-1.jpg" class="img-fluid" alt=""></div>
+              <div class="pic"><img src="img/team/hazem.jpg" class="img-fluid" alt=""></div>
               <div class="member-info">
-                <h4>Walter White</h4>
-                <span>Chief Executive Officer</span>
-                <p>Explicabo voluptatem mollitia et repellat qui dolorum quasi</p>
+                <h4>Hazem Letaief</h4>
+                <span>Ingénieur</span>
                 <div class="social">
                   <a href=""><i class="bi bi-twitter-x"></i></a>
                   <a href=""><i class="bi bi-facebook"></i></a>
@@ -358,11 +332,10 @@
 
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="200">
             <div class="team-member d-flex align-items-start">
-              <div class="pic"><img src="img/team/team-2.jpg" class="img-fluid" alt=""></div>
+              <div class="pic"><img src="img/team/mariem.jpg" class="img-fluid" alt=""></div>
               <div class="member-info">
-                <h4>Sarah Jhonson</h4>
-                <span>Product Manager</span>
-                <p>Aut maiores voluptates amet et quis praesentium qui senda para</p>
+                <h4>Mariem ksouda</h4>
+                <span>Ingénieur</span>
                 <div class="social">
                   <a href=""><i class="bi bi-twitter-x"></i></a>
                   <a href=""><i class="bi bi-facebook"></i></a>
@@ -375,11 +348,10 @@
 
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="300">
             <div class="team-member d-flex align-items-start">
-              <div class="pic"><img src="img/team/team-3.jpg" class="img-fluid" alt=""></div>
+              <div class="pic"><img src="img/team/emen.jpg" class="img-fluid" alt=""></div>
               <div class="member-info">
-                <h4>William Anderson</h4>
-                <span>CTO</span>
-                <p>Quisquam facilis cum velit laborum corrupti fuga rerum quia</p>
+                <h4>Emen Allah Mrad</h4>
+                <span>Ingénieur</span>
                 <div class="social">
                   <a href=""><i class="bi bi-twitter-x"></i></a>
                   <a href=""><i class="bi bi-facebook"></i></a>
@@ -392,11 +364,43 @@
 
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
             <div class="team-member d-flex align-items-start">
-              <div class="pic"><img src="img/team/team-4.jpg" class="img-fluid" alt=""></div>
+              <div class="pic"><img src="img/team/ranim.jpg" class="img-fluid" alt=""></div>
               <div class="member-info">
-                <h4>Amanda Jepson</h4>
-                <span>Accountant</span>
-                <p>Dolorum tempora officiis odit laborum officiis et et accusamus</p>
+                <h4>Ranim Bettaieb</h4>
+                <span>Ingénieur</span>
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter-x"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""> <i class="bi bi-linkedin"></i> </a>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="team-member d-flex align-items-start">
+              <div class="pic"><img src="img/team/nouha.jpg" class="img-fluid" alt=""></div>
+              <div class="member-info">
+                <h4>Nouha Hadj Brahim</h4>
+                <span>Ingénieur</span>
+                <div class="social">
+                  <a href=""><i class="bi bi-twitter-x"></i></a>
+                  <a href=""><i class="bi bi-facebook"></i></a>
+                  <a href=""><i class="bi bi-instagram"></i></a>
+                  <a href=""> <i class="bi bi-linkedin"></i> </a>
+                </div>
+              </div>
+            </div>
+          </div><!-- End Team Member -->
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="team-member d-flex align-items-start">
+              <div class="pic"><img src="img/team/rouuu.jpg" class="img-fluid" alt=""></div>
+              <div class="member-info">
+                <h4>Roua Kandil</h4>
+                <span>Ingénieur</span>
                 <div class="social">
                   <a href=""><i class="bi bi-twitter-x"></i></a>
                   <a href=""><i class="bi bi-facebook"></i></a>
@@ -413,13 +417,13 @@
 
     </section><!-- /Team Section -->
 
-    <!-- Pricing Section -->
+    <!-- Ateliers en ligne Section -->
     <section id="pricing" class="pricing section ">
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Pricing</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <h2>Ateliers en ligne</h2>
+        <p>Apprenez l'artisanat en ligne, à votre rythme et où que vous soyez</p>
       </div><!-- End Section Title -->
 
       <div class="container">
@@ -428,48 +432,49 @@
 
           <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
             <div class="pricing-item">
-              <h3>Free Plan</h3>
-              <h4><sup>$</sup>0<span> / month</span></h4>
+              <h3>Création de Bijoux Artisanaux</h3>
+              <p><strong>Formateur :</strong> Sami Ben Ali</p>
+              <h4><sup>DT</sup>150<span>/ atelier</span></h4>
               <ul>
-                <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
-                <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
-                <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>
-                <li class="na"><i class="bi bi-x"></i> <span>Pharetra massa massa ultricies</span></li>
-                <li class="na"><i class="bi bi-x"></i> <span>Massa ultricies mi quis hendrerit</span></li>
+                <li><i class="bi bi-check"></i> <span>Apprenez à créer des bijoux uniques</span></li>
+                <li><i class="bi bi-check"></i> <span>Techniques adaptées à tous les niveaux</span></li>
+                <li><i class="bi bi-check"></i> <span>2 heures de formation en ligne</span></li>
+                <li class="na"><i class="bi bi-x"></i> <span>Pas d'expérience préalable requise</span></li>
               </ul>
-              <a href="#" class="buy-btn">Buy Now</a>
+              <a href="#" class="buy-btn">S'inscrire</a>
             </div>
           </div><!-- End Pricing Item -->
 
           <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
             <div class="pricing-item featured">
-              <h3>Business Plan</h3>
-              <h4><sup>$</sup>29<span> / month</span></h4>
+              <h3>Poterie : Techniques de Modelage</h3>
+              <p><strong>Formateur :</strong> Amira Zribi</p>
+              <h4><sup>DT</sup>90<span> / atelier</span></h4>
               <ul>
-                <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
-                <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
-                <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>
-                <li><i class="bi bi-check"></i> <span>Pharetra massa massa ultricies</span></li>
-                <li><i class="bi bi-check"></i> <span>Massa ultricies mi quis hendrerit</span></li>
+                <li><i class="bi bi-check"></i> <span>Apprenez les bases du modelage</span></li>
+                <li><i class="bi bi-check"></i> <span>Créez vos premières pièces à la main</span></li>
+                <li><i class="bi bi-check"></i> <span>3 heures de formation pratique</span></li>
+                <li class="na"><i class="bi bi-x"></i> <span>Matériel non inclus</span></li>
               </ul>
-              <a href="#" class="buy-btn">Buy Now</a>
+              <a href="#" class="buy-btn">S'inscrire</a>
             </div>
           </div><!-- End Pricing Item -->
 
           <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
-            <div class="pricing-item">
-              <h3>Developer Plan</h3>
-              <h4><sup>$</sup>49<span> / month</span></h4>
-              <ul>
-                <li><i class="bi bi-check"></i> <span>Quam adipiscing vitae proin</span></li>
-                <li><i class="bi bi-check"></i> <span>Nec feugiat nisl pretium</span></li>
-                <li><i class="bi bi-check"></i> <span>Nulla at volutpat diam uteera</span></li>
-                <li><i class="bi bi-check"></i> <span>Pharetra massa massa ultricies</span></li>
-                <li><i class="bi bi-check"></i> <span>Massa ultricies mi quis hendrerit</span></li>
-              </ul>
-              <a href="#" class="buy-btn">Buy Now</a>
-            </div>
+          <div class="pricing-item">
+            <h3>Création de Céramiques Artisanales</h3>
+            <p><strong>Formateur :</strong> Khaled El Ouerghemmi</p>
+            <h4><sup>DT</sup>250<span> / atelier</span></h4>
+            <ul>
+              <li><i class="bi bi-check"></i> <span>Apprenez les techniques de fabrication de céramiques</span></li>
+              <li><i class="bi bi-check"></i> <span>Créez vos propres pièces en céramique</span></li>
+              <li><i class="bi bi-check"></i> <span>3 heures de formation pratique</span></li>
+              <li class="na"><i class="bi bi-x"></i> <span>Matériel fourni à la demande</span></li>
+            </ul>
+            <a href="#" class="buy-btn">S'inscrire</a>
+          </div>
           </div><!-- End Pricing Item -->
+
 
         </div>
 
@@ -484,84 +489,48 @@
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Contact</h2>
-        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+        <p>Pour plus d'informations, n'hésitez pas à nous contacter ou à venir nous rendre visite</p>
       </div><!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-        <div class="row gy-4">
-
-          <div class="col-lg-5">
-
-            <div class="info-wrap">
-              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
-                <i class="bi bi-geo-alt flex-shrink-0"></i>
-                <div>
-                  <h3>Address</h3>
-                  <p>A108 Adam Street, New York, NY 535022</p>
-                </div>
-              </div><!-- End Info Item -->
-
-              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
-                <i class="bi bi-telephone flex-shrink-0"></i>
-                <div>
-                  <h3>Call Us</h3>
-                  <p>+1 5589 55488 55</p>
-                </div>
-              </div><!-- End Info Item -->
-
-              <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
-                <i class="bi bi-envelope flex-shrink-0"></i>
-                <div>
-                  <h3>Email Us</h3>
-                  <p>info@example.com</p>
-                </div>
-              </div><!-- End Info Item -->
-
-              <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d-74.006138!3d40.710059!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a22a3bda30d%3A0xb89d1fe6bc499443!2sDowntown%20Conference%20Center!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus" frameborder="0" style="border:0; width: 100%; height: 270px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-          </div>
-
-          <div class="col-lg-7">
-            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-              <div class="row gy-4">
-
-                <div class="col-md-6">
-                  <label for="name-field" class="pb-2">Your Name</label>
-                  <input type="text" name="name" id="name-field" class="form-control" required="">
-                </div>
-
-                <div class="col-md-6">
-                  <label for="email-field" class="pb-2">Your Email</label>
-                  <input type="email" class="form-control" name="email" id="email-field" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <label for="subject-field" class="pb-2">Subject</label>
-                  <input type="text" class="form-control" name="subject" id="subject-field" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <label for="message-field" class="pb-2">Message</label>
-                  <textarea class="form-control" name="message" rows="10" id="message-field" required=""></textarea>
-                </div>
-
-                <div class="col-md-12 text-center">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
-
-                  <button type="submit">Send Message</button>
-                </div>
-
+      <div class="row gy-4">
+        
+        <!-- Premier container avec les informations -->
+        <div class="col-lg-5">
+          <div class="info-wrap">
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
+              <i class="bi bi-geo-alt flex-shrink-0"></i>
+              <div>
+                <h3>Adresse</h3>
+                <p>Tunisie, La Petite Ariana</p>
               </div>
-            </form>
-          </div><!-- End Contact Form -->
+            </div><!-- End Info Item -->
 
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+              <i class="bi bi-telephone flex-shrink-0"></i>
+              <div>
+                <h3>Appelez-nous</h3>
+                <p>+21654123456</p>
+              </div>
+            </div><!-- End Info Item -->
+
+            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+              <i class="bi bi-envelope flex-shrink-0"></i>
+              <div>
+                <h3>Envoyez-nous un email</h3>
+                <p>DevElite2025@gmail.com</p>
+              </div>
+            </div><!-- End Info Item -->
+          </div>
         </div>
 
+        <!-- Deuxième container avec la carte Google Maps -->
+        <div class="col-lg-7">
+          <div class="info-wrap">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2659.8402726228464!2d10.184527978216979!3d36.8992690790857!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12e2cb763f2120bb%3A0xc3e79593db50c2e8!2sLa%20petite%20Ariana%2C%20Cebalat%20Ben%20Ammar!5e0!3m2!1sfr!2stn!4v1738700537584!5m2!1sfr!2stn" width="600" height="270" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>          </div>
+        </div>
       </div>
-
+      </div>
     </section><!-- /Contact Section -->
 
 </main>
