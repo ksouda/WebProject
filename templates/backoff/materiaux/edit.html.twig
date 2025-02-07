@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+{% block body %}
+
+    {{ include('backoff/materiaux/_form.html.twig', {'button_label': 'modifier'}) }}
+
+    <a href="{{ path('app_materiaux_index') }}">back to list</a>
+
+    
+{% endblock %}
