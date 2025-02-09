@@ -82,7 +82,7 @@
       </a>
       <div class="collapse" id="form-elements">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="{{ path('app_produit') }}">Table</a></li>
+          <li class="nav-item"> <a class="nav-link" href="#">Table</a></li>
         </ul>
       </div>
     </li>
@@ -105,9 +105,10 @@
         <span class="menu-title">Matériaux</span>
         <i class="menu-arrow"></i>
       </a>
-      <div class="collapse" id="tables">
+      <div class="collapse" id="tabels">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="#">Table</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ path('app_materiaux_index') }}">Table Materiaux</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ path('app_fournisseur_index') }}">Table Fournisseur</a></li>
         </ul>
       </div>
     </li>
@@ -141,60 +142,68 @@
 </nav>
               
 {# formulaire #}
-<div class="formtestmt-5">
-<div class="col-md-6 grid-margin stretch-card">
-<div class="card">
-<div class="card-body">
-<h4 class="card-title">Formulaire Materiaux</h4>
+        <div class="main-panel">
+          
+          <div class="content-wrapper">
+            <div class="formtestmt-5 d-flex justify-content-center">
+            <div class="col-md-6 grid-margin stretch-card">
+            <div class="card w-100">
+            <div class="card-body">
+            <h4 class="card-title">Formulaire Materiaux</h4>
 
-{{ form_start(form, {'attr': {'class': 'forms-sample'}}) }}
-<form class="forms-sample">
-    <div class="form-group">
-    <label for="nom_materiel">Nom du matériel</label>
-    {{ form_widget(form.nom_materiel, { 'attr': {'class': 'form-control'} }) }}
-    <div class="error-message">
-        {{ form_errors(form.nom_materiel) }}
-    </div>
+            {{ form_start(form, {'attr': {'class': 'forms-sample'}}) }}
+            <form class="forms-sample">
+                <div class="form-group">
+                 <label for="nom_materiel">Nom du matériel</label>
+                {{ form_widget(form.nom_materiel, { 'attr': {'class': 'form-control'} }) }}
+                <div class="error-message text-danger small">
+                    {{ form_errors(form.nom_materiel) }}
+                </div>
 
-    <label for="Quantite_stock">Quantite_stock</label>
-    {{ form_widget(form.quantite_stock, { 'attr': {'class': 'form-control'} }) }}
-    <div class="error-message">
-        {{ form_errors(form.quantite_stock) }}
-    </div>
+                <label for="Quantite_stock">Quantite_stock</label>
+                {{ form_widget(form.quantite_stock, { 'attr': {'class': 'form-control'} }) }}
+                <div class="error-message text-danger small">
+                    {{ form_errors(form.quantite_stock) }}
+                </div>
 
-    <label for="seuil_min">Seuil_minimale</label>
-    {{ form_widget(form.seuil_min, { 'attr': {'class': 'form-control'} }) }}
-    <div class="error-message">
-        {{ form_errors(form.seuil_min) }}
-    </div>
+                <label for="seuil_min">Seuil_minimale</label>
+                {{ form_widget(form.seuil_min, { 'attr': {'class': 'form-control'} }) }}
+                <div class="error-message text-danger small">
+                    {{ form_errors(form.seuil_min) }}
+                </div>
 
-    <label for="prix_unitaire">Prix_Unitaire</label>
-    {{ form_widget(form.prix_unitaire, { 'attr': {'class': 'form-control'} }) }}
-    <div class="error-message">
-        {{ form_errors(form.prix_unitaire) }}
-    </div>
+                <label for="prix_unitaire">Prix_Unitaire</label>
+                {{ form_widget(form.prix_unitaire, { 'attr': {'class': 'form-control'} }) }}
+                <div class="error-message text-danger small">
+                    {{ form_errors(form.prix_unitaire) }}
+                </div>
 
-    <label for="categorie">Categorie</label>
-    {{ form_widget(form.categorie, { 'attr': {'class': 'form-control'} }) }}
-    <div class="error-message">
-        {{ form_errors(form.categorie) }}
-    </div>
+                <label for="categorie">Categorie</label>
+                {{ form_widget(form.categorie, { 'attr': {'class': 'form-control'} }) }}
+                <div class="error-message text-danger small">
+                    {{ form_errors(form.categorie) }}
+                </div>
 
-     <label for="description">Description</label>
-    {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
-    <div class="error-message">
-        {{ form_errors(form.description) }}
-    </div>
-
-    <button type="submit" class="btn btn-primary me-2">enregistrer</button>
-  {{ form_end(form) }}
-</form>
-</div>
-</div>
-</div>
-</div>
-{# end formulaire #}
-
+                <label for="description">Description</label>
+                {{ form_widget(form.description, { 'attr': {'class': 'form-control'} }) }}
+                <div class="error-message text-danger small">
+                    {{ form_errors(form.description) }}
+                </div>
+                
+                <button type="submit" class="btn btn-primary me-2" style="margin-top: 10px;">Enregistrer</button>
+                
+                <a href="{{ path('app_materiaux_index') }}">Revenir a la liste</a>
+                
+              {{ form_end(form) }}
+            </form>
+            </div>
+            </div>
+            </div>
+            </div>
+          </div>
+        </div>
+            {# end formulaire #}
+       
           </div>
           <!-- content-wrapper ends -->
           <!-- partial:../../partials/_footer.html -->
@@ -203,6 +212,7 @@
         </div>
         <!-- main-panel ends -->
       </div>
+      
       <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->

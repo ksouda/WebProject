@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -39,7 +41,11 @@
       <span class="icon-menu"></span>
     </button>
  
-    
+    <ul class="navbar-nav navbar-nav-right">
+      
+      
+      
+    </ul>
     <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
       <span class="icon-menu"></span>
     </button>
@@ -68,18 +74,20 @@
         </ul>
       </div>
     </li>
+    
     <li class="nav-item">
-      <a class="nav-link" data-bs-toggle="collapse" href="#" aria-expanded="false" aria-controls="charts">
+      <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="ui-basic">
         <i class="mdi mdi-cube"></i>
         <span class="menu-title">Produits</span>
         <i class="menu-arrow"></i>
       </a>
       <div class="collapse" id="form-elements">
         <ul class="nav flex-column sub-menu">
-            <li class="nav-item"> <a class="nav-link" href="#">Table</a></li>
+          <li class="nav-item"> <a class="nav-link" href=>Table</a></li>
         </ul>
       </div>
     </li>
+   
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
         <i class="mdi mdi-bowl"></i>
@@ -92,10 +100,8 @@
         </ul>
       </div>
     </li>
-
-
     <li class="nav-item">
-      <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+      <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
         <i class="mdi mdi-screwdriver"></i>
         <span class="menu-title">Matériaux</span>
         <i class="menu-arrow"></i>
@@ -138,11 +144,70 @@
         <!-- partial -->
         <div class="main-panel">
           <div class="content-wrapper">
-                 <!-- content of your gestion -->
+             <div class="title-gestion"> Gestion des Materiaux </div>
+            <div class="table-container">
+        <div class="table-title">
+     
+            
+            <div class="search-box">
+                <i class="fa fa-search"></i>
+                <input type="text" placeholder="Rechercher...">
+            </div>
+            <a href="{{ path('app_fournisseur_new') }}">
+            <i class="fa fa-plus"></i>
+            </a>
+        </div>
+   
+        <table>
+            <thead>
+                <tr>
+                <th>Id</th>
+                <th>Nom_fournisseur</th>
+                <th>Adresse</th>
+                <th>Contact</th>
+                <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fournisseur in fournisseurs %}
+            <tr>
+                <td>{{ fournisseur.id }}</td>
+                <td>{{ fournisseur.nomFournisseur }}</td>
+                <td>{{ fournisseur.adresse }}</td>
+                <td>{{ fournisseur.contact }}</td>
+            
+        
+            <td>
+              <a href="{{ path('app_fournisseur_edit', {'id': fournisseur.id}) }}">
+              <i class="fa fa-edit" style="color: #ffc107;"></i>
+              </a>
+              {{ include('backoff/fournisseur/_delete_form.html.twig') }}
+              <a href="{{ path('app_fournisseur_show', {'id': fournisseur.id}) }}">
+                <i class="fa fa-info-circle" style="color: #17a2b8;"></i>
+              </a>
+            </td>
+          </tr>
+        {% else %}
+          <tr>
+            <td colspan="8">Aucun fournisseur trouvé</td>
+          </tr>
+        {% endfor %}
 
-          </div>
+          </tbody>
+        </table>
+        <div class="pagination">
+            <a href="#">&laquo;</a>
+            <a href="#">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">&raquo;</a>
+        </div>
+    </div>
+      </div>
           <!-- content-wrapper ends -->
-         
+          <!-- partial:../../partials/_footer.html -->
+       
+          <!-- partial -->
         </div>
         <!-- main-panel ends -->
       </div>

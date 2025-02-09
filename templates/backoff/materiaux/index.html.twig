@@ -82,7 +82,7 @@
       </a>
       <div class="collapse" id="form-elements">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="{{ path('app_produit') }}">Table</a></li>
+          <li class="nav-item"> <a class="nav-link" href="#">Table</a></li>
         </ul>
       </div>
     </li>
@@ -105,9 +105,10 @@
         <span class="menu-title">Matériaux</span>
         <i class="menu-arrow"></i>
       </a>
-      <div class="collapse" id="tables">
+      <div class="collapse" id="tabels">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="#">Table</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ path('app_materiaux_index') }}">Table Materiaux</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ path('app_fournisseur_index') }}">Table Fournisseur</a></li>
         </ul>
       </div>
     </li>
@@ -182,9 +183,7 @@
                       <a href="{{ path('app_materiaux_edit', {'id': materiaux.id}) }}">
                       <i class="fa fa-edit" style="color: #ffc107;"></i>
                       </a>
-                      <a href="{{ path('app_materiaux_delete', {'id': materiaux.id}) }}" onclick="return confirm('Voulez-vous vraiment supprimer ce matériel ?');">
-                        <i class="fa fa-trash" style="color: #dc3545;"></i>
-                      </a>
+                       {{ include('backoff/materiaux/_delete_form.html.twig') }}
                       <a href="{{ path('app_materiaux_show', {'id': materiaux.id}) }}">
                         <i class="fa fa-info-circle" style="color: #17a2b8;"></i>
                       </a>

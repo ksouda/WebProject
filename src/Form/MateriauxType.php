@@ -79,8 +79,8 @@ class MateriauxType extends AbstractType
                     'message' => 'Le prix unitaire doit être un nombre décimal valide en dinar tunisien.'
                 ]),
             ],
-            'html5' => true, // Active la validation HTML5 pour les nombres
-            'scale' => 2, // Nombre de chiffres après la virgule
+            'html5' => true, 
+            'scale' => 2, 
             'attr' => [
                 'class' => 'form-control',
                 'placeholder' => 'Ex: 20.50',
