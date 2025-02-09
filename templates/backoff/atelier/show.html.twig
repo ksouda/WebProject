@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<title>Atelierenligne</title>
+
+{% block body %}
+    <h1>Atelierenligne</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ atelierenligne.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ atelierenligne.titre }}</td>
+            </tr>
+            <tr>
+                <th>Categorie</th>
+                <td>{{ atelierenligne.categorie }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ atelierenligne.description }}</td>
+            </tr>
+            <tr>
+                <th>Niveau_diff</th>
+                <td>{{ atelierenligne.niveauDiff }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ atelierenligne.prix }}</td>
+            </tr>
+            <tr>
+                <th>Datecours</th>
+                <td>{{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Duree</th>
+                <td>{{ atelierenligne.duree }}</td>
+            </tr>
+            <tr>
+                <th>Lien</th>
+                <td>{{ atelierenligne.lien }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_atelierenligne') }}">back to list</a>
+
+    <a href="{{ path('app_atelierenligne_edit', {'id': atelierenligne.id}) }}">edit</a>
+
+    {{ include('atelierenligne/_delete_form.html.twig') }}
+{% endblock %}
+
+
