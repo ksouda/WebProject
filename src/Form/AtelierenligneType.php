@@ -47,9 +47,9 @@ class AtelierenligneType extends AbstractType
             ])
             ->add('niveau_diff', ChoiceType::class, [
                 'choices' => [
-                    'Débutant' => 'debutant',
-                    'Intermédiaire' => 'intermediaire',
-                    'Avancé' => 'avance',
+                    'Débutant' => 'débutant',
+                    'Intermédiaire' => 'intermédiaire',
+                    'Avancé' => 'avancé',
                 ],
                 'placeholder' => 'Choisissez un niveau de difficulté',
                 'required' => true,
@@ -95,10 +95,7 @@ class AtelierenligneType extends AbstractType
                     'placeholder' => 'https://meet.google.com/xxx', // Indication pour l'utilisateur
                 ]
             ])
-            ->add('id_user', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
+            
         ;
     }
 

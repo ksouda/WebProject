@@ -2,8 +2,11 @@
 
 namespace App\Entity;
 
+use App\Entity\Atelierenligne; // Assurez-vous d'importer l'entité Atelierenligne
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
@@ -36,6 +39,10 @@ class User
 
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
+
+
+    #[ORM\OneToMany(targetEntity: Atelierenligne::class, mappedBy: 'id_user')]
+    private Collection $atelierenlignes;
 
     public function getId(): ?int
     {
@@ -136,5 +143,14 @@ class User
         $this->adresse = $adresse;
 
         return $this;
+    }
+    public function __construct()
+    {
+        $this->atelierenlignes = new ArrayCollection();
+    }
+
+    public function getAtelierenligne(): Collection
+    {
+        return $this->atelierenlignes;
     }
 }

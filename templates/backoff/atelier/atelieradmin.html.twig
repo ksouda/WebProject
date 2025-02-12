@@ -26,8 +26,9 @@
     <!-- endinject -->
     <link rel="shortcut icon" href="assets/images/favicon.png" />
   </head>
-  <body>{% block body %}
-    <div class="container-scroller">
+{% block body %}
+
+  <div class="container-scroller">
       
       <!-- partial:partials/_navbar.html -->
       <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -39,11 +40,7 @@
       <span class="icon-menu"></span>
     </button>
  
-    <ul class="navbar-nav navbar-nav-right">
-      
-      
-      
-    </ul>
+    
     <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
       <span class="icon-menu"></span>
     </button>
@@ -72,20 +69,18 @@
         </ul>
       </div>
     </li>
-    
     <li class="nav-item">
-      <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="ui-basic">
+      <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
         <i class="mdi mdi-cube"></i>
         <span class="menu-title">Produits</span>
         <i class="menu-arrow"></i>
       </a>
       <div class="collapse" id="form-elements">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="{{ path('app_produit') }}">Table</a></li>
+            <li class="nav-item"> <a class="nav-link" href="{{ path('app_produit') }}">Table</a></li>
         </ul>
       </div>
     </li>
-   
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
         <i class="mdi mdi-bowl"></i>
@@ -94,7 +89,7 @@
       </a>
       <div class="collapse" id="charts">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"> <a class="nav-link" href="#">Table</a></li>
+          <li class="nav-item"> <a class="nav-link" href="{{path('app_atelierenligneadmin')}}">Table</a></li>
         </ul>
       </div>
     </li>
@@ -138,106 +133,89 @@
     
   </ul>
 </nav>
-<div class="main-panel1 d-flex justify-content-center align-items-center">
-    <div class="content-wrapper1">
-        <div class="formtest">
-            <div class="d-flex justify-content-center align-items-start flex-wrap gap-4">
-                <!-- Première colonne du formulaire -->
-                <div class="card p-6" style="width: 450px;">
-                    <div class="card-body">
-                        <h4 class="card-title text-center">Ajouter un atelier en ligne</h4>
-                        {{ form_start(form, {'attr': {'class': 'forms-sample', 'novalidate': 'novalidate'}}) }}
-
-                        <div class="form-group">
-                            {{ form_label(form.titre, 'Titre') }}
-                            {{ form_widget(form.titre, {'attr': {'class': 'form-control', 'placeholder': 'Titre'}}) }}
-                            <div class="invalid-feedback">
-                            {{ form_errors(form.titre) }}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            {{ form_label(form.categorie, 'Categorie') }}
-                            {{ form_widget(form.categorie, {'attr': {'class': 'form-select form-select-lg', 'placeholder': 'Categorie'}}) }}
-                            <div class="invalid-feedback">
-                            {{ form_errors(form.categorie) }}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            {{ form_label(form.description, 'Description') }}
-                            {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Description'}}) }}
-                            <div class="invalid-feedback">
-                            {{ form_errors(form.description) }}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            {{ form_label(form.niveau_diff, 'Niveau de difficulté') }}
-                            {{ form_widget(form.niveau_diff, {'attr': {'class': 'form-select form-select-lg', 'placeholder': 'Niveau de difficulté'}}) }}
-                            <div class="invalid-feedback">
-                            {{ form_errors(form.niveau_diff) }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Deuxième colonne du formulaire -->
-                <div class="card p-6" style="width: 450px;">
-                    <div class="card-body">
-                        <div class="form-group">
-                            {{ form_label(form.prix, 'Prix') }}
-                            {{ form_widget(form.prix, {'attr': {'class': 'form-control', 'placeholder': 'Prix'}}) }}
-                            <div class="invalid-feedback">
-                            {{ form_errors(form.prix) }}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            {{ form_label(form.datecours, 'Date du cours') }}
-                            {{ form_widget(form.datecours, {'attr': {'class': 'form-control'}}) }}
-                            <div class="invalid-feedback">
-                                {% for error in form.datecours.vars.errors %}
-                                    <p>{{ error.message }}</p>
-                                {% endfor %}
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            {{ form_label(form.duree, 'Durée en minutes') }}
-                            {{ form_widget(form.duree, {'attr': {'class': 'form-control', 'placeholder': 'Durée'}}) }}
-                            <div class="invalid-feedback">
-                            {{ form_errors(form.duree) }}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            {{ form_label(form.lien, 'Lien') }}
-                            {{ form_widget(form.lien, {'attr': {'class': 'form-control'}}) }}
-                            <div class="invalid-feedback">
-                            {{ form_errors(form.lien) }}
-                            </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 mb-3">
-                            {{ button_label|default('Enregistrer') }}
-                        </button>
-
-                        <a href="{{ path('app_atelierenligne') }}" class="btn btn-primary w-100">
-                            {{ button_label1|default('Retour à la liste') }}
-                        </a>
-                        {{ form_end(form) }}
-                    </div>
-                </div>
+        <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+             <div class="title-gestion"> Gestion des Ateliers En Ligne </div>
+            <div class="table-container">
+        <div class="table-title">
+            
+            <div class="search-box">
+                <i class="fa fa-search"></i>
+                <input type="text" placeholder="Rechercher...">
             </div>
+            <a href="{{ path('app_atelierenligne_new') }}" title="Ajouter un atelier">
+                <i class="fa fa-plus"></i>
+            </a>        
+            </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Titre</th>
+                    <th>Categorie</th>
+                    <th>Description</th>
+                    <th>Niveau_diff</th>
+                    <th>Prix</th>
+                    <th>Date_cours</th>
+                    <th>Durée</th>
+                    <th>Lien</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for atelierenligne in atelierenlignes %}
+    <tr>
+        <td>{{ atelierenligne.id }}</td>
+        <td>{{ atelierenligne.titre }}</td>
+        <td>{{ atelierenligne.categorie }}</td>
+        <td>
+            <span class="short-description">{{ atelierenligne.description|slice(0, 30) }}...</span>
+            <span class="full-description" style="display: none;">{{ atelierenligne.description }}</span>
+        </td>
+        <td>{{ atelierenligne.niveauDiff }}</td>
+        <td>{{ atelierenligne.prix }}</td>
+        <td>{{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : '' }}</td>
+        <td>{{ atelierenligne.duree }}</td>
+        <td>
+            <span class="short-link">{{ atelierenligne.lien|slice(0, 20) }}...</span>
+            <span class="full-link" style="display: none;">{{ atelierenligne.lien }}</span>
+        </td>
+        <td class="action-icons">
+            {{ include('backoff/atelier/_delete_form.html.twig') }}
+            <i class="fa fa-info-circle" style="color: #17a2b8;" onclick="toggleDetails(this)"></i>
+        </td>
+    </tr>
+{% else %}
+    <tr>
+        <td colspan="10">no records found</td>
+    </tr>
+{% endfor %}
+            </tbody>
+        </table>
+        <div class="pagination">
+            <a href="#">&laquo;</a>
+            <a href="#">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">&raquo;</a>
         </div>
     </div>
-</div>
+    <!-- partial -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+                 <!-- content of your gestion -->
 
-
-</div>
-
-<!-- plugins:js -->
+          </div>
+          <!-- content-wrapper ends -->
+         
+        </div>
+        <!-- main-panel ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
     {% block js %}
       <script src="{{ asset('build/assets/vendors/js/vendor.bundle.base.js') }}"></script>
       <!-- endinject -->
@@ -260,5 +238,5 @@
     {% endblock %}
     <!-- <script src="assets/js/Chart.roundedBarCharts.js"></script> -->
     <!-- End custom js for this page-->
-    {% endblock %} </body>
-</html>
+{% endblock %}
+

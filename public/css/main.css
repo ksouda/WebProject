@@ -28,11 +28,13 @@
 .modal-content {
   background: white;
   padding: 20px;
-  width: 50%;
+  width: 80%;
   text-align: center;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
   position: relative;
+  margin: 10% auto;
+  max-width: 600px;
 }
 
 /* Bouton de fermeture */
@@ -43,6 +45,7 @@
   font-size: 30px;
   cursor: pointer;
 }
+
 :root {
   --default-font: "Open Sans",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --heading-font: "Jost",  sans-serif;
@@ -64,6 +67,9 @@
   --nav-color: #ffffff;  /* The default color of the main navmenu links */
   --nav-hover-color: #CE987E ; /* Applied to main navmenu links when they are hovered over or active */
   --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
+  --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
+  --nav-dropdown-color: #8F491C; /* Used for navigation links of the dropdown items in the navigation menu. */
+  --nav-dropdown-hover-color: #CE987E;
 }
 
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
@@ -90,6 +96,7 @@
 # General Styling & Shared Classes
 --------------------------------------------------------------*/
 body {
+  
   color: var(--default-color);
   background-color: var(--background-color);
   font-family: var(--default-font);
@@ -260,7 +267,7 @@ h {
     display: block;
     position: absolute;
     visibility: hidden;
-    left: 14px;
+    left: -14px;
     top: 130%;
     opacity: 0;
     transition: 0.3s;
@@ -270,7 +277,7 @@ h {
   }
 
   .navmenu .dropdown ul li {
-    min-width: 200px;
+    min-width: 160px;
   }
 
   .navmenu .dropdown ul a {
@@ -458,31 +465,6 @@ h {
     background-color: rgba(33, 37, 41, 0.03);
   }
 
-  .mobile-nav-active {
-    overflow: hidden;
-  }
-
-  .mobile-nav-active .mobile-nav-toggle {
-    color: #fff;
-    position: absolute;
-    font-size: 32px;
-    top: 15px;
-    right: 15px;
-    margin-right: 0;
-    z-index: 9999;
-  }
-
-  .mobile-nav-active .navmenu {
-    position: fixed;
-    overflow: hidden;
-    inset: 0;
-    background: rgba(33, 37, 41, 0.8);
-    transition: 0.3s;
-  }
-
-  .mobile-nav-active .navmenu>ul {
-    display: block;
-  }
 }
 
 /*--------------------------------------------------------------
@@ -1428,6 +1410,10 @@ section,
     max-width: 100%;
     margin: 0 auto 30px auto;
   }
+
+}
+#atelier {
+  margin-top: 80px; /* Ajuste la valeur selon la hauteur de la navbar */
 }
 
 
@@ -1598,3 +1584,4 @@ section,
   padding: 0;
   color: color-mix(in srgb, var(--default-color), transparent 30%);
 }
+

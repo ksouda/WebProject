@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\AtelierenligneRepository;
+use App\Entity\User; // Assurez-vous d'importer l'entité User
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -32,7 +33,7 @@ class Atelierenligne
     private ?float $prix = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $datecours = null;
+    private ?\DateTime $datecours = null;
 
     #[ORM\Column]
     private ?int $duree = null;
@@ -41,13 +42,12 @@ class Atelierenligne
     #[ORM\Column(type: Types::TEXT)]
     private ?string $lien = null;
 
-    /**
-     * @var Collection<int, Inscriptionatelier>
-     */
+    
     #[ORM\OneToMany(targetEntity: Inscriptionatelier::class, mappedBy: 'atelier')]
     private Collection $inscription;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: User::class,inversedBy: 'atelierenlignes')]
+    #[ORM\JoinColumn(name: 'id_user_id', referencedColumnName: 'id', nullable: false)]
     private ?User $id_user = null;
 
     public function __construct()
@@ -120,12 +120,12 @@ class Atelierenligne
         return $this;
     }
 
-    public function getDatecours(): ?\DateTimeInterface
+    public function getDatecours(): ?\DateTime
     {
         return $this->datecours;
     }
 
-    public function setDatecours(\DateTimeInterface $datecours): static
+    public function setDatecours(?\DateTime $datecours): static
     {
         $this->datecours = $datecours;
 
@@ -186,12 +186,12 @@ class Atelierenligne
         return $this;
     }
 
-    public function getIdUser(): ?user
+    public function getIdUser(): ?User
     {
         return $this->id_user;
     }
 
-    public function setIdUser(?user $id_user): static
+    public function setIdUser(?User $id_user): static
     {
         $this->id_user = $id_user;
 

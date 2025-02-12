@@ -220,6 +220,29 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
+// Fonction pour ouvrir la modale
+function openModal(id) {
+  var modal = document.getElementById('modal' + id);
+  modal.style.display = "block";
+}
+
+// Fonction pour fermer la modale
+function closeModal(id) {
+  var modal = document.getElementById('modal' + id);
+  modal.style.display = "none";
+}
+
+// Fermer la modale si l'utilisateur clique à l'extérieur du contenu de la modale
+window.onclick = function(event) {
+  var modals = document.querySelectorAll('.modal');
+  modals.forEach(modal => {
+      if (event.target === modal) {
+          modal.style.display = "none";
+      }
+  });
+}
+
+
 window.addEventListener('scroll', function() {
   AOS.refresh(); // Rafraîchit AOS lors du scroll
 });
@@ -263,6 +286,7 @@ function showCategory(category) {
 document.addEventListener("DOMContentLoaded", function() {
   showCategory('produits');  // Afficher Produits par défaut
 });
+
 
 
 

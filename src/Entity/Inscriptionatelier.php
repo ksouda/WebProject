@@ -25,7 +25,7 @@ class Inscriptionatelier
     private ?atelierenligne $atelier = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
-    private ?user $id_user = null;
+    private ?User $id_user = null;
 
     public function getId(): ?int
     {
