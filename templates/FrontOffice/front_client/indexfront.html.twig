@@ -14,6 +14,8 @@
         <link href="{{asset('https://fonts.googleapis.com')}}" rel="preconnect">
         <link href="{{asset('https://fonts.gstatic.com')}}" rel="preconnect" crossorigin>
         <link href="{{asset('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Jost:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap')}}" rel="stylesheet">
+        <!-- Font Awesome CDN -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
         <!-- Vendor CSS Files -->
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -27,7 +29,9 @@
 
         <!-- Main CSS File -->
         <link href="../css/flipcard.css" rel="stylesheet">
-        <link href="css/main.css" rel="stylesheet">
+        <link href="../css/main.css" rel="stylesheet">
+        
+
         
     </head>
     <body>
@@ -35,26 +39,116 @@
         <header id="header" class="header d-flex align-items-center fixed-top">
             <div class="container-fluid container-xl position-relative d-flex align-items-center">
             <a href="/" class="logo d-flex align-items-center me-auto">
-                 <img src="{{asset('img/logo 2.png')}}" alt="">
+                 <img src="../img/logo 2.png" alt="">
             </a>
 
             <nav id="navmenu" class="navmenu">
                 <ul>
                 <li><a href="#hero" class="active">Accueil</a></li>
-                <li><a href="#about">A propos de nous</a></li>
-                <li><a href="#portfolio">Boutique</a></li>
-                <li><a href="#team">Notre équipe</a></li>
-                <li><a href="#pricing">Ateliers en ligne</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li class="dropdown"><a href="#"><span>Boutique</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                    <ul>
+                        <li><a href="#">Produits</a></li>
+                        <li><a href="{{ path('app_front_materiaux') }}">Matériaux</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Ateliers en ligne</a></li>
+                <li><a href="#">Réclamation</a></li>
+                <li><a href="#"><i class="fas fa-shopping-cart" style="font-size: 20px" ></i></a></li>
+                <li class="dropdown">
+                    <a href="#" id="toggleSidebar">
+                        <i class="fas fa-user-circle" style="font-size: 25px"></i> <!-- Icône de compte -->
+                    </a>
+                    <ul>
+                        <li><a href="#">Profil</a></li>
+                        <li class="dropdown"><a href="#"><span>Historique</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                            <ul>
+                            <li><a href="#">Commandes</a></li>
+                            <li><a href="#">Réclamations</a></li>
+                            <li><a href="#">Aeliers en ligne</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="#">Déconnexion</a></li>
+                    </ul>
+                </li>
                 </ul>
-                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
-            <a class="btn-getstarted" href="{{ path('app_front_client')}}">S'inscrire</a>
             </div>
         </header>
+        
+
+{% block body %}
+        
+ 
+
+<!-- Boutique Section -->
+<section id="portfolio" class="portfolio section mt-5">
+
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Materiaux</h2>
+    <p>Des matériaux soigneusement sélectionnés pour sublimer vos créations artisanales.</p>
+  </div><!-- End Section Title -->
+  
+  <div class="container">
+
+    <!-- Parcourir les matériaux -->
+    <div id="materiaux" class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+    {% for materiau in materiauxes %}
+        <div class="col-lg-4 col-md-6 portfolio-item">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <!-- Front de la carte -->
+                    <div class="flip-card-front">
+                        <img src="{{ asset('img/masonry-portfolio/' ~ materiau.photo) }}" class="img-fluid" alt="{{ materiau.NomMateriel }}">
+                        <div class="portfolio-info">
+                            <h4>{{ materiau.NomMateriel }}</h4>
+                            <p>{{ materiau.PrixUnitaire }} TND</p>
+                            <a href="{{ asset('img/masonry-portfolio/' ~ materiau.photo) }}" title="{{ materiau.NomMateriel }}" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                            <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> 
+                        </div>
+                    </div>
+
+                    <!-- Back de la carte -->
+                    <div class="flip-card-back">
+                        <div class="card-details">
+                            <h4>{{ materiau.NomMateriel }}</h4>
+                            <p><strong>Description :</strong> {{ materiau.Description }}</p>
+                            <p><strong>Prix :</strong> {{ materiau.PrixUnitaire }} TND</p>
+                            <p><strong>Catégorie :</strong> {{ materiau.Categorie }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+  </div><!-- End Container -->
+</section><!-- End Portfolio Section -->
 
 
-        {% block body %}{% endblock %}
+
+ <script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.details-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault(); // Empêche le lien de s'ouvrir
+      const card = this.closest('.portfolio-item').querySelector('.flip-card');
+      const cardInner = card.querySelector('.flip-card-inner');
+      
+      // Effectuer le premier flip
+      card.classList.add('flip');
+      
+      // Retirer la classe 'flip' après 1.5 seconde pour revenir à l'état initial
+      setTimeout(() => {
+        card.classList.remove('flip');
+      }, 8000); // 8000ms = 8 seconde
+    });
+  });
+});
+
+</script>   
+{% endblock %}
         <footer id="footer" class="footer dark-background">
           <div class="container footer-top dark-background">
             <div class="row gy-4">
@@ -105,9 +199,9 @@
         <script src="{{asset('vendor/isotope-layout/isotope.pkgd.min.js')}}"></script>
         <script src="{{asset('https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js')}}"></script>
         <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-        <scrip src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script> AOS.init(); </script>
-        <script src="{{ asset('js/main.js') }}"></script>   
+        <script src="../js/main.js"></script>   
         <!-- Main JS File -->
     </body>
 </html>

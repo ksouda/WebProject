@@ -8,7 +8,7 @@
     <title>{% block title %}Back Office EDAYETNA{% endblock %}</title>
     <!-- plugins:css -->
     {% block css %}
-    
+       <link href="css/main.css" rel="stylesheet">
       <link href="{{ asset('build/assets/vendors/feather/feather.css') }}" rel="stylesheet">
       <link href="{{ asset('build/assets/vendors/css/vendor.bundle.base.css') }}" rel="stylesheet">
       <link href="{{ asset('build/assets/vendors/css/vendor.bundle.base.css') }}" rel="stylesheet">
@@ -159,34 +159,59 @@
         <table>
             <thead>
                 <tr>
-                <th>Id</th>
-                <th>Nom_materiel</th>
-                <th>Quantite_stock</th>
-                <th>Seuil_min</th>
-                <th>Prix_unitaire</th>
+                
+                <th>Nom du materiel</th>
+                <th>Quantité</th>
+                <th>Seuil minimale</th>
+                <th>Prix unitaire</th>
                 <th>Categorie</th>
                 <th>Description</th>
+                <th>Photo</th>
+                <th>Nom du Fournisseur</th>
                 <th>actions</th>
+                
+
                 </tr>
             </thead>
             <tbody>
                 {% for materiaux in materiauxes %}
                   <tr>
-                      <td>{{ materiaux.id }}</td>
+                      
                       <td>{{ materiaux.nomMateriel }}</td>
                       <td>{{ materiaux.quantiteStock }}</td>
                       <td>{{ materiaux.seuilMin }}</td>
                       <td>{{ materiaux.prixUnitaire }}</td>
                       <td>{{ materiaux.categorie }}</td>
-                      <td>{{ materiaux.description }}</td>
+                      <td>
+                          <div class="description">
+                              <a href="javascript:void(0);" class="show-more-link" onclick="openModal(`{{ materiaux.description|e('js') }}`)">
+                                  <i class="fa fa-info-circle" style="color: #17a2b8;"></i> 
+                              </a>
+                          </div>
+                      </td>
+
+                      <td>
+                          {% if materiaux.photo|length > 20 %}
+                              {{ materiaux.photo|slice(0, 20) }}...
+                          {% else %}
+                              {{ materiaux.photo }}
+                          {% endif %}
+                      </td>
+                      <td>
+                          {% if materiaux.idFournisseur %}
+                              {{ materiaux.idFournisseur.nomFournisseur }}
+                          {% else %}
+                              Aucun fournisseur
+                          {% endif %}
+                      </td>
+                      
+
                     <td>
                       <a href="{{ path('app_materiaux_edit', {'id': materiaux.id}) }}">
                       <i class="fa fa-edit" style="color: #ffc107;"></i>
                       </a>
                        {{ include('backoff/materiaux/_delete_form.html.twig') }}
-                      <a href="{{ path('app_materiaux_show', {'id': materiaux.id}) }}">
-                        <i class="fa fa-info-circle" style="color: #17a2b8;"></i>
-                      </a>
+                      
                     </td>
                   </tr>
                 {% else %}
@@ -197,6 +222,19 @@
 
           </tbody>
         </table>
+
+<!-- Modale pour afficher la description complète -->
+<div id="descriptionModal" class="modal" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);">
+    <div class="modal-content" style="background-color: white; margin: 10% auto; padding: 20px; width: 50%; border-radius: 8px; position: relative;">
+        <span class="close-btn" onclick="closeModal()" style="position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer;">&times;</span>
+        <h4>Description complète</h4>
+        <p id="modal-description"></p>
+    </div>
+</div>
+
+
+
+</div>
         <div class="pagination">
             <a href="#">&laquo;</a>
             <a href="#">1</a>
@@ -238,6 +276,33 @@
       <script src="{{ asset('build/assets/js/dashboard.js') }}"></script>
     {% endblock %}
     <!-- <script src="assets/js/Chart.roundedBarCharts.js"></script> -->
+    <script src="{{ asset('js/main.js') }}"></script> 
+      
     <!-- End custom js for this page-->
- {% endblock %} </body>
+ {% endblock %} 
+ <script>
+function openModal(description) {
+    // Insérer la description complète dans la modale
+    document.getElementById('modal-description').innerText = description;
+
+    // Afficher la modale
+    document.getElementById('descriptionModal').style.display = 'block';
+}
+
+function closeModal() {
+    // Fermer la modale
+    document.getElementById('descriptionModal').style.display = 'none';
+}
+
+// Fermer la modale en cliquant en dehors
+window.onclick = function(event) {
+    let modal = document.getElementById('descriptionModal');
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+
+ </body>
 </html>

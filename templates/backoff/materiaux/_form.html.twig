@@ -160,19 +160,19 @@
                     {{ form_errors(form.nom_materiel) }}
                 </div>
 
-                <label for="Quantite_stock">Quantite_stock</label>
+                <label for="Quantite_stock">Quantité</label>
                 {{ form_widget(form.quantite_stock, { 'attr': {'class': 'form-control'} }) }}
                 <div class="error-message text-danger small">
                     {{ form_errors(form.quantite_stock) }}
                 </div>
 
-                <label for="seuil_min">Seuil_minimale</label>
+                <label for="seuil_min">Seuil minimale</label>
                 {{ form_widget(form.seuil_min, { 'attr': {'class': 'form-control'} }) }}
                 <div class="error-message text-danger small">
                     {{ form_errors(form.seuil_min) }}
                 </div>
 
-                <label for="prix_unitaire">Prix_Unitaire</label>
+                <label for="prix_unitaire">Prix Unitaire</label>
                 {{ form_widget(form.prix_unitaire, { 'attr': {'class': 'form-control'} }) }}
                 <div class="error-message text-danger small">
                     {{ form_errors(form.prix_unitaire) }}
@@ -189,6 +189,22 @@
                 <div class="error-message text-danger small">
                     {{ form_errors(form.description) }}
                 </div>
+
+                <label for="photo">Photo</label>
+                {{ form_widget(form.photo, { 'attr': {'class': 'form-control'} }) }}
+                <div class="error-message text-danger small">
+                    {{ form_errors(form.photo) }}
+                </div>
+
+                <label for="id_fournisseur">Fournisseur</label>
+                {{ form_widget(form.id_fournisseur, { 'attr': {'class': 'form-control'} }) }}
+                <div class="error-message text-danger small">
+                    {{ form_errors(form.id_fournisseur) }}
+                </div>
+
+
+                
+
                 
                 <button type="submit" class="btn btn-primary me-2" style="margin-top: 10px;">Enregistrer</button>
                 

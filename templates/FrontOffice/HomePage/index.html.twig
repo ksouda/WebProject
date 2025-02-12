@@ -265,42 +265,61 @@
             </div>
 
             <div id="materiaux" class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
-              <!-- Example Material 1 -->
-              <div class="col-lg-4 col-md-6 portfolio-item">
-                <img src="img/masonry-portfolio/argile.jpeg" class="img-fluid" alt="Argile sans cuisson">
-                <div class="portfolio-info">
-                  <h4>Argile sans cuisson</h4>
-                  <a href="img/masonry-portfolio/argile.jpeg" title="Material 1" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                  <!-- <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-                </div>
-              </div>
+              <div id="materiaux" class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
+    {% for materiau in materiauxes |slice(0, 3)%}
+        <div class="col-lg-4 col-md-6 portfolio-item">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <!-- Front de la carte -->
+                    <div class="flip-card-front">
+                        <img src="{{ asset('img/masonry-portfolio/' ~ materiau.photo) }}" class="img-fluid" alt="{{ materiau.NomMateriel }}">
+                        <div class="portfolio-info">
+                            <h4>{{ materiau.NomMateriel }}</h4>
+                            <p>{{ materiau.PrixUnitaire }} TND</p>
+                            <a href="{{ asset('img/masonry-portfolio/' ~ materiau.photo) }}" title="{{ materiau.NomMateriel }}" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
+                            <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> 
+                        </div>
+                    </div>
 
-                <!-- Example Material 2 -->
-                <div class="col-lg-4 col-md-6 portfolio-item">
-                  <img src="img/masonry-portfolio/laines.jpeg" class="img-fluid" alt="laine">
-                  <div class="portfolio-info">
-                    <h4>Laines en coton</h4>
-                    <a href="img/masonry-portfolio/laines.jpeg" title="Material 1" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                    <!-- <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-                  </div>
+                    <!-- Back de la carte -->
+                    <div class="flip-card-back">
+                        <div class="card-details">
+                            <h4>{{ materiau.NomMateriel }}</h4>
+                            <p><strong>Description :</strong> {{ materiau.Description }}</p>
+                            <p><strong>Prix :</strong> {{ materiau.PrixUnitaire }} TND</p>
+                            <p><strong>Catégorie :</strong> {{ materiau.Categorie }}</p>
+                        </div>
+                    </div>
                 </div>
-
-                <!-- Example Material 3 -->
-                <div class="col-lg-4 col-md-6 portfolio-item">
-                  <img src="img/masonry-portfolio/perles.jpeg" class="img-fluid" alt="laine">
-                  <div class="portfolio-info">
-                    <h4>Des perles</h4>
-                    <a href="img/masonry-portfolio/perles.jpeg" title="Material 1" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
-                    <!-- <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> -->
-                  </div>
-                </div>
-          </div>
+            </div>
         </div>
+    {% endfor %}
+</div>
+
       </div><!-- End Portfolio Container -->
       </div>
         </div>
     </section><!-- /Portfolio Section -->
+ <script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.details-link').forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault(); // Empêche le lien de s'ouvrir
+      const card = this.closest('.portfolio-item').querySelector('.flip-card');
+      const cardInner = card.querySelector('.flip-card-inner');
+      
+      // Effectuer le premier flip
+      card.classList.add('flip');
+      
+      // Retirer la classe 'flip' après 1.5 seconde pour revenir à l'état initial
+      setTimeout(() => {
+        card.classList.remove('flip');
+      }, 8000); // 8000ms = 8 seconde
+    });
+  });
+});
 
+</script>  
     <!-- Equipe Section -->
     <section id="team" class="team section light-background ">
 
@@ -441,7 +460,7 @@
                 <li><i class="bi bi-check"></i> <span>2 heures de formation en ligne</span></li>
                 <li class="na"><i class="bi bi-x"></i> <span>Pas d'expérience préalable requise</span></li>
               </ul>
-              <a href="#" class="buy-btn">S'inscrire</a>
+              <a href="/front_client" class="buy-btn">S'inscrire</a>
             </div>
           </div><!-- End Pricing Item -->
 

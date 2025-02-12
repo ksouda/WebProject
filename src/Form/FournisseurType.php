@@ -27,11 +27,13 @@ class FournisseurType extends AbstractType
             'constraints' => [
                 new Assert\NotBlank(['message' => 'L\'adresse est obligatoire.']),
                 new Assert\Regex([
-                    'pattern' => '/^[^\d]+$/',
-                    'message' => 'L\'adresse ne doit pas contenir de chiffres.'
+                    'pattern' => '/^[\p{L}0-9\s]+$/u',
+                    'message' => 'L\'adresse ne doit contenir que des lettres, des chiffres et des espaces.',
                 ]),
             ],
+            'attr' => ['class' => 'form-control'],
         ])
+        
         ->add('contact', TextType::class, [
             'constraints' => [
                 new Assert\NotBlank(['message' => 'Le contact est obligatoire.']),

@@ -19,7 +19,7 @@
    * Mobile nav toggle
    */
   const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
-
+   
   function mobileNavToogle() {
     document.querySelector('body').classList.toggle('mobile-nav-active');
     mobileNavToggleBtn.classList.toggle('bi-list');
@@ -38,7 +38,7 @@
     });
 
   });
-
+  
   /**
    * Preloader
    */
@@ -263,6 +263,10 @@ function showCategory(category) {
 document.addEventListener("DOMContentLoaded", function() {
   showCategory('produits');  // Afficher Produits par défaut
 });
+
+
+        
+
 
 
 

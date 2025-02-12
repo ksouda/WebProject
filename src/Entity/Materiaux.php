@@ -47,6 +47,9 @@ class Materiaux
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $id_user = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $photo = null;
+
     public function __construct()
     {
         $this->id_commande = new ArrayCollection();
@@ -130,12 +133,12 @@ class Materiaux
     }
 
 
-    public function getIdFournisseur(): ?fournisseur
+    public function getIdFournisseur(): ?Fournisseur
     {
         return $this->id_fournisseur;
     }
 
-    public function setIdFournisseur(?fournisseur $id_fournisseur): static
+    public function setIdFournisseur(?Fournisseur $id_fournisseur): static
     {
         $this->id_fournisseur = $id_fournisseur;
 
@@ -177,6 +180,18 @@ class Materiaux
     public function setIdUser(?User $id_user): static
     {
         $this->id_user = $id_user;
+
+        return $this;
+    }
+
+    public function getPhoto(): ?string
+    {
+        return $this->photo;
+    }
+
+    public function setPhoto(string $photo): static
+    {
+        $this->photo = $photo;
 
         return $this;
     }

@@ -11,6 +11,7 @@
 # Help: https://bootstrapmade.com/color-system/
 --------------------------------------------------------------*/
 /* Fonts */
+
 .modal {
   display: none; /* Cachée par défaut */
   position: fixed;
@@ -64,6 +65,9 @@
   --nav-color: #ffffff;  /* The default color of the main navmenu links */
   --nav-hover-color: #CE987E ; /* Applied to main navmenu links when they are hovered over or active */
   --nav-mobile-background-color: #ffffff; /* Used as the background color for mobile navigation menu */
+  --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
+  --nav-dropdown-color: #8F491C; /* Used for navigation links of the dropdown items in the navigation menu. */
+  --nav-dropdown-hover-color: #CE987E;
 }
 
 /* Color Presets - These classes override global colors when applied to any section or element, providing reuse of the sam color scheme. */
@@ -260,7 +264,7 @@ h {
     display: block;
     position: absolute;
     visibility: hidden;
-    left: 14px;
+    left: -14px;
     top: 130%;
     opacity: 0;
     transition: 0.3s;
@@ -270,7 +274,7 @@ h {
   }
 
   .navmenu .dropdown ul li {
-    min-width: 200px;
+    min-width: 160px;
   }
 
   .navmenu .dropdown ul a {
@@ -458,31 +462,6 @@ h {
     background-color: rgba(33, 37, 41, 0.03);
   }
 
-  .mobile-nav-active {
-    overflow: hidden;
-  }
-
-  .mobile-nav-active .mobile-nav-toggle {
-    color: #fff;
-    position: absolute;
-    font-size: 32px;
-    top: 15px;
-    right: 15px;
-    margin-right: 0;
-    z-index: 9999;
-  }
-
-  .mobile-nav-active .navmenu {
-    position: fixed;
-    overflow: hidden;
-    inset: 0;
-    background: rgba(33, 37, 41, 0.8);
-    transition: 0.3s;
-  }
-
-  .mobile-nav-active .navmenu>ul {
-    display: block;
-  }
 }
 
 /*--------------------------------------------------------------
@@ -1598,3 +1577,4 @@ section,
   padding: 0;
   color: color-mix(in srgb, var(--default-color), transparent 30%);
 }
+

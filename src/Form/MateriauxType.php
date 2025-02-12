@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 class MateriauxType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -87,25 +87,26 @@ class MateriauxType extends AbstractType
                 'step' => '0.01'  // Permet d'entrer des décimales dans l'input HTML
             ]
         ])
-        
-        ->add('categorie', TextType::class, [
-            'required' => false,
+        ->add('categorie', ChoiceType::class, [
+            'choices' => [
+                'Peinture' => 'peinture',
+                'Poterie' => 'poterie',
+                'Céramique' => 'ceramique',
+                'Bois Sculpté' => 'bois',
+                'Tissu et Textile' => 'tissu',
+                'Métal Forgé' => 'metal',
+                'Papier et Carton' => 'papier',
+                'Verre Soufflé' => 'verre',
+                'Cuir' => 'cuir',
+                'Pierre et Marbre' => 'pierre',
+            ],
+            'placeholder' => 'Sélectionner une catégorie',
+            'attr' => ['class' => 'form-control'],
             'constraints' => [
                 new Assert\NotBlank(['message' => 'La catégorie est obligatoire.']),
-                new Assert\Length([
-                    'max' => 255,
-                    'maxMessage' => 'La catégorie ne doit pas dépasser 255 caractères.'
-                ]),
-                new Assert\Regex([
-                    'pattern' => '/^[a-zA-ZÀ-ÿ\s]+$/',
-                    'message' => 'La catégorie ne doit contenir que des lettres et des espaces.'
-                ]),
             ],
-            'attr' => [
-                'class' => 'form-control',
-                'placeholder' => 'Ex: Outils de bricolage'
-            ]
         ])
+        
         
         ->add('description', TextType::class, [
             'required' => false,
@@ -124,9 +125,26 @@ class MateriauxType extends AbstractType
                 'rows' => 4
             ]
         ])
+        ->add('photo', TextType::class, [
+            'required' => false,  
+            'constraints' => [
+                new Assert\NotBlank(['message' => 'Le chemin de la photo est obligatoire.']),
+               
+            ],
+            'attr' => [
+                'class' => 'form-control',
+                'placeholder' => 'Entrez le chemin ou l\'URL de la photo'
+            ]
+        ])
+        ->add('id_fournisseur', EntityType::class, [
+            'class' => Fournisseur::class,
+            'choice_label' => 'nom_fournisseur',  // Spécifie la propriété à afficher pour chaque fournisseur
+            'placeholder' => 'Sélectionner un fournisseur',  // Optionnel
+            'attr' => ['class' => 'form-control'],
+            'required' => true,  
+        ]);
+        
     
-            
-        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
