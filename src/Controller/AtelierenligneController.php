@@ -16,9 +16,17 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/atelierenligne')]
 final class AtelierenligneController extends AbstractController
 {
-    private const id_user = 1;
+    private const id_user = 2;
 
-    #[Route(name: 'app_atelierenligne', methods: ['GET'])]
+    #[Route('/admin', name: 'app_atelierenligneadmin', methods: ['GET'])]
+    public function indexadmin(AtelierenligneRepository $atelierenligneRepository): Response
+    {
+        return $this->render('backoff/atelier/atelieradmin.html.twig', [
+            'atelierenlignes' => $atelierenligneRepository->findAll(),
+        ]);
+    }
+
+    #[Route('', name: 'app_atelierenligne', methods: ['GET'])]
     public function index(AtelierenligneRepository $atelierenligneRepository): Response
     {
         $atelierenlignes = $atelierenligneRepository->findBy(['id_user' => self::id_user]);
@@ -28,13 +36,7 @@ final class AtelierenligneController extends AbstractController
         ]);
     }
 
-    #[Route(name: 'app_atelierenligneadmin', methods: ['GET'])]
-    public function indexadmin(AtelierenligneRepository $atelierenligneRepository): Response
-    {
-        return $this->render('backoff/atelier/atelieradmin.html.twig', [
-            'atelierenlignes' => $atelierenligneRepository->findAll(),
-        ]);
-    }
+    
 
     #[Route('/new', name: 'app_atelierenligne_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response

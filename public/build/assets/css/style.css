@@ -8801,6 +8801,12 @@ th {
   border-width: 0;
 }
 
+td {
+  white-space: normal !important;  /* Permet les retours à la ligne */
+  word-wrap: break-word;           /* Coupe les mots trop longs */
+  max-width: 200px;                /* Ajuste la largeur selon ton besoin */
+}
+
 label {
   display: inline-block;
 }

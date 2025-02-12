@@ -37,6 +37,12 @@
   max-width: 600px;
 }
 
+.modal p {
+  white-space: normal; /* Permet le retour à la ligne */
+  word-wrap: break-word; /* Coupe les mots trop longs */
+  overflow-wrap: break-word; /* Alternative pour une meilleure compatibilité */
+}
+
 /* Bouton de fermeture */
 .close {
   position: absolute;
