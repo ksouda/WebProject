@@ -187,6 +187,60 @@ const swiper = new Swiper('.init-swiper', {
     }
   }
 });
+
+let modal = document.getElementById("atelierInfoModal");
+let closeButton = document.getElementById("closeModalButton");
+let closeIcon = document.querySelector(".close-modal");
+
+function toggleDetails(event, link) {
+    event.preventDefault(); // Empêcher le rechargement de la page
+
+    let button = link.querySelector("button");
+
+    if (!button) return;
+
+    // Mettre à jour les informations du modal
+    document.getElementById("atelierTitle").innerText = button.getAttribute("data-titre") || "Atelier";
+    document.getElementById("atelierCategory").innerText = button.getAttribute("data-category") || "Non spécifiée";
+    document.getElementById("atelierFormateur").innerText = button.getAttribute("data-formateur") || "Inconnu";
+    document.getElementById("atelierDate").innerText = button.getAttribute("data-date") || "Non spécifiée";
+    document.getElementById("atelierPrix").innerText = button.getAttribute("data-prix") || "0";
+    document.getElementById("atelierDuree").innerText = button.getAttribute("data-duree") || "Non définie";
+    document.getElementById("atelierStatut").innerText = button.getAttribute("data-statut") || "En attente";
+    document.getElementById("atelierLien").innerText = button.getAttribute("data-lien") || "Non disponible";
+
+    // Afficher le modal
+    modal.style.display = "block";
+}
+
+// Ajouter l'événement à chaque lien contenant un bouton info
+document.querySelectorAll("a[data-toggle='modal']").forEach(link => {
+    link.addEventListener("click", function (event) {
+        toggleDetails(event, this);
+    });
+});
+
+// Fermer le modal quand on clique sur "Fermer"
+closeButton.addEventListener("click", function () {
+    modal.style.display = "none";
+});
+
+// Fermer le modal quand on clique sur "X"
+closeIcon.addEventListener("click", function () {
+    modal.style.display = "none";
+});
+
+// Fermer le modal si on clique à l'extérieur de la boîte
+window.addEventListener("click", function (event) {
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+});
+
+
+
+
+
 document.addEventListener("DOMContentLoaded", function() {
   console.log("Script chargé"); // Vérifie si le script est bien exécuté
 

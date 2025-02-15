@@ -60,8 +60,8 @@
                         <li class="dropdown"><a href="#"><span>Historique</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                             <ul>
                             <li><a href="#">Commandes</a></li>
-                            <li><a href="#">Réclamations</a></li>
-                            <li><a href="#">Aeliers en ligne</a></li>
+                            <li><a href="">Réclamations</a></li>
+                            <li><a href="{{path('app_inscriptions')}}">Aeliers en ligne</a></li>
                             </ul>
                         </li>
                         <li><a href="#">Déconnexion</a></li>
@@ -75,7 +75,10 @@
         
         {% block body %}
 
-            <section id="atelier" class="pricing section">
+            <section id="atelier" class="pricing section lightt-background">
+                <div class="container section-title" data-aos="fade-up">
+                    <h2>Les ateliers en ligne disponibles </h2>
+                </div>
                 <div class="container">
                     <div class="row gy-4">
                         {% for atelierenligne in atelierenlignes %}
@@ -91,10 +94,10 @@
                                         <li><i class="bi bi-check"></i> <span>Durée : {{ atelierenligne.duree }} min</span></li>
                                         <li><a href="javascript:void(0);" class="see-more" onclick="openModal('{{ atelierenligne.id }}')">Voir plus</a></li>
                                     </ul>
-                                    <a href="{{ path('app_atelierenligne_edit', {'id': atelierenligne.id}) }}" class="buy-btn">S'inscrire</a>
+                                    <a href="{{ path('app_inscription_atelier', {'id': atelierenligne.id}) }}" class="buy-btn">S'inscrire</a>
                                 </div>
                             </div><!-- End Pricing Item -->
- 
+                            
                             <!-- Modale pour chaque atelier -->
                             <div id="modal{{ atelierenligne.id }}" class="modal">
                                 <div class="modal-content">
@@ -114,10 +117,7 @@
                         {% endfor %}
                     </div>
                 </div>
-            </section>
-
-
-
+            
         
         {% endblock %}
         

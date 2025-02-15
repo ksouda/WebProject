@@ -22,10 +22,12 @@ class Inscriptionatelier
     private ?string $statut = null;
 
     #[ORM\ManyToOne(inversedBy: 'inscription')]
-    private ?atelierenligne $atelier = null;
+    private ?Atelierenligne $atelier = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: User::class,inversedBy: 'inscriptions')]
+    #[ORM\JoinColumn(name: 'id_user_id', referencedColumnName: 'id', nullable: false)]
     private ?User $id_user = null;
+
 
     public function getId(): ?int
     {

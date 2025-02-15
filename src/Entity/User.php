@@ -44,6 +44,9 @@ class User
     #[ORM\OneToMany(targetEntity: Atelierenligne::class, mappedBy: 'id_user')]
     private Collection $atelierenlignes;
 
+    #[ORM\OneToMany(targetEntity: Inscriptionatelier::class, mappedBy: 'id_user')]
+    private Collection $inscriptions;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -147,10 +150,17 @@ class User
     public function __construct()
     {
         $this->atelierenlignes = new ArrayCollection();
+        $this->inscriptions = new ArrayCollection();
+
     }
 
     public function getAtelierenligne(): Collection
     {
         return $this->atelierenlignes;
+    }
+
+    public function getinscription(): Collection
+    {
+        return $this->inscriptions;
     }
 }

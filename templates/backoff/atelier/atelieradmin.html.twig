@@ -156,11 +156,8 @@
             <div class="search-box">
                 <i class="fa fa-search"></i>
                 <input type="text" placeholder="Rechercher...">
-            </div>
-            <a href="{{ path('app_atelierenligne_new') }}" title="Ajouter un atelier">
-                <i class="fa fa-plus"></i>
-            </a>        
-            </div>
+            </div>    
+        </div>
         <table>
             <thead>
                 <tr>
@@ -173,6 +170,7 @@
                     <th>Date_cours</th>
                     <th>Durée</th>
                     <th>Lien</th>
+                    <th>Inscriptions</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -193,6 +191,15 @@
         <td>
             <span class="short-link">{{ atelierenligne.lien|slice(0, 10) }}...</span>
             <span class="full-link" style="display: none;">{{ atelierenligne.lien }}</span>
+        </td>
+        <td>
+            <ul>
+              {% for inscription in atelierenligne.inscription %}
+                  <li>{{ inscription.IdUser.nom }} {{ inscription.IdUser.prenom }}</li>
+              {% else %}
+                  <li>Aucun inscrit</li>
+              {% endfor %}
+            </ul>
         </td>
         <td class="action-icons">
             {{ include('backoff/atelier/_delete_form.html.twig') }}

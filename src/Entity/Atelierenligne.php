@@ -43,7 +43,7 @@ class Atelierenligne
     private ?string $lien = null;
 
     
-    #[ORM\OneToMany(targetEntity: Inscriptionatelier::class, mappedBy: 'atelier')]
+    #[ORM\OneToMany(targetEntity: Inscriptionatelier::class, mappedBy: 'atelier', cascade: ["remove"])]
     private Collection $inscription;
 
     #[ORM\ManyToOne(targetEntity: User::class,inversedBy: 'atelierenlignes')]

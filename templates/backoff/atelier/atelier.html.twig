@@ -173,6 +173,7 @@
                     <th>Date_cours</th>
                     <th>Durée</th>
                     <th>Lien</th>
+                    <th>Inscriptions</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -193,6 +194,15 @@
         <td>
             <span class="short-link">{{ atelierenligne.lien|slice(0, 10) }}...</span>
             <span class="full-link" style="display: none;">{{ atelierenligne.lien }}</span>
+        </td>
+        <td>
+            <ul>
+              {% for inscription in atelierenligne.inscription %}
+                  <li>{{ inscription.IdUser.nom }} {{ inscription.IdUser.prenom }}</li>
+              {% else %}
+                  <li>Aucun inscrit</li>
+              {% endfor %}
+            </ul>
         </td>
         <td class="action-icons">
             <a href="{{ path('app_atelierenligne_edit', {'id': atelierenligne.id}) }}"><i class="fa fa-edit" style="color: #ffc107;"></i></a>

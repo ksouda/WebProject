@@ -11,7 +11,8 @@
 # Help: https://bootstrapmade.com/color-system/
 --------------------------------------------------------------*/
 /* Fonts */
-.modal {
+.modal,
+.custom-modal{
   display: none; /* Cachée par défaut */
   position: fixed;
   z-index: 1000;
@@ -25,7 +26,8 @@
 }
 
 /* Contenu de la boîte */
-.modal-content {
+.modal-content,
+.custom-modal-content{
   background: white;
   padding: 20px;
   width: 80%;
@@ -37,14 +39,16 @@
   max-width: 600px;
 }
 
-.modal p {
+.modal p 
+.custom-modal p{
   white-space: normal; /* Permet le retour à la ligne */
   word-wrap: break-word; /* Coupe les mots trop longs */
   overflow-wrap: break-word; /* Alternative pour une meilleure compatibilité */
 }
 
 /* Bouton de fermeture */
-.close {
+.close,
+.close-modal{
   position: absolute;
   top: 10px;
   right: 20px;
@@ -83,6 +87,11 @@
 .light-background {
   --background-color: #F7F3E2;
   --surface-color: #ffffff;
+}
+.lightt-background {
+  --background-color: #F7F3E2;
+  --surface-color: #ffffff;
+  min-height: 90vh;
 }
 
 .dark-background {
@@ -987,6 +996,7 @@ section,
   max-height: 70%;
 }
 
+
 /*--------------------------------------------------------------
 # Call To Action Section
 --------------------------------------------------------------*/
@@ -1302,6 +1312,11 @@ section,
 .team .team-member .social a+a {
   margin-left: 8px;
 }
+.action-icons {
+  display: flex;
+  gap: 15px; /* Espacement entre les icônes */
+  align-items: center;
+}
 
 /*--------------------------------------------------------------
 # Pricing Section
@@ -1419,6 +1434,9 @@ section,
 
 }
 #atelier {
+  margin-top: 80px; /* Ajuste la valeur selon la hauteur de la navbar */
+}
+#inscriptions {
   margin-top: 80px; /* Ajuste la valeur selon la hauteur de la navbar */
 }
 
@@ -1591,3 +1609,20 @@ section,
   color: color-mix(in srgb, var(--default-color), transparent 30%);
 }
 
+.close-modal:hover {
+  color: #8F491C;
+}
+
+/* Bouton de fermeture */
+.close-button {
+  background-color: #8F491C;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.close-button:hover {
+  background-color: #CE987E;
+}
