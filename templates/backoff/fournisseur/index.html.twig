@@ -151,8 +151,13 @@
             
             <div class="search-box">
                 <i class="fa fa-search"></i>
-                <input type="text" placeholder="Rechercher...">
+                <input id="searchInput" type="text" placeholder="Rechercher...">
+                <button onclick=" sortTableByName()" style="background: none; border: none; padding: 0; cursor: pointer;">
+                   <i class="fa fa-sort" style="color:rgb(0, 21, 44); font-size: 20px;"></i> 
+                </button>
+
             </div>
+            
             <a href="{{ path('app_fournisseur_new') }}">
             <i class="fa fa-plus"></i>
             </a>
@@ -161,7 +166,6 @@
         <table>
             <thead>
                 <tr>
-                <th>Id</th>
                 <th>Nom_fournisseur</th>
                 <th>Adresse</th>
                 <th>Contact</th>
@@ -171,7 +175,6 @@
             <tbody>
                 {% for fournisseur in fournisseurs %}
             <tr>
-                <td>{{ fournisseur.id }}</td>
                 <td>{{ fournisseur.nomFournisseur }}</td>
                 <td>{{ fournisseur.adresse }}</td>
                 <td>{{ fournisseur.contact }}</td>
@@ -235,5 +238,76 @@
     {% endblock %}
     <!-- <script src="assets/js/Chart.roundedBarCharts.js"></script> -->
     <!-- End custom js for this page-->
- {% endblock %} </body>
+ {% endblock %} 
+ <script>// script recherche
+document.addEventListener("DOMContentLoaded", function () {
+    // Sélectionne l'élément de saisie pour la recherche
+    let searchInput = document.getElementById("searchInput");
+
+    // Fonction qui filtre les lignes du tableau en fonction du texte saisi
+    function filterTable() {
+        // Récupère la valeur tapée dans l'input et la met en minuscules pour éviter la casse
+        let searchText = searchInput.value.toLowerCase();
+
+        // Sélectionne toutes les lignes du tableau (dans <tbody>)
+        let rows = document.querySelectorAll("tbody tr");
+
+        // Parcours chaque ligne du tableau
+        rows.forEach(row => {
+            // Sélectionne la cellule correspondant au nom du fournisseur
+            let nameCell = row.querySelector("td:nth-child(1)"); 
+
+            if (nameCell) {
+                // Récupère le texte du nom du founisseur et le met en minuscules
+                let nameText = nameCell.innerText.toLowerCase();
+                
+                // Vérifie si le texte tapé correspond au début du nom du founisseur
+                let textMatch = searchText === "" || nameText.startsWith(searchText); 
+
+                // Affiche la ligne si elle correspond à la recherche, sinon la cache
+                if (textMatch) {
+                    row.style.display = "";  // Afficher la ligne
+                } else {
+                    row.style.display = "none";  // Cacher la ligne
+                }
+            }
+        });
+    }
+
+    // Ajoute un écouteur d'événement pour détecter la saisie dans le champ de recherche
+    searchInput.addEventListener("input", filterTable);
+});
+
+
+
+let sortOrder = true; // true pour croissant, false pour décroissant
+
+function sortTableByName() {
+    const table = document.querySelector("table tbody"); // Sélectionne toutes les lignes du tableau
+    const rows = Array.from(table.rows); // Convertit les lignes du tableau en tableau pour pouvoir les trier
+
+    const sortedRows = rows.sort((a, b) => {
+        const aName = a.cells[0].innerText.toLowerCase(); // Récupère le texte de la première cellule (nom) de la ligne "a"
+        const bName = b.cells[0].innerText.toLowerCase(); // Idem pour la ligne "b"
+        
+        if (sortOrder) {
+            // Tri croissant
+            return aName.localeCompare(bName);
+        } else {
+            // Tri décroissant
+            return bName.localeCompare(aName);
+        }
+    });
+
+    // Remplace les anciennes lignes par les nouvelles lignes triées
+    sortedRows.forEach(row => table.appendChild(row));
+
+    // Alterne l'état du tri
+    sortOrder = !sortOrder;
+}
+
+
+</script>
+
+ </body>
 </html>

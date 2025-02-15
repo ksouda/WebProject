@@ -150,13 +150,18 @@
             
             <div class="search-box">
                 <i class="fa fa-search"></i>
-                <input type="text" placeholder="Rechercher...">
+                <input id="searchInput" type="text" placeholder="Rechercher...">
+                <button onclick="sortTableByQuantity()" style="background: none; border: none; padding: 0; cursor: pointer;">
+                   <i class="fa fa-sort" style="color:rgb(0, 21, 44); font-size: 20px;"></i> 
+                </button>
             </div>
+            
+
             <a href="{{ path('app_materiaux_new') }}">
             <i class="fa fa-plus"></i>
             </a>
         </div>
-        <table>
+        <table id="materiauxTable">
             <thead>
                 <tr>
                 
@@ -280,7 +285,9 @@
       
     <!-- End custom js for this page-->
  {% endblock %} 
+
  <script>
+ //modale description
 function openModal(description) {
     // Insérer la description complète dans la modale
     document.getElementById('modal-description').innerText = description;
@@ -301,7 +308,76 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
+
+
+
+// script recherche
+document.addEventListener("DOMContentLoaded", function () {
+    // Sélectionne l'élément de saisie pour la recherche
+    let searchInput = document.getElementById("searchInput");
+
+    // Fonction qui filtre les lignes du tableau en fonction du texte saisi
+    function filterTable() {
+        // Récupère la valeur tapée dans l'input et la met en minuscules pour éviter la casse
+        let searchText = searchInput.value.toLowerCase();
+
+        // Sélectionne toutes les lignes du tableau (dans <tbody>)
+        let rows = document.querySelectorAll("tbody tr");
+
+        // Parcours chaque ligne du tableau
+        rows.forEach(row => {
+            // Sélectionne la cellule correspondant au nom du matériel (2ème colonne)
+            let nameCell = row.querySelector("td:nth-child(1)"); 
+
+            if (nameCell) {
+                // Récupère le texte du nom du matériel et le met en minuscules
+                let nameText = nameCell.innerText.toLowerCase();
+                
+                // Vérifie si le texte tapé correspond au début du nom du matériel
+                let textMatch = searchText === "" || nameText.startsWith(searchText); 
+
+                // Affiche la ligne si elle correspond à la recherche, sinon la cache
+                if (textMatch) {
+                    row.style.display = "";  // Afficher la ligne
+                } else {
+                    row.style.display = "none";  // Cacher la ligne
+                }
+            }
+        });
+    }
+
+    // Ajoute un écouteur d'événement pour détecter la saisie dans le champ de recherche
+    searchInput.addEventListener("input", filterTable);
+});
+
+
+// TRI par quantité
+let isAscending = true;
+
+function sortTableByQuantity() {
+    const table = document.getElementById("materiauxTable");
+    const rows = Array.from(table.rows).slice(1); // Exclut l'en-tête
+
+    // Trie les lignes en fonction de la quantité dans la colonne 2 
+    const sortedRows = rows.sort((a, b) => {
+        const aQuantity = parseFloat(a.cells[1].innerText);
+        const bQuantity = parseFloat(b.cells[1].innerText);
+
+        // Si isAscending est true, tri croissant, sinon tri décroissant
+        return isAscending ? aQuantity - bQuantity : bQuantity - aQuantity;
+    });
+
+    // Remplace les anciennes lignes par les nouvelles lignes triées
+    sortedRows.forEach(row => table.appendChild(row));
+
+    // Alterner l'ordre pour le prochain clic
+    isAscending = !isAscending;
+}
+
+
 </script>
+
+
 
 
  </body>
