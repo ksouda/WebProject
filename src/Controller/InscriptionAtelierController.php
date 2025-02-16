@@ -63,13 +63,11 @@ class InscriptionAtelierController extends AbstractController
         }
 
         // Comparer les dates
-        if ($dateAtelier < $today) {
-            $inscription->setStatut('Terminé'); // Atelier déjà terminé
+        if ($dateAtelier = $today) {
+            $inscription->setStatut('En cours aujourd\'hui'); // Atelier déjà terminé
         } elseif ($dateAtelier > $today) {
             $inscription->setStatut('À venir'); // Atelier à venir
-        } else {
-            $inscription->setStatut('En cours aujourd\'hui'); // Atelier aujourd'hui
-        }
+        } 
         $entityManager->persist($inscription);
         $entityManager->flush();
 
@@ -86,16 +84,47 @@ class InscriptionAtelierController extends AbstractController
 
 
     #[Route('/inscriptionclient', name: 'app_inscriptions', methods: ['GET'])]
-    public function showinscri(InscriptionatelierRepository $inscriptionsatelierRepository): Response
+    public function showinscri(InscriptionatelierRepository $inscriptionsatelierRepository, EntityManagerInterface $entityManager): Response
     {
         // Récupérer toutes les inscriptions de l'utilisateur en fonction de l'ID
         $inscriptions = $inscriptionsatelierRepository->findBy(['id_user' => self::id_user]);
 
+        $today = new DateTime(); // Date actuelle
+
+        foreach ($inscriptions as $inscription) {
+            $atelier = $inscription->getAtelier(); // Supposons que l'inscription ait une relation avec un atelier
+            $dateCours = $atelier->getDateCours(); // Récupérer la date du cours de l'atelier
+
+            if ($dateCours === null) {
+                $inscription->setStatut('Date non définie'); // Gérer le cas où la date n'est pas définie
+            } elseif ($dateCours instanceof DateTime) {
+                $dateAtelier = $dateCours; // Si c'est déjà un objet DateTime
+            } else {
+                $dateAtelier = new DateTime($dateCours); // Créer un objet DateTime à partir de la chaîne
+            }
+
+            // Comparer les dates et changer le statut
+            if ($dateAtelier < $today) {
+                $inscription->setStatut('Terminé'); // Atelier déjà terminé
+            } elseif ($dateAtelier > $today) {
+                $inscription->setStatut('À venir'); // Atelier à venir
+            } else {
+                $inscription->setStatut('En cours aujourd\'hui'); // Atelier aujourd'hui
+            }
+
+            // Persister les modifications dans la base de données
+            $entityManager->persist($inscription);
+        }
+
+        // Enregistrer toutes les modifications
+        $entityManager->flush();
+
         // Renvoyer les données à la vue pour affichage
         return $this->render('frontoffice/front_atelier/inscription_atelier/inscriptionatelier.html.twig', [
-            'inscriptions' => $inscriptions, // Les inscriptions sont envoyées à la vue
+            'inscriptions' => $inscriptions, // Les inscriptions mises à jour sont envoyées à la vue
         ]);
     }
+
     
     #[Route('/{id}', name: 'app_annulation', methods: ['POST'])]
     public function delete(Request $request, Inscriptionatelier $inscriptionatelier, EntityManagerInterface $entityManager): Response
