@@ -109,7 +109,7 @@
                                     <i class="fa fa-info-circle" style="color: #17a2b8; font-size: 1.2rem; cursor: pointer;"></i>
                                 </button>
                                 </a>
-
+                                {{include('frontoffice/front_atelier/inscription_atelier/deleteinscri.html.twig')}}
                             </div>
                         </div>
                         </div>
@@ -130,7 +130,7 @@
                     <p><strong>Titre de l'atelier :</strong> <span id="atelierTitle"></span></p>
                     <p><strong>Catégorie :</strong> <span id="atelierCategory"></span></p>
                     <p><strong>Formateur :</strong> <span id="atelierFormateur"></span></p>
-                    <p><strong>Date d'inscription :</strong> <span id="atelierDate"></span></p>
+                    <p><strong>Date de l'atelier:</strong> <span id="atelierDate"></span></p>
                     <p><strong>Prix :</strong> <span id="atelierPrix"></span> dt</p>
                     <p><strong>Durée :</strong> <span id="atelierDuree"></span> minutes</p>
                     <p><strong>Lien :</strong> <span id="atelierLien"></span></p>
@@ -138,6 +138,7 @@
                     <button id="closeModalButton" class="close-button">Fermer</button>
                 </div>
             </div>
+
 
             {% if app.flashes('info') is not empty %}
                 <script>

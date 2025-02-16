@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
-use App\Entity\InscriptionAtelier;
-use App\Entity\AtelierEnLigne;
+use App\Entity\Inscriptionatelier;
+use App\Entity\AtelierenLigne;
 use App\Entity\User;
 use App\Repository\InscriptionatelierRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use DateTime;
 
@@ -34,7 +35,7 @@ class InscriptionAtelierController extends AbstractController
         }
 
         // Vérifier si l'utilisateur est déjà inscrit
-        $existingInscription = $entityManager->getRepository(InscriptionAtelier::class)->findOneBy([
+        $existingInscription = $entityManager->getRepository(Inscriptionatelier::class)->findOneBy([
             'id_user' => $user,
             'atelier' => $atelier
         ]);
@@ -45,7 +46,7 @@ class InscriptionAtelierController extends AbstractController
             
         }
 
-        $inscription = new InscriptionAtelier();
+        $inscription = new Inscriptionatelier();
         $inscription->setIdUser($user);
         $inscription->setAtelier($atelier);
         $inscription->setDateinscri(new \DateTime());
@@ -72,25 +73,42 @@ class InscriptionAtelierController extends AbstractController
         $entityManager->persist($inscription);
         $entityManager->flush();
 
-        $inscriptions = $entityManager->getRepository(InscriptionAtelier::class)->findBy(['id_user' => $user]);
+        $inscriptions = $entityManager->getRepository(Inscriptionatelier::class)->findBy(['id_user' => $user]);
 
         $this->addFlash('success', 'Inscription réussie à l\'atelier : ' . $atelier->getTitre());
 
         return $this->render('frontoffice/front_atelier/inscription_atelier/inscriptionatelier.html.twig', [
                 'inscriptions' => $inscriptions, // Assurez-vous que cette variable est bien passée à la vue
                 'flash_message' => 'Vous êtes inscrit à un nouvel atelier!' // Ajouter un message pour l'affichage de la réussite
-            ])
+        ]);
 
-    ;}
+    }
+
+
     #[Route('/inscriptionclient', name: 'app_inscriptions', methods: ['GET'])]
-public function showinscri(InscriptionAtelierRepository $inscriptionsatelierRepository): Response
-{
-    // Récupérer toutes les inscriptions de l'utilisateur en fonction de l'ID
-    $inscriptions = $inscriptionsatelierRepository->findBy(['id_user' => self::id_user]);
+    public function showinscri(InscriptionatelierRepository $inscriptionsatelierRepository): Response
+    {
+        // Récupérer toutes les inscriptions de l'utilisateur en fonction de l'ID
+        $inscriptions = $inscriptionsatelierRepository->findBy(['id_user' => self::id_user]);
 
-    // Renvoyer les données à la vue pour affichage
-    return $this->render('frontoffice/front_atelier/inscription_atelier/inscriptionatelier.html.twig', [
-        'inscriptions' => $inscriptions, // Les inscriptions sont envoyées à la vue
-    ]);
+        // Renvoyer les données à la vue pour affichage
+        return $this->render('frontoffice/front_atelier/inscription_atelier/inscriptionatelier.html.twig', [
+            'inscriptions' => $inscriptions, // Les inscriptions sont envoyées à la vue
+        ]);
+    }
+    
+    #[Route('/{id}', name: 'app_annulation', methods: ['POST'])]
+    public function delete(Request $request, Inscriptionatelier $inscriptionatelier, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$inscriptionatelier->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($inscriptionatelier);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_inscriptions', [], Response::HTTP_SEE_OTHER);
+    }
 }
-}
+
+
+
+

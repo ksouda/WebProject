@@ -156,9 +156,7 @@ class Atelierenligne
         return $this;
     }
 
-    /**
-     * @return Collection<int, Inscriptionatelier>
-     */
+
     public function getInscription(): Collection
     {
         return $this->inscription;

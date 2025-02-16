@@ -12,7 +12,7 @@
 --------------------------------------------------------------*/
 /* Fonts */
 .modal,
-.custom-modal{
+.custom-modal {
   display: none; /* Cachée par défaut */
   position: fixed;
   z-index: 1000;
@@ -27,11 +27,11 @@
 
 /* Contenu de la boîte */
 .modal-content,
-.custom-modal-content{
+.custom-modal-content {
   background: white;
   padding: 20px;
   width: 80%;
-  text-align: center;
+  text-align: center; /* Alignement du texte à gauche */
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
   position: relative;
@@ -39,22 +39,31 @@
   max-width: 600px;
 }
 
-.modal p 
-.custom-modal p{
+/* Pour le texte dans le modal */
+.modal p, 
+.custom-modal p {
   white-space: normal; /* Permet le retour à la ligne */
   word-wrap: break-word; /* Coupe les mots trop longs */
   overflow-wrap: break-word; /* Alternative pour une meilleure compatibilité */
+  margin-bottom: 10px; /* Espace entre les paragraphes */
+  line-height: 1.6; /* Améliorer l'espacement entre les lignes */
 }
 
 /* Bouton de fermeture */
 .close,
-.close-modal{
+.close-modal {
   position: absolute;
   top: 10px;
   right: 20px;
   font-size: 30px;
   cursor: pointer;
+  color: #333;
+  background-color: transparent;
+  border: none;
 }
+
+
+
 
 :root {
   --default-font: "Open Sans",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";

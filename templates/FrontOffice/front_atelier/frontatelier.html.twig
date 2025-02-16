@@ -90,7 +90,7 @@
                                     <ul>
                                         <li><i class="bi bi-check"></i> <span>{{ atelierenligne.description|slice(0, 10) }}...</span></li>
                                         <li><i class="bi bi-check"></i> <span>Niveau : {{ atelierenligne.niveauDiff }}</span></li>
-                                        <li><i class="bi bi-check"></i> <span>Date du cours : {{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : 'N/A' }}</span></li>
+                                        <li><i class="bi bi-check"></i> <span>Date de l'atelier : {{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : 'N/A' }}</span></li>
                                         <li><i class="bi bi-check"></i> <span>Durée : {{ atelierenligne.duree }} min</span></li>
                                         <li><a href="javascript:void(0);" class="see-more" onclick="openModal('{{ atelierenligne.id }}')">Voir plus</a></li>
                                     </ul>
@@ -118,7 +118,7 @@
                     </div>
                 </div>
             
-        
+        </section>
         {% endblock %}
         
 

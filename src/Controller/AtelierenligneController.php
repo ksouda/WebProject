@@ -87,6 +87,17 @@ final class AtelierenligneController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/{id}', name: 'app_atelierenligne_deleteadmin', methods: ['POST'])]
+    public function deleteadmin(Request $request, Atelierenligne $atelierenligne, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('deleteadmin'.$atelierenligne->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($atelierenligne);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_atelierenligneadmin', [], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route('/{id}', name: 'app_atelierenligne_delete', methods: ['POST'])]
     public function delete(Request $request, Atelierenligne $atelierenligne, EntityManagerInterface $entityManager): Response
     {
@@ -97,4 +108,7 @@ final class AtelierenligneController extends AbstractController
 
         return $this->redirectToRoute('app_atelierenligne', [], Response::HTTP_SEE_OTHER);
     }
+    
+
+   
 }

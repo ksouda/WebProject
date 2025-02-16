@@ -202,10 +202,37 @@
             </ul>
         </td>
         <td class="action-icons">
-            {{ include('backoff/atelier/_delete_form.html.twig') }}
-            <i class="fa fa-info-circle" style="color: #17a2b8;" onclick="toggleDetails(this)"></i>
+            {{ include('backoff/atelier/deleteadmin.html.twig') }}
+            <i class="fa fa-info-circle" 
+              style="color: #17a2b8; font-size: 1.2rem; cursor: pointer;" 
+              onclick="toggleDetailsAdmin(this)"
+              data-titre="{{ atelierenligne.titre }}"
+              data-category="{{ atelierenligne.categorie }}"
+              data-formateur="{{ atelierenligne.idUser.nom }} {{ atelierenligne.idUser.prenom }}"
+              data-date="{{ atelierenligne.datecours|date('Y-m-d') }}"
+              data-prix="{{ atelierenligne.prix }}"
+              data-lien="{{ atelierenligne.lien }}"
+              data-duree="{{ atelierenligne.duree }}"
+              data-inscrits="{{ atelierenligne.inscription | map(i => i.idUser.nom ~ ' ' ~ i.idUser.prenom) | join(', ') }}"> <!-- Nom et Prénom des inscrits -->
+ 
+            </i>
         </td>
     </tr>
+    <div id="infoModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="toggleDetailsAdmin()">&times;</span>
+        <h2>Informations de l'atelier</h2>
+        <p><strong>Titre:</strong> <span id="modalTitre"></span></p>
+        <p><strong>Catégorie:</strong> <span id="modalCategory"></span></p>
+        <p><strong>Formateur:</strong> <span id="modalFormateur"></span></p>
+        <p><strong>Date:</strong> <span id="modalDate"></span></p>
+        <p><strong>Prix:</strong> <span id="modalPrix"></span></p>
+        <p><strong>Lien:</strong> <span id="modalLien"></span></p>
+        <p><strong>Durée:</strong> <span id="modalDuree"></span></p>
+        <h3>Liste des inscrits:</h3>
+        <ul id="modalInscrits"></ul>
+      </div>
+    </div>
 {% else %}
     <tr>
         <td colspan="10">no records found</td>

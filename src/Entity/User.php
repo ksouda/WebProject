@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-use App\Entity\Atelierenligne; // Assurez-vous d'importer l'entité Atelierenligne
+use App\Entity\Atelierenligne; 
+use App\Entity\Inscriptionatelier;// Assurez-vous d'importer l'entité Atelierenligne
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -41,7 +42,7 @@ class User
     private ?string $adresse = null;
 
 
-    #[ORM\OneToMany(targetEntity: Atelierenligne::class, mappedBy: 'id_user')]
+    #[ORM\OneToMany(targetEntity: AtelierEnligne::class, mappedBy: 'id_user')]
     private Collection $atelierenlignes;
 
     #[ORM\OneToMany(targetEntity: Inscriptionatelier::class, mappedBy: 'id_user')]

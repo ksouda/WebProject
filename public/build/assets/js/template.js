@@ -126,23 +126,46 @@
   })
   
 })
-function toggleDetails(icon) {
-  var row = icon.closest('tr');
-  var description = row.querySelector('.full-description');
-  var link = row.querySelector('.full-link');
-  var shortDescription = row.querySelector('.short-description');
-  var shortLink = row.querySelector('.short-link');
 
-  // Toggle visibility of description and link
-  if (description.style.display === 'none') {
-      description.style.display = 'inline';
-      link.style.display = 'inline';
-      shortDescription.style.display = 'none';
-      shortLink.style.display = 'none';
-  } else {
-      description.style.display = 'none';
-      link.style.display = 'none';
-      shortDescription.style.display = 'inline';
-      shortLink.style.display = 'inline';
-  }
-}(jQuery);
+function toggleDetailsAdmin(element) {
+  var modal = document.getElementById("infoModal");
+  
+  // Extraire les données depuis les attributs data-
+  var titre = element.getAttribute("data-titre");
+  var category = element.getAttribute("data-category");
+  var formateur = element.getAttribute("data-formateur");
+  var date = element.getAttribute("data-date");
+  var prix = element.getAttribute("data-prix");
+  var lien = element.getAttribute("data-lien");
+  var duree = element.getAttribute("data-duree");
+  var inscrits = element.getAttribute("data-inscrits"); // Liste des inscrits
+  
+  // Remplir les informations dans le modal
+  document.getElementById("modalTitre").innerText = titre;
+  document.getElementById("modalCategory").innerText = category;
+  document.getElementById("modalFormateur").innerText = formateur;
+  document.getElementById("modalDate").innerText = date;
+  document.getElementById("modalPrix").innerText = prix;
+  document.getElementById("modalLien").innerText = lien;
+  document.getElementById("modalDuree").innerText = duree;
+
+  // Afficher la liste des inscrits
+  var inscritsList = document.getElementById("modalInscrits");
+  inscritsList.innerHTML = ""; // Effacer la liste précédente
+  var inscritsArray = inscrits.split(", "); // Convertir la chaîne en tableau
+  inscritsArray.forEach(function(inscrit) {
+    var li = document.createElement("li");
+    li.textContent = inscrit;
+    inscritsList.appendChild(li);
+  });
+
+  // Afficher le modal
+  modal.style.display = "block";
+}
+
+// Fermer le modal lorsque l'on clique sur la croix
+document.querySelector(".close").onclick = function() {
+  var modal = document.getElementById("infoModal");
+  modal.style.display = "none";
+}
+
