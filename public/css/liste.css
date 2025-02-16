@@ -1,0 +1,100 @@
+/* Appliquer la couleur de fond grège à toute la page */
+html, body {
+  height: 100%;
+  background-color: #EDEADE !important;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Centrer la table et abaisser le tout un peu plus */
+.container {
+  width: 90%;
+  margin: 80px auto; /* Augmenter la marge supérieure pour abaisser le cadre */
+  padding: 30px;
+  background: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+}
+
+/* Titre de la page */
+.page-title {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #6D4C41;
+}
+
+/* Trait de séparation */
+.separator {
+  border: 0;
+  height: 1px;
+  background: #6D4C41;
+  margin-bottom: 30px; /* Augmenter l'espacement pour un peu plus de distance */
+}
+
+/* Style du tableau */
+.table {
+  width: 100%; /* Largeur totale */
+  margin-top: 30px;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px; /* Arrondir les bords du tableau */
+  margin-bottom: 40px; /* Augmenter la marge inférieure pour plus d'espace sous le tableau */
+}
+
+/* Style des en-têtes du tableau */
+.table thead {
+  background-color: #6D4C41;
+  color: white;
+  font-weight: bold;
+}
+
+/* Style des cellules */
+.table th, .table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+/* Alternance des couleurs pour les lignes */
+.table tbody tr:nth-child(odd) {
+  background-color: #F5F5F5;
+}
+
+/* Effet hover sur les lignes */
+.table tbody tr:hover {
+  background-color: #e0d8c8;
+  transition: background 0.3s;
+}
+
+/* Style des boutons avec couleur marron */
+.btn-warning {
+  background-color: #A67B5B !important;
+  color: white !important;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-danger {
+  background-color: #6D4C41 !important;
+  color: white !important;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+/* Effet au survol des boutons */
+.btn-warning:hover {
+  background-color: #8D6E63 !important;
+}
+
+.btn-danger:hover {
+  background-color: #5D4037 !important;
+}

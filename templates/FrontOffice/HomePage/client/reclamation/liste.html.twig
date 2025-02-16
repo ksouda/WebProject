@@ -1,0 +1,116 @@
+{% block head %}
+    <link rel="stylesheet" href="{{ asset('css/main.css') }}">
+
+    <!-- Favicons -->
+    <link href="{{ asset('img/favicon.png') }}" rel="icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+
+    <!-- Main CSS File -->
+    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+    <header id="header" class="header d-flex align-items-center fixed-top">
+        <div class="container-fluid container-xl position-relative d-flex align-items-center">
+        <a href="/" class="logo d-flex align-items-center me-auto">
+                <img src="{{ asset('img/logo 2.png') }}" alt="Logo">
+        </a>
+
+        <nav id="navmenu" class="navmenu">
+            <ul>
+            <li><a href="#hero" class="active">Accueil</a></li>
+            <li class="dropdown"><a href="#"><span>Boutique</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                    <li><a href="#">Produits</a></li>
+                    <li><a href="#">Matériaux</a></li>
+                </ul>
+            </li>
+            <li><a href="#">Ateliers en ligne</a></li>
+            <li><a href="{{ path('app_reclamation_liste_client') }}">Réclamation</a></li>
+            <li><a href="#"><i class="fas fa-shopping-cart" style="font-size: 20px" ></i></a></li>
+            <li class="dropdown">
+                <a href="#" id="toggleSidebar">
+                    <i class="fas fa-user-circle" style="font-size: 25px"></i> <!-- Icône de compte -->
+                </a>
+                <ul>
+                    <li><a href="#">Profil</a></li>
+                    <li class="dropdown"><a href="#"><span>Historique</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <ul>
+                        <li><a href="#">Commandes</a></li>
+                        <li><a href="{{ path('app_reclamation_liste_client') }}">Réclamation</a></li>
+                        <li><a href="#">Aeliers en ligne</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Déconnexion</a></li>
+                </ul>
+            </li>
+            </ul>
+        </nav>
+        </div>
+    </header>
+    <div class="container">
+        <h1>Liste des Réclamations</h1>
+        <hr class="separator">
+        <div class="table-responsive text-center">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">ID</th>
+                        <th style="width: 20%;">Titre</th>
+                        <th style="width: 15%;">Statut</th>
+                        <th style="width: 20%;">Date</th>
+                        <th style="width: 15%;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reclamation in reclamations %}  
+                        <tr>
+                            <td>{{ reclamation.id }}</td>
+                            <td>{{ reclamation.titre }}</td>
+                            <!-- <td>{{ reclamation.description }}</td> -->
+                            <td>{{ reclamation.statut }}</td>
+                            <td>{{ reclamation.dateReclamation|date('Y-m-d') }}</td>
+                            <td>
+                                <a href="{{ path('app_reclamation_consulter_client', {'id': reclamation.id}) }}" class="btn btn-consulter btn-sm">Consulter</a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6">Aucune réclamation trouvée.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <h2 class="text-center">Ajouter une Nouvelle Réclamation</h2>
+        <div class="text-center"> <!-- Ajouter une div pour centrer le bouton -->
+            {{ form_start(form) }}
+                <div class="mb-3">
+                    {{ form_label(form.titre) }}
+                    {{ form_widget(form.titre) }}
+                    {{ form_errors(form.titre) }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form_label(form.description) }}
+                    {{ form_widget(form.description) }}
+                    {{ form_errors(form.description) }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
