@@ -1,0 +1,3 @@
+<?php //cfd956116df55e5eeb8691ddf96a9001
+
+return [PHP_INT_MAX, 'build/front/jsfront/main.js'];
