@@ -155,13 +155,14 @@
             
             <div class="search-box">
                 <i class="fa fa-search"></i>
-                <input type="text" placeholder="Rechercher...">
-            </div>
+                <input type="text" id="titleSearch" placeholder="Rechercher par titre...">
+            </div> 
+
             <a href="{{ path('app_atelierenligne_new') }}" title="Ajouter un atelier">
                 <i class="fa fa-plus"></i>
             </a>        
             </div>
-        <table>
+        <table id="atelierTable">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -179,55 +180,57 @@
             </thead>
             <tbody>
             {% for atelierenligne in atelierenlignes %}
-    <tr>
-        <td>{{ atelierenligne.id }}</td>
-        <td>{{ atelierenligne.titre }}</td>
-        <td>{{ atelierenligne.categorie }}</td>
-        <td>
-            <span class="short-description">{{ atelierenligne.description|slice(0, 10) }}...</span>
-            <span class="full-description" style="display: none;">{{ atelierenligne.description }}</span>
-        </td>
-        <td>{{ atelierenligne.niveauDiff }}</td>
-        <td>{{ atelierenligne.prix }}</td>
-        <td>{{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : '' }}</td>
-        <td>{{ atelierenligne.duree }}</td>
-        <td>
-            <span class="short-link">{{ atelierenligne.lien|slice(0, 10) }}...</span>
-            <span class="full-link" style="display: none;">{{ atelierenligne.lien }}</span>
-        </td>
-        <td>
-            <ul>
-              {% for inscription in atelierenligne.inscription %}
-                  <li>{{ inscription.IdUser.nom }} {{ inscription.IdUser.prenom }}</li>
-              {% else %}
-                  <li>Aucun inscrit</li>
-              {% endfor %}
-            </ul>
-        </td>
-        <td class="action-icons">
-            <a href="{{ path('app_atelierenligne_edit', {'id': atelierenligne.id}) }}"><i class="fa fa-edit" style="color: #ffc107;"></i></a>
-            {{ include('backoff/atelier/_delete_form.html.twig') }}
-            <i class="fa fa-info-circle" 
-              style="color: #17a2b8; font-size: 1.2rem; cursor: pointer;" 
-              onclick="toggleDetailsAdmin(this)"
-              data-titre="{{ atelierenligne.titre }}"
-              data-category="{{ atelierenligne.categorie }}"
-              data-formateur="{{ atelierenligne.idUser.nom }} {{ atelierenligne.idUser.prenom }}"
-              data-date="{{ atelierenligne.datecours|date('Y-m-d') }}"
-              data-prix="{{ atelierenligne.prix }}"
-              data-lien="{{ atelierenligne.lien }}"
-              data-duree="{{ atelierenligne.duree }}"
-              data-inscrits="{{ atelierenligne.inscription | map(i => i.idUser.nom ~ ' ' ~ i.idUser.prenom) | join(', ') }}"> <!-- Nom et Prénom des inscrits -->
- 
-            </i>
-        </td>
-    </tr>
+              <tr class="atelier-row">
+                <td>{{ atelierenligne.id }}</td>
+                <td>{{ atelierenligne.titre }}</td>
+                <td>{{ atelierenligne.categorie }}</td>
+                <td>
+                    <span class="short-description">{{ atelierenligne.description|slice(0, 10) }}...</span>
+                    <span class="full-description" style="display: none;">{{ atelierenligne.description }}</span>
+                </td>
+                <td>{{ atelierenligne.niveauDiff }}</td>
+                <td>{{ atelierenligne.prix }}</td>
+                <td>{{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : '' }}</td>
+                <td>{{ atelierenligne.duree }}</td>
+                <td>
+                    <span class="short-link">{{ atelierenligne.lien|slice(0, 10) }}...</span>
+                    <span class="full-link" style="display: none;">{{ atelierenligne.lien }}</span>
+                </td>
+                <td>
+                    <ul>
+                      {% for inscription in atelierenligne.inscription %}
+                          <li>{{ inscription.IdUser.nom }} {{ inscription.IdUser.prenom }}</li>
+                      {% else %}
+                          <li>Aucun inscrit</li>
+                      {% endfor %}
+                    </ul>
+                </td>
+                <td class="action-icons">
+                    <a href="{{ path('app_atelierenligne_edit', {'id': atelierenligne.id}) }}"><i class="fa fa-edit" style="color: #ffc107;"></i></a>
+                    {{ include('backoff/atelier/_delete_form.html.twig') }}
+                    <i class="fa fa-info-circle" 
+                      style="color: #17a2b8; font-size: 1.2rem; cursor: pointer;" 
+                      onclick="toggleDetailsAdmin(this)"
+                      data-titre="{{ atelierenligne.titre }}"
+                      data-category="{{ atelierenligne.categorie }}"
+                      data-description="{{ atelierenligne.description }}"
+                      data-formateur="{{ atelierenligne.idUser.nom }} {{ atelierenligne.idUser.prenom }}"
+                      data-date="{{ atelierenligne.datecours|date('Y-m-d') }}"
+                      data-prix="{{ atelierenligne.prix }}"
+                      data-lien="{{ atelierenligne.lien }}"
+                      data-duree="{{ atelierenligne.duree }}"
+                      data-inscrits="{{ atelierenligne.inscription | map(i => i.idUser.nom ~ ' ' ~ i.idUser.prenom) | join(', ') }}"> <!-- Nom et Prénom des inscrits -->
+        
+                    </i>
+                </td>
+            </tr>
     <div id="infoModal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="toggleDetailsAdmin()">&times;</span>
         <h2>Informations de l'atelier</h2>
         <p><strong>Titre:</strong> <span id="modalTitre"></span></p>
         <p><strong>Catégorie:</strong> <span id="modalCategory"></span></p>
+        <p><strong>Description complète:</strong> <span id="modalDescription"></span></p>
         <p><strong>Formateur:</strong> <span id="modalFormateur"></span></p>
         <p><strong>Date:</strong> <span id="modalDate"></span></p>
         <p><strong>Prix:</strong> <span id="modalPrix"></span></p>
@@ -268,6 +271,25 @@
     <!-- container-scroller -->
     <!-- plugins:js -->
     {% block js %}
+    <script>
+    document.getElementById('titleSearch').addEventListener('input', function() {
+      var searchTerm = this.value.toLowerCase();
+      var rows = document.querySelectorAll('#atelierTable tbody .atelier-row');
+
+      rows.forEach(function(row) {
+          var title = row.cells[1].textContent.toLowerCase(); // Assuming the title is in the second cell (index 1)
+          
+          // Hide or show rows based on the search term
+          if (title.includes(searchTerm)) {
+              row.style.display = '';
+          } else {
+              row.style.display = 'none';
+          }
+      });
+  });
+</script>
+
+
       <script src="{{ asset('build/assets/vendors/js/vendor.bundle.base.js') }}"></script>
       <!-- endinject -->
       <!-- Plugin js for this page -->

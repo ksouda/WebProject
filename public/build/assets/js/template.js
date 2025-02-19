@@ -133,6 +133,7 @@ function toggleDetailsAdmin(element) {
   // Extraire les données depuis les attributs data-
   var titre = element.getAttribute("data-titre");
   var category = element.getAttribute("data-category");
+  var description = element.getAttribute("data-description");
   var formateur = element.getAttribute("data-formateur");
   var date = element.getAttribute("data-date");
   var prix = element.getAttribute("data-prix");
@@ -143,6 +144,7 @@ function toggleDetailsAdmin(element) {
   // Remplir les informations dans le modal
   document.getElementById("modalTitre").innerText = titre;
   document.getElementById("modalCategory").innerText = category;
+  document.getElementById("modalDescription").innerText = description;
   document.getElementById("modalFormateur").innerText = formateur;
   document.getElementById("modalDate").innerText = date;
   document.getElementById("modalPrix").innerText = prix;

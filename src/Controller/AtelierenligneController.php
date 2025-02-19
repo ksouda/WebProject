@@ -18,23 +18,56 @@ final class AtelierenligneController extends AbstractController
 {
     private const id_user = 1;
 
+    
     #[Route('/admin', name: 'app_atelierenligneadmin', methods: ['GET'])]
     public function indexadmin(AtelierenligneRepository $atelierenligneRepository): Response
     {
+        // Récupérer tous les ateliers triés par date du cours (ordre croissant)
+        $atelierenlignes = $atelierenligneRepository->findBy([], ['datecours' => 'ASC']);
+    
+        // Récupérer les statistiques (nombre d'inscrits pour chaque atelier)
+        $stats = [];
+    
+        foreach ($atelierenlignes as $atelier) {
+            $stats[] = [
+                'titre' => $atelier->getTitre(), // Titre de l'atelier
+                'inscriptions' => count($atelier->getInscription()), // Nombre d'inscrits
+            ];
+        }
+    
+        // Trier les statistiques par nombre d'inscriptions (du plus grand au plus petit)
+        usort($stats, function ($a, $b) {
+            return $b['inscriptions'] <=> $a['inscriptions']; // Tri décroissant
+        });
+    
+        // Extraire les labels et data triés
+        $labels = array_column($stats, 'titre');
+        $data = array_column($stats, 'inscriptions');
+    
         return $this->render('backoff/atelier/atelieradmin.html.twig', [
-            'atelierenlignes' => $atelierenligneRepository->findAll(),
+            'atelierenlignes' => $atelierenlignes,
+            'labels' => $labels, // Titres des ateliers triés
+            'data' => $data,     // Nombre d'inscrits triés
         ]);
     }
+    
+
+
 
     #[Route('', name: 'app_atelierenligne', methods: ['GET'])]
     public function index(AtelierenligneRepository $atelierenligneRepository): Response
     {
-        $atelierenlignes = $atelierenligneRepository->findBy(['id_user' => self::id_user]);
+        // Récupérer les ateliers en ligne de l'utilisateur connecté, triés par date du cours (ASC)
+        $atelierenlignes = $atelierenligneRepository->findBy(
+            ['id_user' => self::id_user],  // Filtre par utilisateur
+            ['datecours' => 'ASC']         // Tri par date croissante
+        );
 
         return $this->render('backoff/atelier/atelier.html.twig', [
             'atelierenlignes' => $atelierenlignes,
         ]);
     }
+
 
     
 

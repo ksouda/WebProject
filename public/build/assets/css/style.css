@@ -25761,7 +25761,7 @@ table.dataTable tbody td.select-checkbox:after {
   display: flex;
   align-items: center;
   background: #fff;
-  height: 30px;
+  height: 38px;
   border: 1px solid #ccc;
   border-radius: 20px;
   padding: 5px 5px;
@@ -25776,11 +25776,12 @@ table.dataTable tbody td.select-checkbox:after {
   font-size: 14px;
 
 }
+
 .search-box i {
   color: #547587;
   margin-right: 5px;
 }
-.search-box:hover {
+.search-box:hover{
   box-shadow: 0px 0px 8px #547587;
 }
 table {
@@ -25870,6 +25871,7 @@ th {
   width: 100%; /* Ajuster la largeur */
   max-width: 500px; /* Largeur maximale pour éviter un étirement excessif */
 }
+
 .invalid-feedback {
   color: #dc3545; /* Rouge pour signaler l'erreur */
   font-size: 0.875em;
@@ -25927,8 +25929,53 @@ th {
   background-color: transparent;
   border: none;
 }
+.filter-box{
+  display: flex;
+  align-items: center;
+  background: #fff;
+  height: 38px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 5px 5px;
+  transition: 0.3s;
+}
+.filter-box select {
+  height: 35px; /* Augmenter la hauteur du select */
+  width: 180px; /* Optionnel : ajuster la largeur si nécessaire */
+  border: none;
+  outline: none;
+  padding: 8px;
+  border-radius: 20px;
+  font-size: 14px; /* Taille du texte pour les options */
+}
 
+.filter-box select option {
+  font-size: 14px; /* Taille du texte dans les options */
+}
 
+/* Taille du texte pour la première option (par défaut) */
+.filter-box select option:first-child {
+  font-size: 14px;
+  color: #aaa; /* Couleur grise pour la première option */
+}
 
+/* Pour ajuster la taille de la catégorie sélectionnée dans le box */
+.filter-box select:focus {
+  font-size: 14px; /* Taille du texte quand le select est activé */
+}
+
+.filter-box i{
+  color: #547587;
+  margin-right: 5px;
+}
+
+.filter-box:hover{
+  box-shadow: 0px 0px 8px #547587;
+}
+.containerboxes {
+  display: flex;
+  align-items: center; /* Centre les éléments verticalement */
+  gap: 10px; /* Ajoute de l'espace entre les boîtes */
+}
 
 

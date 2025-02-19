@@ -16,7 +16,7 @@ use DateTime;
 
 class InscriptionAtelierController extends AbstractController
 {
-    const id_user = 2; 
+    const id_user = 1; 
     
 
     #[Route('/atelier/inscription/{id}', name: 'app_inscription_atelier')]
@@ -50,24 +50,9 @@ class InscriptionAtelierController extends AbstractController
         $inscription->setIdUser($user);
         $inscription->setAtelier($atelier);
         $inscription->setDateinscri(new \DateTime());
-        $dateCours = $atelier->getDateCours(); // Récupérer la date du cours de l'atelier
-
-        if ($dateCours === null) {
-            $inscription->setStatut('Date non définie'); // Gérer le cas où la date n'est pas définie
-        } elseif ($dateCours instanceof DateTime) {
-            // Si c'est déjà un objet DateTime, on l'utilise directement
-            $dateAtelier = $dateCours;
-        } else {
-            // Sinon, crée un objet DateTime à partir de la chaîne
-            $dateAtelier = new DateTime($dateCours);
-        }
-
-        // Comparer les dates
-        if ($dateAtelier = $today) {
-            $inscription->setStatut('En cours aujourd\'hui'); // Atelier déjà terminé
-        } elseif ($dateAtelier > $today) {
-            $inscription->setStatut('À venir'); // Atelier à venir
-        } 
+        $inscription->setStatut('À venir'); 
+        
+        
         $entityManager->persist($inscription);
         $entityManager->flush();
 

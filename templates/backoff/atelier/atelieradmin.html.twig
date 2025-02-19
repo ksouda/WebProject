@@ -153,12 +153,31 @@
             <div class="table-container">
         <div class="table-title">
             
-            <div class="search-box">
+            
+            <div class="containerboxes">
+              <div class="search-box">
                 <i class="fa fa-search"></i>
-                <input type="text" placeholder="Rechercher...">
-            </div>    
+                <input type="text" id="titleSearch" placeholder="Rechercher par titre...">
+              </div> 
+              <div class="filter-box">
+                  <i class="fa fa-filter"></i>
+                  <select id="categoryFilter">
+                      <option value="">Toutes les catégories</option>
+                      {% set categories = [] %}
+                      {% for atelierenligne in atelierenlignes %}
+                          {% if atelierenligne.categorie not in categories %}
+                              {% set categories = categories|merge([atelierenligne.categorie]) %}
+                          {% endif %}
+                      {% endfor %}
+                      {% for category in categories %}
+                          <option value="{{ category }}">{{ category }}</option>
+                      {% endfor %}
+                  </select>
+              </div>
+          </div>   
         </div>
-        <table>
+        
+        <table id="atelierTable">
             <thead>
                 <tr>
                     <th>Id</th>
@@ -176,54 +195,56 @@
             </thead>
             <tbody>
             {% for atelierenligne in atelierenlignes %}
-    <tr>
-        <td>{{ atelierenligne.id }}</td>
-        <td>{{ atelierenligne.titre }}</td>
-        <td>{{ atelierenligne.categorie }}</td>
-        <td>
-            <span class="short-description">{{ atelierenligne.description|slice(0, 10) }}...</span>
-            <span class="full-description" style="display: none;">{{ atelierenligne.description }}</span>
-        </td>
-        <td>{{ atelierenligne.niveauDiff }}</td>
-        <td>{{ atelierenligne.prix }}</td>
-        <td>{{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : '' }}</td>
-        <td>{{ atelierenligne.duree }}</td>
-        <td>
-            <span class="short-link">{{ atelierenligne.lien|slice(0, 10) }}...</span>
-            <span class="full-link" style="display: none;">{{ atelierenligne.lien }}</span>
-        </td>
-        <td>
-            <ul>
-              {% for inscription in atelierenligne.inscription %}
-                  <li>{{ inscription.IdUser.nom }} {{ inscription.IdUser.prenom }}</li>
-              {% else %}
-                  <li>Aucun inscrit</li>
-              {% endfor %}
-            </ul>
-        </td>
-        <td class="action-icons">
-            {{ include('backoff/atelier/deleteadmin.html.twig') }}
-            <i class="fa fa-info-circle" 
-              style="color: #17a2b8; font-size: 1.2rem; cursor: pointer;" 
-              onclick="toggleDetailsAdmin(this)"
-              data-titre="{{ atelierenligne.titre }}"
-              data-category="{{ atelierenligne.categorie }}"
-              data-formateur="{{ atelierenligne.idUser.nom }} {{ atelierenligne.idUser.prenom }}"
-              data-date="{{ atelierenligne.datecours|date('Y-m-d') }}"
-              data-prix="{{ atelierenligne.prix }}"
-              data-lien="{{ atelierenligne.lien }}"
-              data-duree="{{ atelierenligne.duree }}"
-              data-inscrits="{{ atelierenligne.inscription | map(i => i.idUser.nom ~ ' ' ~ i.idUser.prenom) | join(', ') }}"> <!-- Nom et Prénom des inscrits -->
- 
-            </i>
-        </td>
-    </tr>
+            <tr class="atelier-row">
+                <td>{{ atelierenligne.id }}</td>
+                <td>{{ atelierenligne.titre }}</td>
+                <td>{{ atelierenligne.categorie }}</td>
+                <td>
+                    <span class="short-description">{{ atelierenligne.description|slice(0, 10) }}...</span>
+                    <span class="full-description" style="display: none;">{{ atelierenligne.description }}</span>
+                </td>
+                <td>{{ atelierenligne.niveauDiff }}</td>
+                <td>{{ atelierenligne.prix }}</td>
+                <td>{{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : '' }}</td>
+                <td>{{ atelierenligne.duree }}</td>
+                <td>
+                    <span class="short-link">{{ atelierenligne.lien|slice(0, 10) }}...</span>
+                    <span class="full-link" style="display: none;">{{ atelierenligne.lien }}</span>
+                </td>
+                <td>
+                    <ul>
+                      {% for inscription in atelierenligne.inscription %}
+                          <li>{{ inscription.IdUser.nom }} {{ inscription.IdUser.prenom }}</li>
+                      {% else %}
+                          <li>Aucun inscrit</li>
+                      {% endfor %}
+                    </ul>
+                </td>
+                <td class="action-icons">
+                    {{ include('backoff/atelier/deleteadmin.html.twig') }}
+                    <i class="fa fa-info-circle" 
+                      style="color: #17a2b8; font-size: 1.2rem; cursor: pointer;" 
+                      onclick="toggleDetailsAdmin(this)"
+                      data-titre="{{ atelierenligne.titre }}"
+                      data-category="{{ atelierenligne.categorie }}"
+                      data-description="{{ atelierenligne.description }}"
+                      data-formateur="{{ atelierenligne.idUser.nom }} {{ atelierenligne.idUser.prenom }}"
+                      data-date="{{ atelierenligne.datecours|date('Y-m-d') }}"
+                      data-prix="{{ atelierenligne.prix }}"
+                      data-lien="{{ atelierenligne.lien }}"
+                      data-duree="{{ atelierenligne.duree }}"
+                      data-inscrits="{{ atelierenligne.inscription | map(i => i.idUser.nom ~ ' ' ~ i.idUser.prenom) | join(', ') }}"> <!-- Nom et Prénom des inscrits -->
+        
+                    </i>
+                </td>
+            </tr>
     <div id="infoModal" class="modal">
       <div class="modal-content">
         <span class="close" onclick="toggleDetailsAdmin()">&times;</span>
         <h2>Informations de l'atelier</h2>
         <p><strong>Titre:</strong> <span id="modalTitre"></span></p>
         <p><strong>Catégorie:</strong> <span id="modalCategory"></span></p>
+        <p><strong>Description complète:</strong> <span id="modalDescription"></span></p>
         <p><strong>Formateur:</strong> <span id="modalFormateur"></span></p>
         <p><strong>Date:</strong> <span id="modalDate"></span></p>
         <p><strong>Prix:</strong> <span id="modalPrix"></span></p>
@@ -240,6 +261,7 @@
 {% endfor %}
             </tbody>
         </table>
+        
         <div class="pagination">
             <a href="#">&laquo;</a>
             <a href="#">1</a>
@@ -248,22 +270,75 @@
             <a href="#">&raquo;</a>
         </div>
     </div>
-    <!-- partial -->
-        <div class="main-panel">
-          <div class="content-wrapper">
-                 <!-- content of your gestion -->
-
-          </div>
-          <!-- content-wrapper ends -->
-         
+    <div class="atelier-statistics">
+            <h2>Statistiques des Ateliers par Inscriptions</h2>
+            <canvas id="atelierChart" height="100"></canvas>
         </div>
-        <!-- main-panel ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
     <!-- plugins:js -->
     {% block js %}
+    <script>
+    document.getElementById('categoryFilter').addEventListener('change', function() {
+          let selectedCategory = this.value.toLowerCase();
+          let rows = document.querySelectorAll("tbody tr");
+
+          rows.forEach(row => {
+              let categoryCell = row.cells[2].textContent.toLowerCase(); // Colonne "Catégorie"
+
+              if (selectedCategory === "" || categoryCell.includes(selectedCategory)) {
+                  row.style.display = "";
+              } else {
+                  row.style.display = "none";
+              }
+          });
+      });
+      document.getElementById('titleSearch').addEventListener('input', function() {
+      var searchTerm = this.value.toLowerCase();
+      var rows = document.querySelectorAll('#atelierTable tbody .atelier-row');
+
+      rows.forEach(function(row) {
+          var title = row.cells[1].textContent.toLowerCase(); // Assuming the title is in the second cell (index 1)
+          
+          // Hide or show rows based on the search term
+          if (title.includes(searchTerm)) {
+              row.style.display = '';
+          } else {
+              row.style.display = 'none';
+          }
+      });
+  });
+  
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <script>
+          const ctx = document.getElementById('atelierChart').getContext('2d');
+          const atelierChart = new Chart(ctx, {
+              type: 'bar', // Type de graphique à barres
+              data: {
+                  labels: {{ labels|json_encode()|raw }}, // Les labels (titres des ateliers)
+                  datasets: [{
+                      label: 'Inscriptions',
+                      data: {{ data|json_encode()|raw }}, // Les données (nombre d'inscrits)
+                      backgroundColor: ['#547587', '#547587'], // Couleurs des barres
+                      borderColor: ['#547587', '#547587'], // Bordure des barres
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  responsive: true,
+                  scales: {
+                      y: {
+                        ticks: {
+                              stepSize: 1, // Force un incrément de 1
+                              callback: function(value, index, values) {
+                                  return Number.isInteger(value) ? value : ''; // Affiche uniquement les entiers
+                              }
+                          },
+                          beginAtZero: true // Démarre l'axe Y à zéro
+                      }
+                  }
+              }
+          });
+      </script>
       <script src="{{ asset('build/assets/vendors/js/vendor.bundle.base.js') }}"></script>
       <!-- endinject -->
       <!-- Plugin js for this page -->
