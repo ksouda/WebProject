@@ -31,7 +31,7 @@ class AtelierenligneType extends AbstractType
                     'Broderie' => 'broderie',
                     'Tricot' => 'tricot',
                     'Couture' => 'couture',
-                    'Bijoux faits main' => 'bijoux',
+                    'Bijoux faits main' => 'bijouterie',
                 ],
                 'placeholder' => 'Choisissez une catégorie',
                 'required' => true,

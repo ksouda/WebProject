@@ -273,39 +273,36 @@
     <div class="atelier-statistics">
             <h2>Statistiques des Ateliers par Inscriptions</h2>
             <canvas id="atelierChart" height="100"></canvas>
-        </div>
+    </div>
     <!-- plugins:js -->
     {% block js %}
     <script>
     document.getElementById('categoryFilter').addEventListener('change', function() {
-          let selectedCategory = this.value.toLowerCase();
-          let rows = document.querySelectorAll("tbody tr");
+    filterTable();
+});
 
-          rows.forEach(row => {
-              let categoryCell = row.cells[2].textContent.toLowerCase(); // Colonne "Catégorie"
+document.getElementById('titleSearch').addEventListener('input', function() {
+    filterTable();
+});
 
-              if (selectedCategory === "" || categoryCell.includes(selectedCategory)) {
-                  row.style.display = "";
-              } else {
-                  row.style.display = "none";
-              }
-          });
-      });
-      document.getElementById('titleSearch').addEventListener('input', function() {
-      var searchTerm = this.value.toLowerCase();
-      var rows = document.querySelectorAll('#atelierTable tbody .atelier-row');
+function filterTable() {
+    let selectedCategory = document.getElementById('categoryFilter').value.toLowerCase();
+    let searchTerm = document.getElementById('titleSearch').value.toLowerCase();
+    let rows = document.querySelectorAll('#atelierTable tbody .atelier-row');
 
-      rows.forEach(function(row) {
-          var title = row.cells[1].textContent.toLowerCase(); // Assuming the title is in the second cell (index 1)
-          
-          // Hide or show rows based on the search term
-          if (title.includes(searchTerm)) {
-              row.style.display = '';
-          } else {
-              row.style.display = 'none';
-          }
-      });
-  });
+    rows.forEach(function(row) {
+        let categoryCell = row.cells[2].textContent.toLowerCase();
+        let titleCell = row.cells[1].textContent.toLowerCase();
+
+        // Appliquer à la fois le filtrage de la catégorie et la recherche par titre
+        if ((selectedCategory === "" || categoryCell.includes(selectedCategory)) && titleCell.includes(searchTerm)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
   
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

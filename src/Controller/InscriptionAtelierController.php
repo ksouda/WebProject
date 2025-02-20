@@ -75,6 +75,7 @@ class InscriptionAtelierController extends AbstractController
         $inscriptions = $inscriptionsatelierRepository->findBy(['id_user' => self::id_user]);
 
         $today = new DateTime(); // Date actuelle
+        $today->setTime(0, 0, 0);
 
         foreach ($inscriptions as $inscription) {
             $atelier = $inscription->getAtelier(); // Supposons que l'inscription ait une relation avec un atelier
@@ -84,6 +85,7 @@ class InscriptionAtelierController extends AbstractController
                 $inscription->setStatut('Date non définie'); // Gérer le cas où la date n'est pas définie
             } elseif ($dateCours instanceof DateTime) {
                 $dateAtelier = $dateCours; // Si c'est déjà un objet DateTime
+                $dateAtelier->setTime(0, 0, 0);
             } else {
                 $dateAtelier = new DateTime($dateCours); // Créer un objet DateTime à partir de la chaîne
             }

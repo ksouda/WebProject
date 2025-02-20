@@ -14,13 +14,15 @@ final class FrontAtelierController extends AbstractController
     #[Route('/front/atelier', name: 'app_front_atelier', methods: ['GET'])]
     public function index(AtelierenligneRepository $atelierenligneRepository): Response
     {
-        // Récupérer la date actuelle
+        // Récupérer la date actuelle et ignorer l'heure
         $today = new \DateTime();
+        $today->setTime(0, 0, 0);
 
-        // Utiliser QueryBuilder pour filtrer les ateliers dont la date de cours est égale ou postérieure à aujourd'hui
+        // Utiliser QueryBuilder pour filtrer et trier les ateliers
         $ateliers = $atelierenligneRepository->createQueryBuilder('a')
-            ->where('a.datecours >= :today')
+            ->where('a.datecours > :today')
             ->setParameter('today', $today)
+            ->orderBy('a.datecours', 'ASC') // Tri par date croissante (du plus proche au plus éloigné)
             ->getQuery()
             ->getResult();
 
@@ -28,4 +30,5 @@ final class FrontAtelierController extends AbstractController
             'atelierenlignes' => $ateliers,
         ]);
     }
+
 }
