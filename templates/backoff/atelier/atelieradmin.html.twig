@@ -263,7 +263,6 @@
         </table>
         
         <div class="pagination">
-<<<<<<< HEAD
           {# Flèche gauche #}
           {% if previousPage >= 1 %}
               <a href="{{ path('app_atelierenligneadmin', {'page': previousPage}) }}">&laquo;</a>
@@ -287,19 +286,6 @@
             <h2>Statistiques des Ateliers par Inscriptions</h2>
             <canvas id="atelierChart" height="100"></canvas>
     </div>
-=======
-            <a href="#">&laquo;</a>
-            <a href="#">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">&raquo;</a>
-        </div>
-    </div>
-    <div class="atelier-statistics">
-            <h2>Statistiques des Ateliers par Inscriptions</h2>
-            <canvas id="atelierChart" height="100"></canvas>
-    </div>
->>>>>>> db2faa75dc452bb17c9b181ae41e9e5ca13006bf
     <!-- plugins:js -->
     {% block js %}
     <script>

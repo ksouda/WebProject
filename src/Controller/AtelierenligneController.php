@@ -20,7 +20,6 @@ final class AtelierenligneController extends AbstractController
 
     
     #[Route('/admin', name: 'app_atelierenligneadmin', methods: ['GET'])]
-<<<<<<< HEAD
 public function indexadmin(Request $request, PaginatorInterface $paginator, AtelierenligneRepository $atelierenligneRepository): Response
 {
     // Récupérer tous les ateliers triés par date du cours (ordre croissant)
@@ -39,38 +38,9 @@ public function indexadmin(Request $request, PaginatorInterface $paginator, Atel
             'titre' => $atelier->getTitre(), // Titre de l'atelier
             'inscriptions' => count($atelier->getInscription()), // Nombre d'inscrits
         ];
-=======
-    public function indexadmin(AtelierenligneRepository $atelierenligneRepository): Response
-    {
-        // Récupérer tous les ateliers triés par date du cours (ordre croissant)
-        $atelierenlignes = $atelierenligneRepository->findBy([], ['datecours' => 'ASC']);
-    
-        // Récupérer les statistiques (nombre d'inscrits pour chaque atelier)
-        $stats = [];
-    
-        foreach ($atelierenlignes as $atelier) {
-            $stats[] = [
-                'titre' => $atelier->getTitre(), // Titre de l'atelier
-                'inscriptions' => count($atelier->getInscription()), // Nombre d'inscrits
-            ];
-        }
-    
-        // Trier les statistiques par nombre d'inscriptions (du plus grand au plus petit)
-        usort($stats, function ($a, $b) {
-            return $b['inscriptions'] <=> $a['inscriptions']; // Tri décroissant
-        });
-    
-        // Extraire les labels et data triés
-        $labels = array_column($stats, 'titre');
-        $data = array_column($stats, 'inscriptions');
-    
-        return $this->render('backoff/atelier/atelieradmin.html.twig', [
-            'atelierenlignes' => $atelierenlignes,
-            'labels' => $labels, // Titres des ateliers triés
-            'data' => $data,     // Nombre d'inscrits triés
-        ]);
->>>>>>> db2faa75dc452bb17c9b181ae41e9e5ca13006bf
     }
+
+   
     
 
 
@@ -118,19 +88,11 @@ public function indexadmin(Request $request, PaginatorInterface $paginator, Atel
     #[Route('', name: 'app_atelierenligne', methods: ['GET'])]
     public function index(Request $request, PaginatorInterface $paginator, AtelierenligneRepository $atelierenligneRepository)
     {
-<<<<<<< HEAD
         $atelierenlignesQuery = $atelierenligneRepository->createQueryBuilder('a')
         ->where('a.id_user = :id_user')
         ->setParameter('id_user', self::id_user)
         ->orderBy('a.datecours', 'ASC')
         ->getQuery();
-=======
-        // Récupérer les ateliers en ligne de l'utilisateur connecté, triés par date du cours (ASC)
-        $atelierenlignes = $atelierenligneRepository->findBy(
-            ['id_user' => self::id_user],  // Filtre par utilisateur
-            ['datecours' => 'ASC']         // Tri par date croissante
-        );
->>>>>>> db2faa75dc452bb17c9b181ae41e9e5ca13006bf
 
     // Paginate the results
     $pagination = $paginator->paginate(
@@ -159,10 +121,6 @@ public function indexadmin(Request $request, PaginatorInterface $paginator, Atel
     }
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> db2faa75dc452bb17c9b181ae41e9e5ca13006bf
     
 
     #[Route('/new', name: 'app_atelierenligne_new', methods: ['GET', 'POST'])]
