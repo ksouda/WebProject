@@ -14,41 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/reclamation')]
 class ReclamationController extends AbstractController
 {
-    #[Route('/ajouter', name: 'app_reclamation_ajouter')]
-    public function ajouter(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $reclamation = new Reclamation();
-
-        $reclamation->setStatut('En attente');
-
-        $form = $this->createForm(ReclamationType::class, $reclamation, [
-            'attr' => ['novalidate' => 'novalidate'], // Désactiver la validation HTML5
-        ]);
-        $form->handleRequest($request);     
-            
-    if ($form->isSubmitted() && $form->isValid()) {
-        // Récupérer l'utilisateur avec ID = 1
-        $user = $entityManager->getRepository(User::class)->find(1);
-
-        if (!$user) {
-            throw $this->createNotFoundException('Utilisateur par défaut non trouvé.');
-        }
-
-        // Assigner l'utilisateur par défaut (ID = 1) à la réclamation
-        $reclamation->setUser($user);
-            
-        $entityManager->persist($reclamation);
-        $entityManager->flush(); 
-
-        $this->addFlash('success', 'Réclamation ajoutée avec succès.');
-
-        return $this->redirectToRoute('app_reclamation_liste_client');
-        }
-
-        return $this->render('frontoffice/HomePage/client/reclamation/ajouter.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
 
     #[Route('/client/liste', name: 'app_reclamation_liste_client')]
     public function listeClient(Request $request, EntityManagerInterface $entityManager): Response
@@ -101,7 +66,7 @@ public function liste(EntityManagerInterface $entityManager): Response
 public function modifier(Request $request, EntityManagerInterface $entityManager, Reclamation $reclamation): Response
 {
     $form = $this->createForm(ReclamationType::class, $reclamation, [
-        'attr' => ['novalidate' => 'novalidate'], // Désactiver la validation HTML5
+        'attr' => ['novalidate' => 'novalidate'], 
     ]);
     $form->handleRequest($request);
 
@@ -134,11 +99,12 @@ public function supprimer(EntityManagerInterface $entityManager, Reclamation $re
     return $this->redirectToRoute('app_reclamation_liste_client');
 }
 
-
+/*
 #[Route('/modifier-statut/{id}', name: 'app_reclamation_modifier_statut', methods: ['POST'])]
 public function modifierStatut(Reclamation $reclamation, Request $request, EntityManagerInterface $entityManager): Response
 {
     $nouveauStatut = $request->request->get('statut');
+
     if (in_array($nouveauStatut, ['En attente', 'En cours', 'Répondue'])) {
         $reclamation->setStatut($nouveauStatut);
         $entityManager->flush();
@@ -147,7 +113,7 @@ public function modifierStatut(Reclamation $reclamation, Request $request, Entit
         $this->addFlash('error', 'Statut invalide.');
     }
     return $this->redirectToRoute('app_reclamation_liste_admin');
-}
+}*/
 
 #[Route('/admin/{id}/consulter', name: 'app_reclamation_consulter_admin', methods: ['GET'])]
 public function consulterAdmin(Reclamation $reclamation, EntityManagerInterface $entityManager): Response
@@ -170,5 +136,43 @@ public function consulterClient(Reclamation $reclamation, EntityManagerInterface
         'reponseExiste' => $reponseExiste,
     ]);
 }
+
+    /*
+    #[Route('/ajouter', name: 'app_reclamation_ajouter')]
+    public function ajouter(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $reclamation = new Reclamation();
+
+        $reclamation->setStatut('En attente');
+
+        $form = $this->createForm(ReclamationType::class, $reclamation, [
+            'attr' => ['novalidate' => 'novalidate'], 
+        ]);
+        $form->handleRequest($request);     
+            
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Récupérer l'utilisateur avec ID = 1
+        $user = $entityManager->getRepository(User::class)->find(1);
+
+        if (!$user) {
+            throw $this->createNotFoundException('Utilisateur par défaut non trouvé.');
+        }
+
+        // Assigner l'utilisateur par défaut (ID = 1) à la réclamation
+        $reclamation->setUser($user);
+            
+        $entityManager->persist($reclamation);
+        $entityManager->flush(); 
+
+        $this->addFlash('success', 'Réclamation ajoutée avec succès.');
+
+        return $this->redirectToRoute('app_reclamation_liste_client');
+        }
+
+        return $this->render('frontoffice/HomePage/client/reclamation/ajouter.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+*/
 
 }

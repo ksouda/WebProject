@@ -22,11 +22,14 @@ class Reponse
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_reponse = null;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private $finale = false; // Par défaut, une réponse n'est pas finale
+
     #[ORM\OneToOne(inversedBy: "reponse", cascade: ["persist", "remove"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Reclamation $reclamation = null;
 
-    // 🕒 Cette méthode force la date actuelle lors de l’insertion
+    //  Cette méthode force la date actuelle lors de l’insertion
     #[ORM\PrePersist]
     public function prePersist(): void
     {
@@ -54,6 +57,19 @@ class Reponse
         return $this->date_reponse;
     }
 
+    public function isFinale(): bool
+    {
+        return $this->finale;
+    }
+
+    public function setFinale(bool $finale): self
+    {
+        $this->finale = $finale;
+        return $this;
+    }
+
+    
+
     public function getReclamation(): ?Reclamation
     {
         return $this->reclamation;
@@ -64,4 +80,5 @@ class Reponse
         $this->reclamation = $reclamation;
         return $this;
     }
+
 }

@@ -109,13 +109,16 @@
           <form method="post" novalidate>
             {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
               
-              {{ form_widget(form) }}
-              {{ form_errors(form) }}
+              <div class="mb-3">
+                  {{ form_label(form.description) }} {# Explicitement montrer la description #}
+                  {{ form_widget(form.description) }}
+                  {{ form_errors(form.description) }}  {# Erreurs spécifiques pour ce champ #}
+              </div>
               
               <button type="submit" class="btn btn-success">Envoyer la réponse</button>
             {{ form_end(form) }}
           </form>
-          <a href="{{ path('app_reponse_liste_admin') }}" class="btn btn-secondary">Retour à la liste</a>
+          <a href="{{ path('app_reclamation_liste_admin') }}" class="btn btn-secondary">Retour à la liste</a>
         </div>
       </div>
     </div>

@@ -22,8 +22,8 @@ class Reclamation
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $statut = null;
+    #[ORM\Column(type: Types::STRING , length: 255 )]
+    private $statut = 'En attente';
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateReclamation = null;
@@ -35,7 +35,7 @@ class Reclamation
     #[ORM\OneToOne(mappedBy: "reclamation", cascade: ["persist", "remove"])]
     private ?Reponse $reponse = null;
 
-    // 🕒 Cette méthode force la date actuelle lors de l’insertion
+    //  Cette méthode force la date actuelle lors de l’insertion
     #[ORM\PrePersist]
     public function prePersist(): void
     {
@@ -74,10 +74,23 @@ class Reclamation
         return $this->statut;
     }
 
-    public function setStatut(string $statut): static
+    public function setStatut(string $statut): self
     {
         $this->statut = $statut;
         return $this;
+    }
+
+    public function updateStatutBasedOnReponse(): void
+    {
+        if ($this->getReponse()) {
+            // Vérifie si la réponse est finale
+            $this->statut = $this->getReponse()->isFinale() ? 'Répondue' : 'En cours';
+            
+        } else {
+            // Si aucune réponse, maintenir le statut par défaut
+            $this->statut = 'En attente';
+        }
+        
     }
 
     public function getDateReclamation(): ?\DateTimeInterface

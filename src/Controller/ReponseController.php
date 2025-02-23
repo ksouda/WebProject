@@ -12,17 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/reponse')]
+
 class ReponseController extends AbstractController
 {
-    #[Route('/admin/liste', name: 'app_reponse_liste_admin')]
-    public function liste(EntityManagerInterface $entityManager): Response
-    {
-        $reclamations = $entityManager->getRepository(Reclamation::class)->findAll();
-    
-        return $this->render('backoff/admin/reclamation/liste.html.twig', [
-            'reclamations' => $reclamations,
-        ]);
-    }
 
 
     #[Route('/ajouter/{id}', name: 'app_reponse_ajouter')]
@@ -31,7 +23,7 @@ class ReponseController extends AbstractController
         
         if ($reclamation->getReponse()) {
             $this->addFlash('warning', 'Cette réclamation a déjà une réponse.');
-            return $this->redirectToRoute('app_reponse_liste_admin');
+            return $this->redirectToRoute('app_reclamation_liste_admin');
         }
 
         $reponse = new Reponse();
@@ -43,11 +35,28 @@ class ReponseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $finale = $form->get('finale')->getData();  // Récupérez l'état de la case à cocher
+            $reponse->setFinale($finale); // Mettez à jour le champ finale
+
+            $reclamation->setReponse($reponse);
+
+            $reclamation->updateStatutBasedOnReponse(); //Mettez à jour le statut de la réclamation
+
             $entityManager->persist($reponse);
-            $entityManager->flush();
+            try{
+                $entityManager->persist($reclamation);
+                $entityManager->flush(); // Flusher à nouveau pour mettre à jour le statut
+                //dump("Flush successful!!"); 
+                return $this->redirectToRoute('app_reclamation_consulter_admin', ['id' => $reclamation->getId()]);
+            } catch (\Exception $e) {
+            
+                dump("Flush error: " . $e->getMessage()); 
+            }
+            die;
 
             $this->addFlash('success', 'Réponse ajoutée avec succès.');
-            return $this->redirectToRoute('app_reclamation_consulter_admin', ['id' => $reclamation->getId()]);
+            //return $this->redirectToRoute('app_reclamation_consulter_admin', ['id' => $reclamation->getId()]);
         }
 
         return $this->render('backoff/admin/reclamation/ajouter.html.twig', [
@@ -80,6 +89,8 @@ class ReponseController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $reclamation->updateStatutBasedOnReponse();
+            $entityManager->persist($reclamation);
             $entityManager->flush(); 
             $this->addFlash('success', 'Réponse modifiée avec succès.');
             return $this->redirectToRoute('app_reclamation_consulter_admin', [
@@ -93,5 +104,16 @@ class ReponseController extends AbstractController
         ]);
     }
     
+
+    /*
+    #[Route('/admin/liste', name: 'app_reponse_liste_admin')]
+    public function liste(EntityManagerInterface $entityManager): Response
+    {
+        $reclamations = $entityManager->getRepository(Reclamation::class)->findAll();
+    
+        return $this->render('backoff/admin/reclamation/liste.html.twig', [
+            'reclamations' => $reclamations,
+        ]);
+    }*/
 
 }

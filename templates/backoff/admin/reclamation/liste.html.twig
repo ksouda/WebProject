@@ -124,22 +124,18 @@
             </thead>
             <tbody>
               {% for reclamation in reclamations %}
-              <tr>
-                <td>{{ reclamation.id }}</td>
-                <td>{{ reclamation.dateReclamation|date('Y-m-d') }}</td>
-                <td>
-                  <form method="post" action="{{ path('app_reclamation_modifier_statut', {'id': reclamation.id}) }}">
-                    <select name="statut" class="form-select" onchange="this.form.submit()">
-                      <option value="En attente" {% if reclamation.statut == 'En attente' %} selected {% endif %}>En attente</option>
-                      <option value="En cours" {% if reclamation.statut == 'En cours' %} selected {% endif %}>En cours</option>
-                      <option value="Répondue" {% if reclamation.statut == 'Répondue' %} selected {% endif %}>Répondue</option>
-                    </select>
-                  </form>
-                </td>
-                <td>
-                  <a href="{{ path('app_reclamation_consulter_admin', {'id': reclamation.id}) }}" class="btn btn-info">Consulter</a>
-                </td>
-              </tr>
+                <tr>
+                  <td>{{ reclamation.id }}</td>
+                  <td>{{ reclamation.dateReclamation|date('Y-m-d') }}</td>
+                  <td>{{ reclamation.statut }}</td>
+                  <td>
+                    <a href="{{ path('app_reclamation_consulter_admin', {'id': reclamation.id}) }}" class="btn btn-info">Consulter</a>
+                  </td>
+                </tr>
+              {% else %}
+                <tr>
+                    <td colspan="4">Aucune réclamation trouvée.</td>
+                </tr>
               {% endfor %}
             </tbody>
           </table>

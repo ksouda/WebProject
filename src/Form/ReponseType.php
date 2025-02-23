@@ -4,11 +4,11 @@ namespace App\Form;
 
 use App\Entity\Reponse;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ReponseType extends AbstractType
 {
@@ -36,6 +36,11 @@ class ReponseType extends AbstractType
                         'message' => 'La réponse contient des mots interdits.',
                     ]),
                 ],
+            ])
+
+            ->add('finale', CheckboxType::class, [
+                'label'    => 'Réponse finale',
+                'required' => false, // Cela ne sera pas obligatoire
             ]);
     }
 
