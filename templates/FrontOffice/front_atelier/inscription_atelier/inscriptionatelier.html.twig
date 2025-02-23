@@ -82,12 +82,33 @@
                 <h2>Historique des inscriptions</h2>
                 <p>Retrouvez les ateliers auxquels vous êtes inscrit.</p>
             </div>
+            <div class="containerboxes" data-aos="fade-up">
+              <div class="search-box">
+                <i class="fa fa-search"></i>
+                <input type="text" id="titleSearch" placeholder="Rechercher par titre...">
+              </div> 
+              <div class="filter-box">
+                    <i class="fa fa-filter"></i>
+                    <select id="statutFilter">
+                        <option value="">Tous les statuts</option>
+                        {% set statuts = [] %}
+                        {% for inscription in inscriptions %}
+                            {% if inscription.statut not in statuts %}
+                                {% set statuts = statuts|merge([inscription.statut]) %}
+                            {% endif %}
+                        {% endfor %}
+                        {% for stat in statuts %}
+                            <option value="{{ stat }}">{{ stat }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
             
             <div class="container">
-                <div class="row gy-4">
+                <div class="row gy-4" id="atelierList">
                 {% if inscriptions is defined and inscriptions is not empty %}
                     {% for inscription in inscriptions %}
-                    <div class="col-lg-6" data-aos="fade-up">
+                    <div class="col-lg-6 atelier-item" data-aos="fade-up" data-statut="{{ inscription.statut }}">
                         <div class="team-member d-flex align-items-start">
                         <div class="member-info">
                             <h4>{{ inscription.atelier.titre }}</h4>
@@ -109,7 +130,7 @@
                                     <i class="fa fa-info-circle" style="color: #17a2b8; font-size: 1.2rem; cursor: pointer;"></i>
                                 </button>
                                 </a>
-
+                                {{include('frontoffice/front_atelier/inscription_atelier/deleteinscri.html.twig')}}
                             </div>
                         </div>
                         </div>
@@ -130,7 +151,7 @@
                     <p><strong>Titre de l'atelier :</strong> <span id="atelierTitle"></span></p>
                     <p><strong>Catégorie :</strong> <span id="atelierCategory"></span></p>
                     <p><strong>Formateur :</strong> <span id="atelierFormateur"></span></p>
-                    <p><strong>Date d'inscription :</strong> <span id="atelierDate"></span></p>
+                    <p><strong>Date de l'atelier:</strong> <span id="atelierDate"></span></p>
                     <p><strong>Prix :</strong> <span id="atelierPrix"></span> dt</p>
                     <p><strong>Durée :</strong> <span id="atelierDuree"></span> minutes</p>
                     <p><strong>Lien :</strong> <span id="atelierLien"></span></p>
@@ -138,6 +159,7 @@
                     <button id="closeModalButton" class="close-button">Fermer</button>
                 </div>
             </div>
+
 
             {% if app.flashes('info') is not empty %}
                 <script>
@@ -162,7 +184,63 @@
         </section>
 
         {% endblock %}
-        
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("titleSearch");
+    const statutFilter = document.getElementById("statutFilter");
+    const atelierItems = Array.from(document.querySelectorAll(".atelier-item"));
+    const workshops = document.querySelectorAll(".col-lg-6"); // Sélectionne tous les ateliers affichés
+
+    function filterAteliers() {
+        const selectedStatut = statutFilter.value;
+
+        atelierItems.forEach(item => {
+            const statut = item.getAttribute("data-statut");
+
+            // Vérifie si le statut de l'atelier correspond au filtre sélectionné
+            if (selectedStatut === "" || statut === selectedStatut) {
+                item.style.display = "block"; // Affiche l'atelier si le statut correspond
+            } else {
+                item.style.display = "none"; // Cache l'atelier si le statut ne correspond pas
+            }
+        });
+    }
+
+    // Ajouter l'écouteur d'événements pour le changement de sélection
+    statutFilter.addEventListener("change", function () {
+        filterAteliers(); // Appliquer le filtre au changement de statut
+        searchAteliers(); // Appliquer également la recherche (au cas où un texte serait déjà saisi)
+    });
+
+    // Gérer la recherche par titre
+    searchInput.addEventListener("input", function () {
+        searchAteliers(); // Appel de la fonction de recherche à chaque saisie
+    });
+
+    // Fonction de recherche
+    function searchAteliers() {
+        const searchText = searchInput.value.toLowerCase();
+
+        atelierItems.forEach(item => {
+            const title = item.querySelector("h4").textContent.toLowerCase();
+            const statut = item.getAttribute("data-statut");
+
+            // Si le titre contient le texte recherché et que le statut est toujours visible
+            if (title.includes(searchText) && (statutFilter.value === "" || statut === statutFilter.value)) {
+                item.style.display = "block"; // Affiche l'atelier
+            } else {
+                item.style.display = "none"; // Cache l'atelier
+            }
+        });
+    }
+
+    // Appliquer les filtres et la recherche au chargement de la page
+    filterAteliers();
+    searchAteliers();
+});
+
+
+    </script>
 
         <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
         <script src="{{asset('vendor/php-email-form/validate.js')}}"></script>

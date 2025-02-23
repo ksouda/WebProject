@@ -11,30 +11,111 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/atelierenligne')]
 final class AtelierenligneController extends AbstractController
 {
     private const id_user = 1;
 
+    
     #[Route('/admin', name: 'app_atelierenligneadmin', methods: ['GET'])]
-    public function indexadmin(AtelierenligneRepository $atelierenligneRepository): Response
-    {
-        return $this->render('backoff/atelier/atelieradmin.html.twig', [
-            'atelierenlignes' => $atelierenligneRepository->findAll(),
-        ]);
+public function indexadmin(Request $request, PaginatorInterface $paginator, AtelierenligneRepository $atelierenligneRepository): Response
+{
+    // Récupérer tous les ateliers triés par date du cours (ordre croissant)
+    $atelierenlignesQuery = $atelierenligneRepository->createQueryBuilder('a')
+        ->orderBy('a.datecours', 'DESC')
+        ->getQuery();
+    
+    // Récupérer tous les ateliers sans pagination pour les statistiques
+    $atelierenlignes = $atelierenligneRepository->findBy([], ['datecours' => 'ASC']);
+
+    // Calculer les statistiques sur tous les ateliers
+    $stats = [];
+
+    foreach ($atelierenlignes as $atelier) {
+        $stats[] = [
+            'titre' => $atelier->getTitre(), // Titre de l'atelier
+            'inscriptions' => count($atelier->getInscription()), // Nombre d'inscrits
+        ];
     }
+
+    // Trier les statistiques par nombre d'inscriptions (du plus grand au plus petit)
+    usort($stats, function ($a, $b) {
+        return $b['inscriptions'] <=> $a['inscriptions']; // Tri décroissant
+    });
+
+    // Extraire les labels et data triés
+    $labels = array_column($stats, 'titre');
+    $data = array_column($stats, 'inscriptions');
+    
+    // Paginer les ateliers pour l'affichage
+    $pagination = $paginator->paginate(
+        $atelierenlignesQuery,
+        $request->query->getInt('page', 1), // Page actuelle
+        3 // Nombre d'éléments par page
+    );
+
+    $totalItems = $pagination->getTotalItemCount();
+    $pageSize = 3;
+    $pageCount = ceil($totalItems / $pageSize);
+
+    // Get previous and next page numbers, ensuring they are within valid bounds
+    $currentPage = $pagination->getCurrentPageNumber();
+    $previousPage = $currentPage > 1 ? $currentPage - 1 : 1;
+    $nextPage = $currentPage < $pageCount ? $currentPage + 1 : $pageCount;
+
+    // Render the template with pagination and page links
+    return $this->render('backoff/atelier/atelieradmin.html.twig', [
+        'atelierenlignes' => $pagination,
+        'previousPage' => $previousPage,
+        'nextPage' => $nextPage,
+        'pageCount' => $pageCount,
+        'labels' => $labels, // Titres des ateliers triés
+        'data' => $data,     // Nombre d'inscrits triés
+    ]);
+}
+
+
+    
+
 
     #[Route('', name: 'app_atelierenligne', methods: ['GET'])]
-    public function index(AtelierenligneRepository $atelierenligneRepository): Response
+    public function index(Request $request, PaginatorInterface $paginator, AtelierenligneRepository $atelierenligneRepository)
     {
-        $atelierenlignes = $atelierenligneRepository->findBy(['id_user' => self::id_user]);
+        $atelierenlignesQuery = $atelierenligneRepository->createQueryBuilder('a')
+        ->where('a.id_user = :id_user')
+        ->setParameter('id_user', self::id_user)
+        ->orderBy('a.datecours', 'ASC')
+        ->getQuery();
 
-        return $this->render('backoff/atelier/atelier.html.twig', [
-            'atelierenlignes' => $atelierenlignes,
-        ]);
+    // Paginate the results
+    $pagination = $paginator->paginate(
+        $atelierenlignesQuery,
+        $request->query->getInt('page', 1),
+        3
+    );
+    
+
+    $totalItems = $pagination->getTotalItemCount();
+    $pageSize = 3;
+    $pageCount = ceil($totalItems / $pageSize);
+
+    // Get previous and next page numbers, ensuring they are within valid bounds
+    $currentPage = $pagination->getCurrentPageNumber();
+    $previousPage = $currentPage > 1 ? $currentPage - 1 : 1;
+    $nextPage = $currentPage < $pageCount ? $currentPage + 1 : $pageCount;
+
+    // Render the template with pagination and page links
+    return $this->render('backoff/atelier/atelier.html.twig', [
+        'atelierenlignes' => $pagination,
+        'previousPage' => $previousPage,
+        'nextPage' => $nextPage,
+        'pageCount' => $pageCount,
+    ]);
     }
+
+
 
     
 
@@ -87,6 +168,17 @@ final class AtelierenligneController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/{id}', name: 'app_atelierenligne_deleteadmin', methods: ['POST'])]
+    public function deleteadmin(Request $request, Atelierenligne $atelierenligne, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('deleteadmin'.$atelierenligne->getId(), $request->getPayload()->getString('_token'))) {
+            $entityManager->remove($atelierenligne);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_atelierenligneadmin', [], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route('/{id}', name: 'app_atelierenligne_delete', methods: ['POST'])]
     public function delete(Request $request, Atelierenligne $atelierenligne, EntityManagerInterface $entityManager): Response
     {
@@ -97,4 +189,7 @@ final class AtelierenligneController extends AbstractController
 
         return $this->redirectToRoute('app_atelierenligne', [], Response::HTTP_SEE_OTHER);
     }
+    
+
+   
 }

@@ -3,12 +3,14 @@
 namespace App\Entity;
 
 use App\Repository\AtelierenligneRepository;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Entity\User; // Assurez-vous d'importer l'entité User
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[UniqueEntity(fields: ['titre'], message: 'Ce titre est déjà utilisé.')]
 #[ORM\Entity(repositoryClass: AtelierenligneRepository::class)]
 class Atelierenligne
 {
@@ -156,9 +158,7 @@ class Atelierenligne
         return $this;
     }
 
-    /**
-     * @return Collection<int, Inscriptionatelier>
-     */
+
     public function getInscription(): Collection
     {
         return $this->inscription;

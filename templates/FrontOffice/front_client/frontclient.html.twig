@@ -1,4 +1,5 @@
 {% extends 'FrontOffice/front_client/basefrontclient.html.twig' %}
+
 {% block title %}EDAYETNA{% endblock %}
 
 {% block body %}
@@ -178,69 +179,57 @@
     </section><!-- /Portfolio Section -->
 
     <!-- Ateliers en ligne Section -->
-    <section id="pricing" class="pricing section light-background">
+    <section id="atelier" class="pricing section lightt-background">
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+          <h2>Ateliers en ligne</h2>
+          <p>Apprenez l'artisanat en ligne, à votre rythme et où que vous soyez</p>
+        </div><!-- End Section Title -->
+                <div class="container">
+                    <div class="row gy-4">
+                        {% for atelierenligne in ateliers %}
+                            <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+                                <div class="pricing-item">
+                                    <h3>{{ atelierenligne.titre }}</h3>
+                                    <p><strong>Formateur :</strong> {{  atelierenligne.idUser.nom }} {{ atelierenligne.idUser.prenom}}</p>
+                                    <h4><sup>DT</sup>{{ atelierenligne.prix }}<span> / atelier</span></h4>
+                                    <ul>
+                                        <li><i class="bi bi-check"></i> <span>{{ atelierenligne.description|slice(0, 10) }}...</span></li>
+                                        <li><i class="bi bi-check"></i> <span>Niveau : {{ atelierenligne.niveauDiff }}</span></li>
+                                        <li><i class="bi bi-check"></i> <span>Date du cours : {{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : 'N/A' }}</span></li>
+                                        <li><i class="bi bi-check"></i> <span>Durée : {{ atelierenligne.duree }} min</span></li>
+                                        <li><a href="javascript:void(0);" class="see-more" onclick="openModal('{{ atelierenligne.id }}')">Voir plus</a></li>
+                                    </ul>
+                                    <a href="{{ path('app_inscription_atelier', {'id': atelierenligne.id}) }}" class="buy-btn">S'inscrire</a>
+                                </div>
+                                
+                            </div><!-- End Pricing Item -->
+                            
+                            <!-- Modale pour chaque atelier -->
+                            <div id="modal{{ atelierenligne.id }}" class="modal">
+                                <div class="modal-content">
+                                    <span class="close" onclick="closeModal('{{ atelierenligne.id }}')">&times;</span>
+                                    <h2>{{ atelierenligne.titre }}</h2>
+                                    <p><strong>Formateur :</strong> {{ atelierenligne.idUser.nom }} {{ atelierenligne.idUser.prenom}}</p>
+                                    <p><strong>Description complète :</strong> {{ atelierenligne.description }}</p>
+                                    <p><strong>Prix :</strong> {{ atelierenligne.prix }} DT</p>
+                                    <p><strong>Date de l'atelier :</strong> {{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : 'Non précisé' }}</p>
+                                    <p><strong>Durée :</strong> {{ atelierenligne.duree }} min</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="col-lg-12">
+                                <p>Aucun atelier trouvé</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="text-center mt-4">
+                        <a href="{{ path('app_front_atelier') }}" class="buy-btn">Explorer</a>
+                    </div>                
+                  </div>
+            
+        </section>
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Ateliers en ligne</h2>
-        <p>Apprenez l'artisanat en ligne, à votre rythme et où que vous soyez</p>
-      </div><!-- End Section Title -->
-
-      <div class="container">
-
-        <div class="row gy-4">
-
-          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-            <div class="pricing-item">
-              <h3>Création de Bijoux Artisanaux</h3>
-              <p><strong>Formateur :</strong> Sami Ben Ali</p>
-              <h4><sup>DT</sup>150<span>/ atelier</span></h4>
-              <ul>
-                <li><i class="bi bi-check"></i> <span>Apprenez à créer des bijoux uniques</span></li>
-                <li><i class="bi bi-check"></i> <span>Techniques adaptées à tous les niveaux</span></li>
-                <li><i class="bi bi-check"></i> <span>2 heures de formation en ligne</span></li>
-                <li class="na"><i class="bi bi-x"></i> <span>Pas d'expérience préalable requise</span></li>
-              </ul>
-              <a href="#" class="buy-btn">S'inscrire</a>
-            </div>
-          </div><!-- End Pricing Item -->
-
-          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
-            <div class="pricing-item featured">
-              <h3>Poterie : Techniques de Modelage</h3>
-              <p><strong>Formateur :</strong> Amira Zribi</p>
-              <h4><sup>DT</sup>90<span> / atelier</span></h4>
-              <ul>
-                <li><i class="bi bi-check"></i> <span>Apprenez les bases du modelage</span></li>
-                <li><i class="bi bi-check"></i> <span>Créez vos premières pièces à la main</span></li>
-                <li><i class="bi bi-check"></i> <span>3 heures de formation pratique</span></li>
-                <li class="na"><i class="bi bi-x"></i> <span>Matériel non inclus</span></li>
-              </ul>
-              <a href="#" class="buy-btn">S'inscrire</a>
-            </div>
-          </div><!-- End Pricing Item -->
-
-          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
-          <div class="pricing-item">
-            <h3>Création de Céramiques Artisanales</h3>
-            <p><strong>Formateur :</strong> Khaled El Ouerghemmi</p>
-            <h4><sup>DT</sup>250<span> / atelier</span></h4>
-            <ul>
-              <li><i class="bi bi-check"></i> <span>Apprenez les techniques de fabrication de céramiques</span></li>
-              <li><i class="bi bi-check"></i> <span>Créez vos propres pièces en céramique</span></li>
-              <li><i class="bi bi-check"></i> <span>3 heures de formation pratique</span></li>
-              <li class="na"><i class="bi bi-x"></i> <span>Matériel fourni à la demande</span></li>
-            </ul>
-            <a href="#" class="buy-btn">S'inscrire</a>
-          </div>
-          </div><!-- End Pricing Item -->
-
-
-        </div>
-
-      </div>
-
-    </section><!-- /Pricing Section -->
 
 
     <!-- Contact Section -->
