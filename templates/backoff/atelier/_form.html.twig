@@ -194,14 +194,24 @@
                         </div>
 
                         <div class="form-group">
-                            {{ form_label(form.datecours, 'Date du cours') }}
-                            {{ form_widget(form.datecours, {'attr': {'class': 'form-control'}}) }}
-                            <div class="invalid-feedback">
-                                {% for error in form.datecours.vars.errors %}
-                                    <p>{{ error.message }}</p>
-                                {% endfor %}
-                            </div>
+                        {# Étiquette du champ #}
+                        {{ form_label(form.datecours, 'Date et heure du cours', {'label_attr': {'class': 'form-label'}}) }}
+
+                        {# Champ de saisie #}
+                        {{ form_widget(form.datecours, {
+                            'attr': {
+                                'class': 'form-control',
+                                'placeholder': 'Sélectionnez la date et l\'heure'
+                            }
+                        }) }}
+
+                        {# Affichage des erreurs de validation #}
+                        <div class="invalid-feedback">
+                            {% for error in form.datecours.vars.errors %}
+                                <p>{{ error.message }}</p>
+                            {% endfor %}
                         </div>
+                    </div>
 
 
                         <div class="form-group">

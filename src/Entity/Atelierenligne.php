@@ -34,7 +34,7 @@ class Atelierenligne
     #[ORM\Column]
     private ?float $prix = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $datecours = null;
 
     #[ORM\Column]

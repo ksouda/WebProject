@@ -11,6 +11,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+
+
 
 
 class AtelierenligneType extends AbstractType
@@ -63,16 +66,21 @@ class AtelierenligneType extends AbstractType
                     new Assert\Positive(['message' => 'Le prix doit être un nombre positif.']),
                 ],
             ])
-            ->add('datecours', null, [
-                'widget' => 'single_text',
+            ->add('datecours', DateTimeType::class, [
+                'widget' => 'single_text', // Affiche un seul champ pour la date et l'heure
+                'html5' => true, // Utilise le type HTML5 datetime-local
                 'constraints' => [
-                new Assert\NotBlank(['message' => 'La date du cours est obligatoire.']),
-                new Assert\GreaterThan([
-                    'value' => 'today',
-                    'message' => 'La date doit être supérieure à aujourd\'hui.',
-                ]),
-            ],
+                    new Assert\NotBlank(['message' => 'La date et l\'heure du cours sont obligatoires.']),
+                    new Assert\GreaterThan([
+                        'value' => 'now', // Compare avec l'instant présent (date et heure)
+                        'message' => 'La date et l\'heure doivent être supérieures à maintenant.',
+                    ]),
+                ],
+                'attr' => [
+                    'class' => 'form-control', // Classe CSS optionnelle
+                ],
             ])
+            
             ->add('duree', null, [
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'La durée est obligatoire.']),

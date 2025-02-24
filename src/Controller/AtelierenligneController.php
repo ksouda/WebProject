@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
 
 #[Route('/atelierenligne')]
 final class AtelierenligneController extends AbstractController
@@ -20,69 +22,62 @@ final class AtelierenligneController extends AbstractController
 
     
     #[Route('/admin', name: 'app_atelierenligneadmin', methods: ['GET'])]
-public function indexadmin(Request $request, PaginatorInterface $paginator, AtelierenligneRepository $atelierenligneRepository): Response
-{
-    // Récupérer tous les ateliers triés par date du cours (ordre croissant)
-    $atelierenlignesQuery = $atelierenligneRepository->createQueryBuilder('a')
-        ->orderBy('a.datecours', 'DESC')
-        ->getQuery();
+    public function indexadmin(Request $request, PaginatorInterface $paginator, AtelierenligneRepository $atelierenligneRepository): Response
+    {
+        // Récupérer tous les ateliers triés par date du cours (ordre croissant)
+        $atelierenlignesQuery = $atelierenligneRepository->createQueryBuilder('a')
+            ->orderBy('a.datecours', 'DESC')
+            ->getQuery();
+        
+        // Récupérer tous les ateliers sans pagination pour les statistiques
+        $atelierenlignes = $atelierenligneRepository->findBy([], ['datecours' => 'ASC']);
+
+        // Calculer les statistiques sur tous les ateliers
+        $stats = [];
+
+        foreach ($atelierenlignes as $atelier) {
+            $stats[] = [
+                'titre' => $atelier->getTitre(), // Titre de l'atelier
+                'inscriptions' => count($atelier->getInscription()), // Nombre d'inscrits
+            ];
+        }
+
     
-    // Récupérer tous les ateliers sans pagination pour les statistiques
-    $atelierenlignes = $atelierenligneRepository->findBy([], ['datecours' => 'ASC']);
+        // Trier les statistiques par nombre d'inscriptions (du plus grand au plus petit)
+        usort($stats, function ($a, $b) {
+            return $b['inscriptions'] <=> $a['inscriptions']; // Tri décroissant
+        });
 
-    // Calculer les statistiques sur tous les ateliers
-    $stats = [];
+        // Extraire les labels et data triés
+        $labels = array_column($stats, 'titre');
+        $data = array_column($stats, 'inscriptions');
+        
+        // Paginer les ateliers pour l'affichage
+        $pagination = $paginator->paginate(
+            $atelierenlignesQuery,
+            $request->query->getInt('page', 1), // Page actuelle
+            3 // Nombre d'éléments par page
+        );
 
-    foreach ($atelierenlignes as $atelier) {
-        $stats[] = [
-            'titre' => $atelier->getTitre(), // Titre de l'atelier
-            'inscriptions' => count($atelier->getInscription()), // Nombre d'inscrits
-        ];
+        $totalItems = $pagination->getTotalItemCount();
+        $pageSize = 3;
+        $pageCount = ceil($totalItems / $pageSize);
+
+        // Get previous and next page numbers, ensuring they are within valid bounds
+        $currentPage = $pagination->getCurrentPageNumber();
+        $previousPage = $currentPage > 1 ? $currentPage - 1 : 1;
+        $nextPage = $currentPage < $pageCount ? $currentPage + 1 : $pageCount;
+
+        // Render the template with pagination and page links
+        return $this->render('backoff/atelier/atelieradmin.html.twig', [
+            'atelierenlignes' => $pagination,
+            'previousPage' => $previousPage,
+            'nextPage' => $nextPage,
+            'pageCount' => $pageCount,
+            'labels' => $labels, // Titres des ateliers triés
+            'data' => $data,     // Nombre d'inscrits triés
+        ]);
     }
-
-   
-    
-
-
-
-    // Trier les statistiques par nombre d'inscriptions (du plus grand au plus petit)
-    usort($stats, function ($a, $b) {
-        return $b['inscriptions'] <=> $a['inscriptions']; // Tri décroissant
-    });
-
-    // Extraire les labels et data triés
-    $labels = array_column($stats, 'titre');
-    $data = array_column($stats, 'inscriptions');
-    
-    // Paginer les ateliers pour l'affichage
-    $pagination = $paginator->paginate(
-        $atelierenlignesQuery,
-        $request->query->getInt('page', 1), // Page actuelle
-        3 // Nombre d'éléments par page
-    );
-
-    $totalItems = $pagination->getTotalItemCount();
-    $pageSize = 3;
-    $pageCount = ceil($totalItems / $pageSize);
-
-    // Get previous and next page numbers, ensuring they are within valid bounds
-    $currentPage = $pagination->getCurrentPageNumber();
-    $previousPage = $currentPage > 1 ? $currentPage - 1 : 1;
-    $nextPage = $currentPage < $pageCount ? $currentPage + 1 : $pageCount;
-
-    // Render the template with pagination and page links
-    return $this->render('backoff/atelier/atelieradmin.html.twig', [
-        'atelierenlignes' => $pagination,
-        'previousPage' => $previousPage,
-        'nextPage' => $nextPage,
-        'pageCount' => $pageCount,
-        'labels' => $labels, // Titres des ateliers triés
-        'data' => $data,     // Nombre d'inscrits triés
-    ]);
-}
-
-
-    
 
 
     #[Route('', name: 'app_atelierenligne', methods: ['GET'])]
@@ -119,9 +114,6 @@ public function indexadmin(Request $request, PaginatorInterface $paginator, Atel
         'pageCount' => $pageCount,
     ]);
     }
-
-
-    
 
     #[Route('/new', name: 'app_atelierenligne_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -193,7 +185,31 @@ public function indexadmin(Request $request, PaginatorInterface $paginator, Atel
 
         return $this->redirectToRoute('app_atelierenligne', [], Response::HTTP_SEE_OTHER);
     }
-    
+
+    #[Route('/search', name: 'recherche_ateliers', methods: ['GET'])]
+    public function search(Request $request, AtelierenligneRepository $atelierenligneRepository): JsonResponse
+    {
+        $query = $request->query->get('q', '');
+
+        if (empty($query)) {
+            return new JsonResponse([]);
+        }
+
+        $atelierenlignes = $atelierenligneRepository->searchByTerm($query);
+
+        $results = [];
+
+        foreach ($atelierenlignes as $atelierenligne) {
+            $results[] = [
+                'id' => $atelierenligne->getId(),
+                'titre' => $atelierenligne->getTitre(),
+            ];
+        }
+
+        return new JsonResponse($results);
+    }
+
+
 
    
 }

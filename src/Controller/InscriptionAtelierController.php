@@ -69,46 +69,52 @@ class InscriptionAtelierController extends AbstractController
 
 
     #[Route('/inscriptionclient', name: 'app_inscriptions', methods: ['GET'])]
-    public function showinscri(InscriptionatelierRepository $inscriptionsatelierRepository, EntityManagerInterface $entityManager): Response
-    {
-        // Récupérer toutes les inscriptions de l'utilisateur en fonction de l'ID
-        $inscriptions = $inscriptionsatelierRepository->findBy(['id_user' => self::id_user]);
+public function showinscri(InscriptionatelierRepository $inscriptionsatelierRepository, EntityManagerInterface $entityManager): Response
+{
+    // Créer une requête QueryBuilder pour récupérer les inscriptions triées par datecours DESC
+    $inscriptionsQuery = $inscriptionsatelierRepository->createQueryBuilder('i')
+        ->leftJoin('i.atelier', 'a') // Jointure avec l'entité Atelier
+        ->where('i.id_user = :id_user')
+        ->setParameter('id_user', self::id_user)
+        ->orderBy('a.datecours', 'DESC') // Tri par datecours en ordre décroissant
+        ->getQuery();
 
-        $today = new DateTime(); // Date actuelle
-        $today->setTime(0, 0, 0);
+    // Exécuter la requête pour obtenir les résultats
+    $inscriptions = $inscriptionsQuery->getResult();
 
-        foreach ($inscriptions as $inscription) {
-            $atelier = $inscription->getAtelier(); // Supposons que l'inscription ait une relation avec un atelier
-            $dateCours = $atelier->getDateCours(); // Récupérer la date du cours de l'atelier
+    $today = new DateTime(); // Date actuelle
 
-            if ($dateCours === null) {
-                $inscription->setStatut('Date non définie'); // Gérer le cas où la date n'est pas définie
-            } elseif ($dateCours instanceof DateTime) {
-                $dateAtelier = $dateCours; // Si c'est déjà un objet DateTime
-                $dateAtelier->setTime(0, 0, 0);
-            } else {
-                $dateAtelier = new DateTime($dateCours); // Créer un objet DateTime à partir de la chaîne
-            }
+    foreach ($inscriptions as $inscription) {
+        $atelier = $inscription->getAtelier(); // Supposons que l'inscription ait une relation avec un atelier
+        $dateCours = $atelier->getDateCours(); // Récupérer la date du cours de l'atelier
 
-            // Comparer les dates et changer le statut
-            if ($dateAtelier < $today) {
-                $inscription->setStatut('Terminé'); // Atelier déjà terminé
-            } elseif ($dateAtelier > $today) {
-                $inscription->setStatut('À venir'); // Atelier à venir
-            } else {
-                $inscription->setStatut('En cours aujourd\'hui'); // Atelier aujourd'hui
-            }
-
-            // Persister les modifications dans la base de données
-            $entityManager->persist($inscription);
+        if ($dateCours === null) {
+            $inscription->setStatut('Date non définie'); // Gérer le cas où la date n'est pas définie
+        } elseif ($dateCours instanceof DateTime) {
+            $dateAtelier = $dateCours; // Si c'est déjà un objet DateTime
+        } else {
+            $dateAtelier = new DateTime($dateCours); // Créer un objet DateTime à partir de la chaîne
         }
 
-        // Enregistrer toutes les modifications
-        $entityManager->flush();
+        // Comparer les dates et changer le statut
+        if ($dateAtelier < $today) {
+            $inscription->setStatut('Terminé'); // Atelier déjà terminé
+        } elseif ($dateAtelier > $today) {
+            $inscription->setStatut('À venir'); // Atelier à venir
+        } else {
+            $inscription->setStatut('En cours aujourd\'hui'); // Atelier aujourd'hui
+        }
 
-        // Renvoyer les données à la vue pour affichage
-        return $this->render('frontoffice/front_atelier/inscription_atelier/inscriptionatelier.html.twig', [
-            'inscriptions' => $inscriptions, // Les inscriptions mises à jour sont envoyées à la vue
+        // Persister les modifications dans la base de données
+        $entityManager->persist($inscription);
+    }
+
+    // Enregistrer toutes les modifications
+    $entityManager->flush();
+
+    // Renvoyer les données à la vue pour affichage
+    return $this->render('frontoffice/front_atelier/inscription_atelier/inscriptionatelier.html.twig', [
+        'inscriptions' => $inscriptions, // Les inscriptions triées sont envoyées à la vue
         ]);
     }
 

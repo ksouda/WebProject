@@ -196,7 +196,7 @@
                                     <ul>
                                         <li><i class="bi bi-check"></i> <span>{{ atelierenligne.description|slice(0, 10) }}...</span></li>
                                         <li><i class="bi bi-check"></i> <span>Niveau : {{ atelierenligne.niveauDiff }}</span></li>
-                                        <li><i class="bi bi-check"></i> <span>Date du cours : {{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : 'N/A' }}</span></li>
+                                        <li><i class="bi bi-check"></i> <span>Date du cours : {{ atelierenligne.datecours ? atelierenligne.datecours|date('d/m/Y H:i', 'Africa/Tunis') : '' }}</span></li>
                                         <li><i class="bi bi-check"></i> <span>Durée : {{ atelierenligne.duree }} min</span></li>
                                         <li><a href="javascript:void(0);" class="see-more" onclick="openModal('{{ atelierenligne.id }}')">Voir plus</a></li>
                                     </ul>
@@ -213,7 +213,7 @@
                                     <p><strong>Formateur :</strong> {{ atelierenligne.idUser.nom }} {{ atelierenligne.idUser.prenom}}</p>
                                     <p><strong>Description complète :</strong> {{ atelierenligne.description }}</p>
                                     <p><strong>Prix :</strong> {{ atelierenligne.prix }} DT</p>
-                                    <p><strong>Date de l'atelier :</strong> {{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : 'Non précisé' }}</p>
+                                    <p><strong>Date de l'atelier :</strong> {{ atelierenligne.datecours ? atelierenligne.datecours|date('d/m/Y H:i', 'Africa/Tunis') : 'Non précisé' }}</p>
                                     <p><strong>Durée :</strong> {{ atelierenligne.duree }} min</p>
                                 </div>
                             </div>

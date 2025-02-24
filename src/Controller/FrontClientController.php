@@ -34,10 +34,6 @@ final class FrontClientController extends AbstractController
     }
 
 
-    
-
-
-
 
 
 }

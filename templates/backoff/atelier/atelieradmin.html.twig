@@ -155,10 +155,6 @@
             
             
             <div class="containerboxes">
-              <div class="search-box">
-                <i class="fa fa-search"></i>
-                <input type="text" id="titleSearch" placeholder="Rechercher par titre...">
-              </div> 
               <div class="filter-box">
                   <i class="fa fa-filter"></i>
                   <select id="categoryFilter">
@@ -205,7 +201,7 @@
                 </td>
                 <td>{{ atelierenligne.niveauDiff }}</td>
                 <td>{{ atelierenligne.prix }}</td>
-                <td>{{ atelierenligne.datecours ? atelierenligne.datecours|date('Y-m-d') : '' }}</td>
+                <td>{{ atelierenligne.datecours ? atelierenligne.datecours|date('d/m/Y H:i', 'Africa/Tunis') : '' }}</td>
                 <td>{{ atelierenligne.duree }}</td>
                 <td>
                     <span class="short-link">{{ atelierenligne.lien|slice(0, 10) }}...</span>
@@ -229,7 +225,7 @@
                       data-category="{{ atelierenligne.categorie }}"
                       data-description="{{ atelierenligne.description }}"
                       data-formateur="{{ atelierenligne.idUser.nom }} {{ atelierenligne.idUser.prenom }}"
-                      data-date="{{ atelierenligne.datecours|date('Y-m-d') }}"
+                      data-date="{{ atelierenligne.datecours|date('Y-m-d H:i') }}"
                       data-prix="{{ atelierenligne.prix }}"
                       data-lien="{{ atelierenligne.lien }}"
                       data-duree="{{ atelierenligne.duree }}"
@@ -289,34 +285,33 @@
     <!-- plugins:js -->
     {% block js %}
     <script>
-    document.getElementById('categoryFilter').addEventListener('change', function() {
+// Écouter les changements dans le filtre de catégorie
+document.getElementById('categoryFilter').addEventListener('change', function() {
     filterTable();
 });
 
-document.getElementById('titleSearch').addEventListener('input', function() {
-    filterTable();
-});
-
+// Fonction de filtrage
 function filterTable() {
+    // Récupérer la catégorie sélectionnée
     let selectedCategory = document.getElementById('categoryFilter').value.toLowerCase();
-    let searchTerm = document.getElementById('titleSearch').value.toLowerCase();
+
+    // Récupérer toutes les lignes du tableau
     let rows = document.querySelectorAll('#atelierTable tbody .atelier-row');
 
+    // Parcourir chaque ligne
     rows.forEach(function(row) {
+        // Récupérer le contenu de la cellule de catégorie
         let categoryCell = row.cells[2].textContent.toLowerCase();
-        let titleCell = row.cells[1].textContent.toLowerCase();
 
-        // Appliquer à la fois le filtrage de la catégorie et la recherche par titre
-        if ((selectedCategory === "" || categoryCell.includes(selectedCategory)) && titleCell.includes(searchTerm)) {
-            row.style.display = '';
+        // Appliquer le filtrage
+        if (selectedCategory === "" || categoryCell.includes(selectedCategory)) {
+            row.style.display = ''; // Afficher la ligne si elle correspond à la catégorie
         } else {
-            row.style.display = 'none';
+            row.style.display = 'none'; // Cacher la ligne si elle ne correspond pas
         }
     });
 }
-
-  
-    </script>
+</script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
           const ctx = document.getElementById('atelierChart').getContext('2d');
