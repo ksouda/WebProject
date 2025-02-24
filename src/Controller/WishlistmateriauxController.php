@@ -30,7 +30,7 @@ final class WishlistmateriauxController extends AbstractController
 
 
     #[Route('/wishlist/add/{id}', name: 'wishlist_add')]
-    public function addToWishlist(int $id, MateriauxRepository $materiauxRepository, EntityManagerInterface $em): Response
+public function addToWishlist(int $id, MateriauxRepository $materiauxRepository, EntityManagerInterface $em): Response
 {
     // Utilisation d'un user_id statique, ici 1
     $userId = 1;
@@ -42,34 +42,41 @@ final class WishlistmateriauxController extends AbstractController
         throw $this->createNotFoundException('Produit non trouvé');
     }
 
-    // Récupérer l'utilisateur (id_user)
+    // Récupérer l'utilisateur
     $user = $em->getRepository(User::class)->find($userId);
 
     if (!$user) {
         throw $this->createNotFoundException('Utilisateur non trouvé');
     }
 
-    // Vérifier si le produit est déjà dans la wishlist de l'utilisateur (userId statique)
+    // Vérifier si l'utilisateur a déjà une wishlist
+    $existingWishlist = $em->getRepository(Wishlistmateriaux::class)
+        ->findOneBy(['user' => $user]);  // Chercher la wishlist par utilisateur
+
+    if (!$existingWishlist) {
+        // Si la wishlist n'existe pas, créer une nouvelle wishlist
+        $existingWishlist = new Wishlistmateriaux();
+        $existingWishlist->setUser($user);  // Associer l'utilisateur
+        $existingWishlist->setDateAjout(new \DateTime());  // Ajouter la date d'ajout
+        $em->persist($existingWishlist);
+        $em->flush();
+    }
+
+    // Vérifier si le produit est déjà dans la wishlist de l'utilisateur
     $existingWishlistItem = $em->getRepository(Wishlistmateriaux::class)
-    ->createQueryBuilder('w')
-    ->innerJoin('w.id_materiel', 'm')
-    ->where('w.user = :user')  // Changer id_user par user
-    ->andWhere('m.id = :materiel')
-    ->setParameter('user', $user->getId())
-    ->setParameter('materiel', $materiel->getId())
-    ->getQuery()
-    ->getOneOrNullResult();
-
-
+        ->createQueryBuilder('w')
+        ->innerJoin('w.id_materiel', 'm')
+        ->where('w.user = :user') 
+        ->andWhere('m.id = :materiel')
+        ->setParameter('user', $user->getId())
+        ->setParameter('materiel', $materiel->getId())
+        ->getQuery()
+        ->getOneOrNullResult();
 
     if (!$existingWishlistItem) {
-        // Ajouter à la wishlist
-        $wishlist = new Wishlistmateriaux();
-        $wishlist->setUser($user);  // Associer l'utilisateur
-        $wishlist->addIdMateriel($materiel);  // Ajouter le matériel à la wishlist
-        $wishlist->setDateAjout(new \DateTime());  // Ajouter la date
-
-        $em->persist($wishlist);
+        // Ajouter le matériel à la wishlist
+        $existingWishlist->addIdMateriel($materiel);
+        $em->persist($existingWishlist);
         $em->flush();
 
         $this->addFlash('success', 'Produit ajouté à votre wishlist.');
@@ -79,4 +86,5 @@ final class WishlistmateriauxController extends AbstractController
 
     return $this->redirectToRoute('app_wishlistmateriaux');
 }
+
 }

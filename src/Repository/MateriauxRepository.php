@@ -15,6 +15,17 @@ class MateriauxRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Materiaux::class);
     }
+    public function searchByTerm(string $term)
+    {
+        return $this->createQueryBuilder('m')
+            ->where('m.nom_materiel LIKE :term')
+            ->setParameter('term', '%' . $term . '%')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+    }
+    
+
     
 
     //    /**

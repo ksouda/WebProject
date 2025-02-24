@@ -8,6 +8,9 @@
     <title>{% block title %}Back Office EDAYETNA{% endblock %}</title>
     <!-- plugins:css -->
     {% block css %}
+       <!-- a ajouter -->
+      <!-- Toastr CSS -->
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
        <link href="css/main.css" rel="stylesheet">
       <link href="{{ asset('build/assets/vendors/feather/feather.css') }}" rel="stylesheet">
       <link href="{{ asset('build/assets/vendors/css/vendor.bundle.base.css') }}" rel="stylesheet">
@@ -147,41 +150,25 @@
             <div class="table-container">
         <div class="table-title">
          
-            
+           
             <div class="search-box">
-                <i class="fa fa-search"></i>
-                <input id="searchInput" type="text" placeholder="Rechercher...">
-                <button onclick="sortTableByQuantity()" style="background: none; border: none; padding: 0; cursor: pointer;">
-                   <i class="fa fa-sort" style="color:rgb(0, 21, 44); font-size: 20px;"></i> 
-                </button>
-            </div>
+            <i class="fa fa-search"></i>
+            <input  id="searchInput" type="text" placeholder="Rechercher...">
+            <div id="results"></div>
+            <button onclick="sortTableByQuantity()" style="background: none; border: none; padding: 0; cursor: pointer;">
+                <i class="fa fa-sort" style="color:rgb(0, 21, 44); font-size: 20px;"></i> 
+            </button>
+        </div>
+
+       
+
             
 
             <a href="{{ path('app_materiaux_new') }}">
             <i class="fa fa-plus"></i>
             </a>
            </div>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        let alerts = {{ app.flashes('alert')|json_encode|raw }}; // Récupérer tous les messages flash en tableau JS
-
-        if (alerts.length > 0) {
-            alerts.forEach((message, index) => {
-                setTimeout(() => {
-                    Swal.fire({
-                        title: "Alerte Stock Faible",
-                        text: message,
-                        icon: "warning",
-                        confirmButtonText: "OK",
-                        timer: 5000
-                    });
-                }, index * 3000); // Décaler chaque pop-up pour éviter qu'elles se superposent
-            });
-        }
-    });
-</script>
 
 
         <table id="materiauxTable">
@@ -203,9 +190,9 @@
             </thead>
             <tbody>
                 {% for materiaux in materiauxes %}
-                  <tr>
+                  <tr style="{% if materiaux.quantiteStock <= materiaux.seuilMin %}background-color: #ffcccc; color: #d60000; font-weight: bold;{% endif %}">
                       
-                      <td>{{ materiaux.nomMateriel }}</td>
+                      <td class="nomMateriel">{{ materiaux.nomMateriel }}</td>
                       <td>{{ materiaux.quantiteStock }}</td>
                       <td>{{ materiaux.seuilMin }}</td>
                       <td>{{ materiaux.prixUnitaire }}</td>
@@ -246,6 +233,52 @@
 
           </tbody>
         </table>
+<style>
+/* Forcer l'opacité de la notification */
+.toast {
+    opacity: 1 !important; /* Pleine visibilité */
+}
+
+/* Changer la couleur du fond des alertes selon le type */
+.toast-warning {
+    background-color:rgb(142, 168, 212) !important; /* Jaune pour warning */
+    color: #000 !important; /* Texte en noir pour contraste */
+}
+
+.toast-error {
+    background-color: #dc3545 !important; /* Rouge pour erreur */
+    color: #fff !important;
+}
+
+.toast-success {
+    background-color: #28a745 !important; /* Vert pour succès */
+    color: #fff !important;
+}
+
+.toast-info {
+    background-color: #17a2b8 !important; /* Bleu pour information */
+    color: #fff !important;
+}
+
+</style>
+<!--a ajouter -->
+<!-- jQuery (nécessaire pour Toastr) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+{% for message in app.flashes('low_stock') %}
+    toastr.warning("{{ message }}", "Alerte Stock", {
+        closeButton: true,
+        progressBar: true,
+        positionClass: "toast-top-right",
+        timeOut: 5000
+    });
+{% endfor %}
+});
+</script>
+
 
     <div class="pagination">
         <a href="#">&laquo;</a>
@@ -267,12 +300,13 @@
 <div class="content-wrapper" style="width: 100%; padding: 20px;">
   <div class="main-panel" style="width: 100%; display: flex; justify-content: center; align-items: center;">
     <div class="materiaux-statistics" style="width: 60%; max-width: 400px; margin-top: 20px; text-align: center;">
-        <canvas id="materiauxChart" style="width: 100% !important; height: 350px !important;"></canvas> <!-- Graphique circulaire -->
+        <canvas id="materiauxChart" style="width: 100% !important; height: 350px !important;"></canvas>
 
         <!-- Légende personnalisée -->
         <div class="legend" style="margin-top: 10px; font-size: 16px; font-weight: bold; text-align: center;">
-            <span class="legend-item" style="color:rgba(255, 60, 0, 0.7); margin-right: 20px;">🔴 Insuffisant </span>
-            <span class="legend-item" style="color:rgba(2, 12, 87, 0.7);">🔵 Suffisant</span>
+            <span style="border: 3px solid red; padding: 3px 10px; border-radius: 5px; color: black;">
+                🔴 Matériaux avec stock insuffisant
+            </span>
         </div>
     </div>
   </div>
@@ -284,40 +318,49 @@
         const ctx = document.getElementById('materiauxChart').getContext('2d');
 
         // Données des matériaux
-        const labels = {{ labels|json_encode()|raw }}; // Noms des matériaux
-        const data = {{ data|json_encode()|raw }}; // Quantités des matériaux
+        const labels = {{ labels|json_encode()|raw }};
+        const data = {{ data|json_encode()|raw }};
 
-        // Définition des couleurs homogènes et plus cohérentes
-        const backgroundColors = data.map(quantity => 
-            quantity < 5 ? 'rgba(255, 60, 0, 0.7)' : 'rgba(2, 12, 87, 0.7)'); // Utilisation des couleurs pour insuffisant et suffisant
+        // Fonction pour générer des couleurs modernes et harmonieuses
+        function getColor(index) {
+            const colors = [
+                '#FFADAD', '#FFD6A5', '#FDFFB6', '#CAFFBF', '#9BF6FF',
+                '#A0C4FF', '#BDB2FF', '#FFC6FF', '#FF99C8', '#FCF6BD'
+            ];
+            return colors[index % colors.length];
+        }
 
-        const materiauxChart = new Chart(ctx, {
-            type: 'pie', // Graphique circulaire
+        // Couleurs d'arrière-plan et bordures conditionnelles
+        let backgroundColors = labels.map((_, index) => getColor(index));
+        let borderColors = data.map((quantity, index) => quantity < 5 ? 'red' : backgroundColors[index]);
+
+        new Chart(ctx, {
+            type: 'pie', 
             data: {
-                labels: labels.map((label, index) => label.length > 12 ? label.substring(0, 12) + '...' : label), // Afficher uniquement les noms des matériaux
+                labels: labels.map(label => (label.length > 12 ? label.substring(0, 12) + '...' : label)),
                 datasets: [{
                     label: 'Quantité en Stock',
                     data: data,
-                    backgroundColor: backgroundColors, // Couleurs homogènes
-                    borderColor: '#fff', // Bordure blanche pour contraste
-                    borderWidth: 2
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 3
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'top', // Position de la légende
+                        position: 'top',
                         labels: {
                             font: {
-                                size: 14, // Taille de police homogène pour la légende
+                                size: 14
                             }
                         }
                     },
                     tooltip: {
                         callbacks: {
-                            label: function(tooltipItem) {
-                                return tooltipItem.label + ': ' + tooltipItem.raw + ' unités'; // Afficher les quantités
+                            label: function (tooltipItem) {
+                                return `${tooltipItem.label}: ${tooltipItem.raw} unités`;
                             }
                         }
                     },
@@ -325,12 +368,16 @@
                         display: true,
                         text: 'Répartition des Matériaux en Stock'
                     }
-                },
-                cutoutPercentage: 70, // Augmenter l'espace central pour améliorer l'affichage des labels
+                }
             }
         });
     });
 </script>
+
+
+
+
+
 
       </div>
           <!-- content-wrapper ends -->
@@ -398,45 +445,56 @@ window.onclick = function(event) {
 }
 
 
+// script recherche 
+document.getElementById("searchInput").addEventListener("input", function () {
+  console.log("searchInput trouvé :", searchInput);
+  console.log("Le script de recherche est bien chargé !");
 
-// script recherche
-document.addEventListener("DOMContentLoaded", function () {
-    // Sélectionne l'élément de saisie pour la recherche
-    let searchInput = document.getElementById("searchInput");
+  let query = this.value.trim().toLowerCase();
+  console.log("Texte recherché :", query); // Vérifier la saisie utilisateur
 
-    // Fonction qui filtre les lignes du tableau en fonction du texte saisi
-    function filterTable() {
-        // Récupère la valeur tapée dans l'input et la met en minuscules pour éviter la casse
-        let searchText = searchInput.value.toLowerCase();
+  // On effectue la requête fetch ici
+  fetch('/materiaux/search?q=' + query)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Erreur de réseau');
+        }
+        return response.json(); // Convertit la réponse en JSON
+    })
+    .then(data => {
+        console.log("Données de la recherche:", data);
+        let rows = document.querySelectorAll("#materiauxTable tbody tr");
+        console.log("Nombre de lignes trouvées :", rows.length); // Vérifier combien de lignes existent
 
-        // Sélectionne toutes les lignes du tableau (dans <tbody>)
-        let rows = document.querySelectorAll("tbody tr");
-
-        // Parcours chaque ligne du tableau
         rows.forEach(row => {
-            // Sélectionne la cellule correspondant au nom du matériel (2ème colonne)
-            let nameCell = row.querySelector("td:nth-child(1)"); 
-
-            if (nameCell) {
-                // Récupère le texte du nom du matériel et le met en minuscules
-                let nameText = nameCell.innerText.toLowerCase();
+            try {
+                let nomMaterielElement = row.querySelector(".nomMateriel");
                 
-                // Vérifie si le texte tapé correspond au début du nom du matériel
-                let textMatch = searchText === "" || nameText.startsWith(searchText); 
-
-                // Affiche la ligne si elle correspond à la recherche, sinon la cache
-                if (textMatch) {
-                    row.style.display = "";  // Afficher la ligne
-                } else {
-                    row.style.display = "none";  // Cacher la ligne
+                // Vérifier si la cellule existe
+                if (!nomMaterielElement) {
+                    console.warn("Aucune cellule '.nomMateriel' trouvée dans cette ligne :", row);
+                    return;
                 }
+
+                let nomMateriel = nomMaterielElement.textContent.toLowerCase();
+                console.log("Comparaison :", nomMateriel, "contient", query, "?", nomMateriel.includes(query));
+
+                if (nomMateriel.includes(query)) {
+                    row.style.display = ""; // Afficher la ligne si elle correspond à la recherche
+                } else {
+                    row.style.display = "none"; // Cacher la ligne si elle ne correspond pas
+                }
+            } catch (error) {
+                console.error("Erreur lors du filtrage d'une ligne :", error);
             }
         });
-    }
-
-    // Ajoute un écouteur d'événement pour détecter la saisie dans le champ de recherche
-    searchInput.addEventListener("input", filterTable);
+    })
+    .catch(error => {
+        console.error("Erreur lors de la requête fetch :", error);
+    });
 });
+
+
 
 
 // TRI par quantité

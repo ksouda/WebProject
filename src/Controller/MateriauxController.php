@@ -6,6 +6,7 @@ use App\Form\MateriauxType;
 use App\Repository\MateriauxRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 
+//a modifier
 #[Route('/materiaux')]
 final class MateriauxController extends AbstractController
 {
@@ -26,16 +28,21 @@ public function index(MateriauxRepository $materiauxRepository): Response
     // Initialiser les tableaux pour les statistiques
     $labels = [];
     $data = [];
-
-    // Vérifier les seuils et ajouter les alertes
+    $lowStock = false; 
+    // Vérifier les seuils pour statistique 
     foreach ($materiaux as $materiel) {
         $labels[] = $materiel->getNomMateriel();
         $data[] = $materiel->getQuantiteStock();
-
+        //pour notifiacation
         if ($materiel->getQuantiteStock() <= $materiel->getSeuilMin()) {
-            $this->addFlash('alert', '⚠️ Stock faible pour : ' . $materiel->getNomMateriel());
+            $lowStock = true; // On détecte un stock insuffisant
         }
     }
+    if ($lowStock) {
+        $this->addFlash('low_stock', '⚠️ Attention : Certains matériaux ont un stock insuffisant.');
+        dump('Flash ajouté : Stock insuffisant détecté'); // TESTER SI LE FLASH FONCTIONNE
+    }
+    
 
     // Rendre la vue avec les données nécessaires
     return $this->render('backoff/materiaux/index.html.twig', [
@@ -44,10 +51,36 @@ public function index(MateriauxRepository $materiauxRepository): Response
         'data' => $data,
     ]);
 }
+#[Route('/search', name: 'app_materiaux_search', methods: ['GET'])]
+public function search(Request $request, MateriauxRepository $materiauxRepository): JsonResponse
+{
+    $query = $request->query->get('q', '');
 
-    
+    if (empty($query)) {
+        return new JsonResponse([]);
+    }
 
-    
+    $materiaux = $materiauxRepository->searchByTerm($query);
+
+    $results = [];
+
+    foreach ($materiaux as $materiel) {
+        $results[] = [
+            'id' => $materiel->getId(),
+            'nomMateriel' => $materiel->getNomMateriel(),
+            'quantiteStock' => $materiel->getQuantiteStock(),
+            'seuilMin' => $materiel->getSeuilMin(),
+            'categorie'=> $materiel->getCategorie(),
+            'description'=> $materiel->getDescription(),
+            'photo'=> $materiel->getPhoto(),
+            
+
+        ];
+    }
+
+    return new JsonResponse($results);
+}
+
 
     #[Route('/new', name: 'app_materiaux_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
