@@ -153,6 +153,10 @@
                                       <p>{{ materiau.PrixUnitaire }} TND</p>
                                       <a href="{{ asset('img/masonry-portfolio/' ~ materiau.photo) }}" title="{{ materiau.NomMateriel }}" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                                       <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> 
+                                      {# Ajouter le bouton "Ajouter à la wishlist" #}
+                                      <form action="{{ path('wishlist_add', {'id': materiau.id}) }}" method="post">
+                                     <button type="submit" class="btn btn-primary">Ajouter à ma wishlist</button>
+                                     </form>
                                   </div>
                               </div>
 
@@ -176,25 +180,27 @@
         </div>
     </section><!-- /Portfolio Section -->
     <script>
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.details-link').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault(); // Empêche le lien de s'ouvrir
-      const card = this.closest('.portfolio-item').querySelector('.flip-card');
-      const cardInner = card.querySelector('.flip-card-inner');
-      
-      // Effectuer le premier flip
-      card.classList.add('flip');
-      
-      // Retirer la classe 'flip' après 1.5 seconde pour revenir à l'état initial
-      setTimeout(() => {
-        card.classList.remove('flip');
-      }, 8000); // 8000ms = 8 seconde
-    });
-  });
-});
+          document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.details-link').forEach(link => {
+              
+              link.addEventListener('click', function(e) {
+                e.preventDefault(); // Empêche le lien de se comporter comme un lien normal 
 
-</script> 
+                // Trouver l'élément parent le plus proche qui a la classe "portfolio-item"
+                const card = this.closest('.portfolio-item').querySelector('.flip-card');
+                // Sélectionner l'élément interne qui gère le retournement de la carte
+                const cardInner = card.querySelector('.flip-card-inner');
+                // Ajouter la classe "flip" pour activer l'animation de retournement
+                card.classList.add('flip');
+                
+                // Définir un délai pour retirer la classe "flip" après 8 secondes,
+                setTimeout(() => {
+                  card.classList.remove('flip');
+                }, 8000); // 8000ms = 8 secondes
+              });
+            });
+          });
+      </script> 
 
     <!-- Ateliers en ligne Section -->
     <section id="pricing" class="pricing section light-background">

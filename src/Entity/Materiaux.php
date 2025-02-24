@@ -50,9 +50,16 @@ class Materiaux
     #[ORM\Column(length: 255)]
     private ?string $photo = null;
 
+    /**
+     * @var Collection<int, Wishlistmateriaux>
+     */
+    #[ORM\ManyToMany(targetEntity: Wishlistmateriaux::class, mappedBy: 'id_materiel')]
+    private Collection $wishlistmateriauxes;
+
     public function __construct()
     {
         $this->id_commande = new ArrayCollection();
+        $this->wishlistmateriauxes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -192,6 +199,33 @@ class Materiaux
     public function setPhoto(string $photo): static
     {
         $this->photo = $photo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Wishlistmateriaux>
+     */
+    public function getWishlistmateriauxes(): Collection
+    {
+        return $this->wishlistmateriauxes;
+    }
+
+    public function addWishlistmateriaux(Wishlistmateriaux $wishlistmateriaux): static
+    {
+        if (!$this->wishlistmateriauxes->contains($wishlistmateriaux)) {
+            $this->wishlistmateriauxes->add($wishlistmateriaux);
+            $wishlistmateriaux->addIdMateriel($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWishlistmateriaux(Wishlistmateriaux $wishlistmateriaux): static
+    {
+        if ($this->wishlistmateriauxes->removeElement($wishlistmateriaux)) {
+            $wishlistmateriaux->removeIdMateriel($this);
+        }
 
         return $this;
     }

@@ -151,7 +151,8 @@
             <div class="card-body">
             <h4 class="card-title">Formulaire Materiaux</h4>
 
-            {{ form_start(form, {'attr': {'class': 'forms-sample'}}) }}
+           {{ form_start(form, {'attr': {'class': 'forms-sample', 'novalidate': 'novalidate'}}) }}
+
             <form class="forms-sample">
                 <div class="form-group">
                  <label for="nom_materiel">Nom du matériel</label>
@@ -218,7 +219,7 @@
             </div>
           </div>
         </div>
-            {# end formulaire #}
+{# end formulaire #}
        
           </div>
           <!-- content-wrapper ends -->

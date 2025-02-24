@@ -9,18 +9,44 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
+
 
 #[Route('/materiaux')]
 final class MateriauxController extends AbstractController
 {
     
     #[Route(name: 'app_materiaux_index', methods: ['GET'])]
-    public function index(MateriauxRepository $materiauxRepository): Response
-    {
-        return $this->render('backoff/materiaux/index.html.twig', [
-            'materiauxes' => $materiauxRepository->findAll(),
-        ]);
+public function index(MateriauxRepository $materiauxRepository): Response
+{
+    // Récupérer tous les matériaux
+    $materiaux = $materiauxRepository->findAll();
+
+    // Initialiser les tableaux pour les statistiques
+    $labels = [];
+    $data = [];
+
+    // Vérifier les seuils et ajouter les alertes
+    foreach ($materiaux as $materiel) {
+        $labels[] = $materiel->getNomMateriel();
+        $data[] = $materiel->getQuantiteStock();
+
+        if ($materiel->getQuantiteStock() <= $materiel->getSeuilMin()) {
+            $this->addFlash('alert', '⚠️ Stock faible pour : ' . $materiel->getNomMateriel());
+        }
     }
+
+    // Rendre la vue avec les données nécessaires
+    return $this->render('backoff/materiaux/index.html.twig', [
+        'materiauxes' => $materiaux,
+        'labels' => $labels,
+        'data' => $data,
+    ]);
+}
+
+    
+
     
 
     #[Route('/new', name: 'app_materiaux_new', methods: ['GET', 'POST'])]
@@ -80,4 +106,6 @@ final class MateriauxController extends AbstractController
 
         return $this->redirectToRoute('app_materiaux_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    
 }

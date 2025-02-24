@@ -80,7 +80,7 @@ class MateriauxType extends AbstractType
                 ]),
             ],
             'html5' => true, 
-            'scale' => 2, 
+            'scale' => 2,  // Définit le nombre de décimales affichées
             'attr' => [
                 'class' => 'form-control',
                 'placeholder' => 'Ex: 20.50',
@@ -137,12 +137,17 @@ class MateriauxType extends AbstractType
             ]
         ])
         ->add('id_fournisseur', EntityType::class, [
-            'class' => Fournisseur::class,
-            'choice_label' => 'nom_fournisseur',  // Spécifie la propriété à afficher pour chaque fournisseur
-            'placeholder' => 'Sélectionner un fournisseur',  // Optionnel
-            'attr' => ['class' => 'form-control'],
-            'required' => true,  
+            'class' => Fournisseur::class,  
+            'choice_label' => 'nom_fournisseur',  
+            'placeholder' => 'Sélectionner un fournisseur',  
+            'attr' => ['class' => 'form-control'],  
+            'constraints' => [
+                new Assert\NotBlank([
+                    'message' => 'Veuillez sélectionner un fournisseur.' 
+                ])
+            ]
         ]);
+        
         
     
     }

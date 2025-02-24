@@ -30,11 +30,29 @@
         <!-- Main CSS File -->
         <link href="../css/flipcard.css" rel="stylesheet">
         <link href="../css/main.css" rel="stylesheet">
+        <style>
+            @media (max-width: 768px) {
+                .search-box {
+                max-width: 100%;
+                }
+                .form-select {
+                width: 100%;
+                }
+            }
+
+            /* Focus style for select box */
+            .form-select:focus {
+                background-color: #e6e6e6; /* Subtle focus effect */
+                border-color: #007bff;
+            }
+            </style>
         
 
         
     </head>
     <body>
+   
+
     
         <header id="header" class="header d-flex align-items-center fixed-top">
             <div class="container-fluid container-xl position-relative d-flex align-items-center">
@@ -44,7 +62,7 @@
 
             <nav id="navmenu" class="navmenu">
                 <ul>
-                <li><a href="#hero" class="active">Accueil</a></li>
+                <li><a href="/front" class="active">Accueil</a></li>
                 <li class="dropdown"><a href="#"><span>Boutique</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
                         <li><a href="#">Produits</a></li>
@@ -90,6 +108,23 @@
   </div><!-- End Section Title -->
   
   <div class="container">
+            <!-- Search Box -->
+    <div class="search-box" style="display: flex; align-items: center; padding: 8px 12px; border-radius: 25px; background-color: #f5f5f5; width: 100%; max-width: 400px; margin-bottom: 20px; box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);">
+                <i class="fa fa-search" style="font-size: 20px; color: #333; margin-right: 8px;"></i>
+                <input id="searchInput" type="text" placeholder="Rechercher..." style="border: none; background-color: transparent; font-size: 16px; width: 100%; outline: none; color: #333;">
+            
+
+            <!-- Sort Box -->
+           
+            <select id="sortOrder" class="form-select" style="padding: 8px 12px; font-size: 16px; border-radius: 25px; border: none; background-color: #f5f5f5; color: #333; outline: none; cursor: pointer; width: auto; min-width: 200px; transition: background-color 0.3s ease, border-color 0.3s ease;">
+            <i class="fa fa-filter" style="font-size: 20px; color: #333; margin-right: 8px;"></i>
+                <option value="none">Aucun filtre</option>
+                <option value="ascending">Prix Croissant</option>
+                <option value="descending">Prix Décroissant</option>
+            </select>
+    </div>
+
+
 
     <!-- Parcourir les matériaux -->
     <div id="materiaux" class="row gy-4 isotope-container" data-aos="fade-up" data-aos-delay="200">
@@ -105,6 +140,9 @@
                             <p>{{ materiau.PrixUnitaire }} TND</p>
                             <a href="{{ asset('img/masonry-portfolio/' ~ materiau.photo) }}" title="{{ materiau.NomMateriel }}" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                             <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> 
+                            <form action="{{ path('wishlist_add', {'id': materiau.id}) }}" method="post">
+                                     <button type="submit" class="btn btn-primary">Ajouter à ma wishlist</button>
+                                     </form>
                         </div>
                     </div>
 
@@ -126,28 +164,90 @@
   </div><!-- End Container -->
 </section><!-- End Portfolio Section -->
 
-
-
- <script>
+<script>
 document.addEventListener('DOMContentLoaded', function () {
+
+  // Script pour gérer le flip de la carte
   document.querySelectorAll('.details-link').forEach(link => {
     link.addEventListener('click', function(e) {
       e.preventDefault(); // Empêche le lien de s'ouvrir
       const card = this.closest('.portfolio-item').querySelector('.flip-card');
-      const cardInner = card.querySelector('.flip-card-inner');
       
-      // Effectuer le premier flip
+      // Effectuer le flip de la carte
       card.classList.add('flip');
       
-      // Retirer la classe 'flip' après 1.5 seconde pour revenir à l'état initial
+      // Retirer la classe 'flip' après 8 secondes pour revenir à l'état initial
       setTimeout(() => {
         card.classList.remove('flip');
-      }, 8000); // 8000ms = 8 seconde
+      }, 8000); // 8000ms = 8 secondes
     });
   });
+
+  // Fonction de recherche
+  document.getElementById('searchInput').addEventListener('input', function() {
+    const searchValue = this.value.toLowerCase(); // Récupère la valeur de la recherche
+    const items = document.querySelectorAll('.portfolio-item'); // Sélectionne tous les éléments de portfolio
+    
+    items.forEach(item => {
+      const name = item.querySelector('.portfolio-info h4').textContent.toLowerCase(); // Récupère le nom du matériau
+      if (name.includes(searchValue)) {
+        item.style.display = ''; // Affiche l'élément si le nom correspond à la recherche
+      } else {
+        item.style.display = 'none'; // Cache l'élément si le nom ne correspond pas
+      }
+    });
+  });
+
+ // Stocker l'ordre original des éléments au début
+const originalItems = Array.from(document.querySelectorAll('.portfolio-item'));
+
+// Fonction pour trier les matériaux par prix
+function sortByPrice(sortOrder) {
+  const itemsArray = Array.from(document.querySelectorAll('.portfolio-item'));
+
+  // Si aucun filtre n'est sélectionné, remettre les éléments dans leur ordre d'origine
+  if (sortOrder === 'none') {
+    // Réinitialiser l'ordre des éléments à leur état original
+    const container = document.querySelector('.isotope-container');
+    originalItems.forEach(item => {
+      item.style.display = ''; // Assurer que les éléments sont visibles
+      container.appendChild(item); // Remettre les éléments dans le conteneur sans tri
+    });
+    return; // Ne pas trier, juste réinitialiser l'ordre
+  }
+
+  // Trier les éléments par prix (croissant ou décroissant)
+  itemsArray.sort((a, b) => {
+    const priceA = parseFloat(a.querySelector('.portfolio-info p').textContent.replace(' TND', '').trim());
+    const priceB = parseFloat(b.querySelector('.portfolio-info p').textContent.replace(' TND', '').trim());
+    
+    if (sortOrder === 'ascending') {
+      return priceA - priceB; // Tri croissant
+    } else if (sortOrder === 'descending') {
+      return priceB - priceA; // Tri décroissant
+    }
+  });
+
+  // Réafficher les éléments dans l'ordre trié
+  const container = document.querySelector('.isotope-container');
+  itemsArray.forEach(item => {
+    item.style.display = ''; // Assurer que les éléments sont visibles
+    container.appendChild(item); // Ajouter l'élément trié à la fin du conteneur
+  });
+}
+
+// Écouter le changement dans le sélecteur de tri
+document.getElementById('sortOrder').addEventListener('change', function() {
+  const sortOrder = this.value; // Récupérer la valeur sélectionnée (croissant, décroissant ou aucun filtre)
+  sortByPrice(sortOrder); // Appliquer le tri
 });
 
-</script>   
+
+
+});
+</script>
+
+ 
 {% endblock %}
         <footer id="footer" class="footer dark-background">
           <div class="container footer-top dark-background">

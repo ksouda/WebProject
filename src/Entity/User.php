@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Entity;
-
+use App\Entity\Wishlistmateriaux;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -36,6 +36,10 @@ class User
 
     #[ORM\Column(length: 255)]
     private ?string $adresse = null;
+    
+    #[ORM\OneToOne(mappedBy: 'user')]
+    private ?Wishlistmateriaux $wishlistmateriaux = null;
+    
 
     public function getId(): ?int
     {

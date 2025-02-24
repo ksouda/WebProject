@@ -17,8 +17,19 @@ final class FournisseurController extends AbstractController
     #[Route(name: 'app_fournisseur_index', methods: ['GET'])]
     public function index(FournisseurRepository $fournisseurRepository): Response
     {
+        $fournisseurs = $fournisseurRepository->findAll();
+        // Récupérer les statistiques (nombre de matériaux fournis par chaque fournisseur)
+        $labels = [];
+        $data = [];
+
+        foreach ($fournisseurs as $fournisseur) {
+        $labels[] = $fournisseur->getNomFournisseur(); // Nom du fournisseur
+        $data[] = count($fournisseur->getFournisseurM()); // Nombre de matériaux fournis
+    }
         return $this->render('backoff/fournisseur/index.html.twig', [
-            'fournisseurs' => $fournisseurRepository->findAll(),
+            'fournisseurs' => $fournisseurs,
+            'labels' => $labels,
+             'data' => $data,
         ]);
     }
 

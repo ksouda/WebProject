@@ -151,7 +151,7 @@
 <div class="card-body">
 <h4 class="card-title">Formulaire Fournisseur</h4>
 
-{{ form_start(form) }}
+{{ form_start(form, { 'attr': { 'novalidate': 'novalidate' } }) }}
     
     <label for="nom_fournisseur">Nom Fournisseur</label>
     {{ form_widget(form.nom_fournisseur, { 'attr': {'class': 'form-control'} }) }}
