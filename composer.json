@@ -9,14 +9,18 @@
         "ext-iconv": "*",
         "doctrine/dbal": "^3",
         "doctrine/doctrine-bundle": "^2.13",
+        "doctrine/doctrine-fixtures-bundle": "^4.0",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.3",
+        "dompdf/dompdf": "^3.1",
+        "knplabs/knp-snappy-bundle": "^1.10",
         "symfony/asset": "6.4.*",
         "symfony/asset-mapper": "6.4.*",
         "symfony/console": "6.4.*",
         "symfony/debug-bundle": "6.4.*",
         "symfony/dotenv": "6.4.*",
         "symfony/flex": "^2",
+        "symfony/form": "6.4.*",
         "symfony/framework-bundle": "6.4.*",
         "symfony/mailer": "6.4.*",
         "symfony/messenger": "6.4.*",
@@ -81,6 +85,7 @@
         }
     },
     "require-dev": {
+        "symfony/maker-bundle": "^1.62",
         "symfony/web-profiler-bundle": "6.4.*"
     }
 }

@@ -1,0 +1,7 @@
+knp_snappy:
+  pdf:
+    enabled: true
+    binary: '/usr/bin/wkhtmltopdf'  # Update this path if you're on Windows or Mac
+    options: []
+  image:
+    enabled: false

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Commande #{{ commande.id }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; font-size: 14px; }
+        h1 { text-align: center; }
+        .container { width: 80%; margin: 0 auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .status { padding: 5px; border-radius: 5px; }
+        .success { background-color: #28a745; color: white; }
+        .warning { background-color: #ffc107; color: black; }
+        .danger { background-color: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Commande #{{ commande.id }}</h1>
+    <p><strong>Date :</strong> {{ commande.dateCommande ? commande.dateCommande|date('d/m/Y') : 'N/A' }}</p>
+    <p><strong>Montant Total :</strong> {{ commande.montantTotal }} TND</p>
+    <p><strong>Adresse de Livraison :</strong> {{ commande.adresseLivraison }}</p>
+    <p><strong>Mode de Paiement :</strong> {{ commande.paiement }}</p>
+    <p><strong>Statut :</strong>
+        <span class="status {% if commande.statut == 'Confirmé' %}success{% elseif commande.statut == 'En attente' %}warning{% else %}danger{% endif %}">
+                {{ commande.statut }}
+            </span>
+    </p>
+
+
+</div>
+</body>
+</html>
