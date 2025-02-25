@@ -268,15 +268,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-{% for message in app.flashes('low_stock') %}
-    toastr.warning("{{ message }}", "Alerte Stock", {
-        closeButton: true,
-        progressBar: true,
-        positionClass: "toast-top-right",
-        timeOut: 5000
-    });
-{% endfor %}
+    function showLowStockNotification() {
+        {% for message in app.flashes('low_stock') %}
+            toastr.warning("{{ message }}", "Alerte Stock", {
+                closeButton: true,
+                progressBar: true,
+                positionClass: "toast-top-right",
+                timeOut: 5000
+            });
+        {% endfor %}
+    }
+
+    // Afficher la notification au chargement de la page
+    showLowStockNotification();
+
+    // Vérifier et afficher les notifications toutes les 30 secondes
+    setInterval(showLowStockNotification, 30000);
 });
+
 </script>
 
 

@@ -109,9 +109,15 @@ img {
                             <div class="flip-card-inner">
                                 <!-- Front of the card -->
                                 <div class="flip-card-front">
+                                {% if materiel.quantiteStock < 5 %}
+                                    <span class="badge bg-danger position-absolute top-0 start-100 translate-middle p-2 ">
+                                        Stock limité !
+                                    </span>
+                                {% endif %}
                                     <img src="{{ asset('img/masonry-portfolio/' ~ materiel.photo) }}" class="img-fluid" alt="{{ materiel.nomMateriel }}">
                                     <div>
                                         <h5>{{ materiel.nomMateriel }}</h5>
+                                      
                                     </div>
                                 </div>
                                 <!-- Back of the card -->
@@ -119,6 +125,12 @@ img {
                                     <h5>{{ materiel.nomMateriel }}</h5>
                                     <p>Description: {{ materiel.description }}</p>
                                     <p>Prix: {{ materiel.prixUnitaire }} TND</p>
+                                    <form action="{{ path('wishlist_remove', {'id': materiel.id}) }}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-link p-0 border-0 text-danger">
+                                            <i class="bi bi-trash fs-5"></i>
+                                        </button>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>

@@ -151,12 +151,16 @@
                                   <div class="portfolio-info">
                                       <h4>{{ materiau.NomMateriel }}</h4>
                                       <p>{{ materiau.PrixUnitaire }} TND</p>
+                                      <!-- Bouton Wishlist à gauche -->
+                                      <form action="{{ path('wishlist_add', {'id': materiau.id}) }}" method="post">
+                                          <button type="submit" class="btn btn-link p-0 border-0 bg-transparent">
+                                              <img src="{{ asset('img/favoris.png') }}" style="width: 40px; height: 40px;">
+                                          </button>
+                                      </form>
                                       <a href="{{ asset('img/masonry-portfolio/' ~ materiau.photo) }}" title="{{ materiau.NomMateriel }}" class="glightbox preview-link"><i class="bi bi-zoom-in"></i></a>
                                       <a href="portfolio-details.html" title="More Details" class="details-link"><i class="bi bi-link-45deg"></i></a> 
-                                      {# Ajouter le bouton "Ajouter à la wishlist" #}
-                                      <form action="{{ path('wishlist_add', {'id': materiau.id}) }}" method="post">
-                                     <button type="submit" class="btn btn-primary">Ajouter à ma wishlist</button>
-                                     </form>
+                                     
+
                                   </div>
                               </div>
 

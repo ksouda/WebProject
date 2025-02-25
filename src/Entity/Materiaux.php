@@ -56,6 +56,8 @@ class Materiaux
     #[ORM\ManyToMany(targetEntity: Wishlistmateriaux::class, mappedBy: 'id_materiel')]
     private Collection $wishlistmateriauxes;
 
+ 
+
     public function __construct()
     {
         $this->id_commande = new ArrayCollection();
@@ -229,4 +231,6 @@ class Materiaux
 
         return $this;
     }
+
+ 
 }

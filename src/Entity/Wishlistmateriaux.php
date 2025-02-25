@@ -28,6 +28,7 @@ class Wishlistmateriaux
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_ajout = null;
 
+
     public function __construct()
     {
         $this->id_materiel = new ArrayCollection();
@@ -85,4 +86,5 @@ class Wishlistmateriaux
 
         return $this;
     }
+
 }
