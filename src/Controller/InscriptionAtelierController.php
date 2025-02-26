@@ -74,10 +74,19 @@ class InscriptionAtelierController extends AbstractController
     );
 
     $mailer->send($email);
+    $inscriptionsQuery = $entityManager->getRepository(Inscriptionatelier::class)->createQueryBuilder('i')
+        ->leftJoin('i.atelier', 'a') // Jointure avec l'entité Atelier
+        ->where('i.id_user = :id_user')
+        ->setParameter('id_user', self::id_user)
+        ->orderBy('a.datecours', 'DESC') // Tri par datecours en ordre décroissant
+        ->getQuery();
+
+    // Exécuter la requête pour obtenir les résultats
+    $inscriptions = $inscriptionsQuery->getResult();
 
 
     return $this->render('frontoffice/front_atelier/inscription_atelier/inscriptionatelier.html.twig', [
-        'inscriptions' => $entityManager->getRepository(Inscriptionatelier::class)->findBy(['id_user' => $user]),
+        'inscriptions' =>  $inscriptions,
         'flash_message' => 'Vous êtes inscrit à un nouvel atelier!'
     ]);
 }

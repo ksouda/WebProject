@@ -56,11 +56,11 @@ final class AtelierenligneController extends AbstractController
         $pagination = $paginator->paginate(
             $atelierenlignesQuery,
             $request->query->getInt('page', 1), // Page actuelle
-            3 // Nombre d'éléments par page
+            5 // Nombre d'éléments par page
         );
 
         $totalItems = $pagination->getTotalItemCount();
-        $pageSize = 3;
+        $pageSize = 5;
         $pageCount = ceil($totalItems / $pageSize);
 
         // Get previous and next page numbers, ensuring they are within valid bounds
@@ -93,12 +93,12 @@ final class AtelierenligneController extends AbstractController
     $pagination = $paginator->paginate(
         $atelierenlignesQuery,
         $request->query->getInt('page', 1),
-        3
+        5
     );
     
 
     $totalItems = $pagination->getTotalItemCount();
-    $pageSize = 3;
+    $pageSize = 5;
     $pageCount = ceil($totalItems / $pageSize);
 
     // Get previous and next page numbers, ensuring they are within valid bounds

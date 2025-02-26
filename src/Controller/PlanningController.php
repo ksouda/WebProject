@@ -52,7 +52,7 @@ class PlanningController extends AbstractController
         
 
         // Passer les événements au frontend
-        return $this->render('backoff/planning/index.html.twig', [
+        return $this->render('backoff/atelier/planning/planning.html.twig', [
             'events' => json_encode($events)  // Passer les événements au frontend en format JSON
         ]);
     }

@@ -181,35 +181,42 @@
 
         {% endblock %}
         <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const statutFilter = document.getElementById("statutFilter");
-        const atelierItems = Array.from(document.querySelectorAll(".atelier-item"));
+        document.addEventListener("DOMContentLoaded", function () {
+    const statutFilter = document.getElementById("statutFilter");
+    const atelierItems = Array.from(document.querySelectorAll(".atelier-item"));
 
-        // Fonction pour filtrer les ateliers par statut
-        function filterAteliers() {
-            const selectedStatut = statutFilter.value;
+    // Fonction pour filtrer les ateliers par statut
+    function filterAteliers() {
+        const selectedStatut = statutFilter.value;
 
-            atelierItems.forEach(item => {
-                const statut = item.getAttribute("data-statut");
+        // Log pour vérifier le statut sélectionné et les statuts des ateliers
+        console.log("Filtre appliqué sur le statut : ", selectedStatut);
 
-                // Vérifier si le statut de l'atelier correspond au filtre sélectionné
-                if (selectedStatut === "" || statut === selectedStatut) {
-                    item.style.display = "block"; // Afficher l'atelier si le statut correspond
-                } else {
-                    item.style.display = "none"; // Cacher l'atelier si le statut ne correspond pas
-                }
-            });
-        }
+        atelierItems.forEach(item => {
+            const statut = item.getAttribute("data-statut");
 
-        // Ajouter l'écouteur d'événements pour le changement de sélection
-        statutFilter.addEventListener("change", function () {
-            filterAteliers(); // Appliquer le filtre au changement de statut
+            // Log pour vérifier les statuts des ateliers
+            console.log("Statut de l'atelier :", statut);
+
+            // Vérifier si le statut de l'atelier correspond au filtre sélectionné
+            if (selectedStatut === "" || statut === selectedStatut) {
+                item.style.display = "block"; // Afficher l'atelier si le statut correspond
+            } else {
+                item.style.display = "none"; // Cacher l'atelier si le statut ne correspond pas
+            }
         });
+    }
 
-        // Appliquer le filtrage au chargement de la page
-        filterAteliers();
+    // Ajouter l'écouteur d'événements pour le changement de sélection
+    statutFilter.addEventListener("change", function () {
+        filterAteliers(); // Appliquer le filtre au changement de statut
     });
-</script>
+
+    // Appliquer le filtrage au chargement de la page
+    filterAteliers();
+});
+
+        </script>
 
         <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
         <script src="{{asset('vendor/php-email-form/validate.js')}}"></script>
