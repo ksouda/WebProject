@@ -1,12 +1,21 @@
 framework:
     notifier:
+        # Définir les transports pour différents canaux
         chatter_transports:
+            # Exemple de transport Mercure (si vous utilisez Mercure pour la messagerie en temps réel)
+            mercure: '%env(MERCURE_DSN)%'
+
         texter_transports:
+            # Transport pour l'envoi de SMS via Twilio
+            twilio_sms: 'twilio://%env(TWILIO_SID)%:%env(TWILIO_AUTH_TOKEN)%@default'
+
+        # Politique de canaux en fonction de l'urgence du message
         channel_policy:
-            # use chat/slack, chat/telegram, sms/twilio or sms/nexmo
-            urgent: ['email']
-            high: ['email']
+            urgent: ['sms/twilio', 'sms/nexmo', 'email']
+            high: ['sms/twilio', 'sms/nexmo', 'email']
             medium: ['email']
             low: ['email']
+
+        # Destinataires des notifications administratives (par exemple, un administrateur pour recevoir toutes les notifications critiques)
         admin_recipients:
             - { email: admin@example.com }
