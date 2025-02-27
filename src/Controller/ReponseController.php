@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 #[Route('/reponse')]
 
@@ -66,18 +67,6 @@ class ReponseController extends AbstractController
     }
 
 
-    #[Route('/client/liste', name: 'app_reponse_liste_client')]
-    public function listeClient(EntityManagerInterface $entityManager): Response
-    {
-        // Récupérer toutes les réclamations avec leurs réponses
-        $reclamations = $entityManager->getRepository(Reclamation::class)->findAll();
-
-        return $this->render('backoff/admin/reclamation/liste.html.twig', [
-            'reclamations' => $reclamations,
-        ]);
-    }
-
-
     #[Route('/modifier/{id}', name: 'app_reponse_modifier')]
     public function modifier(Reponse $reponse, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -104,16 +93,23 @@ class ReponseController extends AbstractController
         ]);
     }
     
-
-    /*
-    #[Route('/admin/liste', name: 'app_reponse_liste_admin')]
-    public function liste(EntityManagerInterface $entityManager): Response
+    #[Route('/admin/archives', name: 'app_reclamation_archive')]
+    public function archives(EntityManagerInterface $entityManager, Request $request, PaginatorInterface $paginator): Response
     {
-        $reclamations = $entityManager->getRepository(Reclamation::class)->findAll();
+        $queryBuilder = $entityManager->getRepository(Reclamation::class)->createQueryBuilder('r')
+            ->where('r.statut = :statut')
+            ->setParameter('statut', 'Répondue');
     
-        return $this->render('backoff/admin/reclamation/liste.html.twig', [
-            'reclamations' => $reclamations,
+        $pagination = $paginator->paginate(
+            $queryBuilder,
+            $request->query->getInt('page', 1),
+            4
+        );
+        
+        return $this->render('backoff/admin/reclamation/archives.html.twig', [
+            'pagination' => $pagination,
         ]);
-    }*/
+    }
+
 
 }

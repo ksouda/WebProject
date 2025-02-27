@@ -9,6 +9,9 @@
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <!-- Vendor CSS Files -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -80,7 +83,7 @@
                 </tr>
                 <tr>
                     <th>Description :</th>
-                    <td>{{ reclamation.description }}</td>
+                    <td>{{ reclamationDescription }}</td>
                 </tr>
                 <tr>
                     <th>Statut :</th>
@@ -90,24 +93,22 @@
                     <th>Date :</th>
                     <td>{{ reclamation.dateReclamation|date('Y-m-d') }}</td>
                 </tr>
-                                <tr>
+                <tr>
                     <th>Réponse :</th>
                     <td>
-                        {% if reclamation.reponse %}
+                        {% if reclamation.statut == 'Répondue' and reclamation.reponse %}
                             {{ reclamation.reponse.description }}
-                            <br>
-
+                            <tr>
+                                <th>Date de la réponse :</th>
+                                <td>{{ reclamation.reponse.dateReponse|date('Y-m-d') }}</td>
+                            </tr>
+                        {% elseif reclamation.statut == 'En cours' %}
+                            <span class="text-muted">La réponse est en cours de traitement .</span>
                         {% else %}
                             <span class="text-danger">Pas encore répondu</span>
                         {% endif %}
                     </td>
                 </tr>
-                {% if reclamation.reponse %}
-                    <tr>
-                        <th>Date de la réponse :</th>
-                        <td>{{ reclamation.reponse.dateReponse|date('Y-m-d') }}</td>
-                    </tr>
-                {% endif %}
             </tbody>
             </table>
         </div>
@@ -122,6 +123,8 @@
                 <button type="submit" class="btn btn-secondary btn-spacing mt-3" onclick="return confirm('Voulez-vous vraiment supprimer cette réclamation ?');">Supprimer</button>
             </form>
         </div>
+    {% elseif reclamation.statut == 'Répondue' %}
+        <a href="{{ path('app_reclamation_pdf', {id: reclamation.id}) }}" class="btn btn-secondary mt-3">PDF</a>
     {% endif %}
 
     <a href="{{ path('app_reclamation_liste_client') }}" class="btn btn-secondary mt-3">Retour</a>

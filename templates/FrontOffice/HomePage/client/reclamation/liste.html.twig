@@ -30,7 +30,7 @@
     <!-- Main CSS File -->
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
 
-    
+
 
 {% endblock %}
 
@@ -92,7 +92,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for reclamation in reclamations %}  
+                    {% for reclamation in reclamations %} 
                         <tr>
                             <td>{{ reclamation.id }}</td>
                             <td>{{ reclamation.titre }}</td>
@@ -110,6 +110,9 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <dic class="pagination">
+                {{ knp_pagination_render(reclamations) }}
+            </div>
         </div>
         <h2 class="text-center">Ajouter une Nouvelle Réclamation</h2>
         <div class="text-center"> <!-- Ajouter une div pour centrer le bouton -->

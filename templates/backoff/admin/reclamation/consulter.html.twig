@@ -93,7 +93,8 @@
           </a>
           <div class="collapse" id="auth">
             <ul class="nav flex-column sub-menu">
-              <li class="nav-item"> <a class="nav-link" href="#">Table</a></li>
+              <li class="nav-item"> <a class="nav-link" href="{{ path('app_reclamation_liste_admin') }}">Table</a></li>
+              <li class="nav-item"> <a class="nav-link" href="{{ path('app_reclamation_archive') }}"> Archive </a></li>
             </ul>
           </div>
         </li>
@@ -102,6 +103,10 @@
 
 
     <!-- Contenu principal -->
+
+    {# At the beginning of the template, check the 'source' query parameter #}
+    {% set source = app.request.query.get('source') %}
+
     <div class="main-panel">
       <div class="content-wrapper">
         <div class="title-gestion"> Détails de la Réclamation </div>
@@ -117,7 +122,7 @@
                 </tr>
                 <tr>
                     <th>Description :</th>
-                    <td>{{ reclamation.description }}</td>
+                    <td>{{ reclamationDescription }}</td>
                 </tr>
                 <tr>
                     <th>Statut :</th>
@@ -157,7 +162,7 @@
                 </div>
             {% endif %}
 
-            <a href="{{ path('app_reclamation_liste_admin') }}" class="btn btn-secondary">Retour</a>
+            <a href="{% if source == 'archive' %}{{ path('app_reclamation_archive') }}{% else %}{{ path('app_reclamation_liste_admin') }}{% endif %}" class="btn btn-secondary">Retour</a>
         </div>
     </div>
 </div>

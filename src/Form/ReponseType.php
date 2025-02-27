@@ -14,7 +14,7 @@ class ReponseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $forbiddenWords = ['débile', 'bête'];
+        $forbiddenWords = ['débile', 'stupid'];
         $pattern = '/\b(?:' . implode('|', $forbiddenWords) . ')\b/i';
 
         $builder

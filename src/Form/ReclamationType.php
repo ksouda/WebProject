@@ -11,11 +11,12 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
+
 class ReclamationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $forbiddenWords = ['débile', 'bête'];
+        $forbiddenWords = ['débile', 'stupid'];
         $pattern = '/\b(?:' . implode('|', $forbiddenWords) . ')\b/i';
 
         $builder
@@ -55,11 +56,7 @@ class ReclamationType extends AbstractType
                         'max' => 1000,
                         'maxMessage' => 'La description ne peut pas dépasser {{ limit }} caractères.',
                     ]),
-                    new Assert\Regex([
-                        'pattern' => $pattern,
-                        'match' => false, 
-                        'message' => 'La description contient des mots interdits.',
-                    ]),
+                    
                 ],
             ]);}        
 
