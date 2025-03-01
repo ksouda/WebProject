@@ -1,44 +1,51 @@
 <?php
 namespace App\Service;
 
-use Dompdf\Dompdf;
-use Dompdf\Options;
+use Knp\Snappy\Pdf;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PdfService
 {
-    public function generateReclamationPdf($reclamation)
+    private $snappy;
+    private $parameterBag;
+
+    public function __construct(Pdf $snappy, ParameterBagInterface $parameterBag)
     {
-        $options = new Options();
-        $options->set('isHtml5ParserEnabled', true);
-        $options->set('isPhpEnabled', true);
-
-        $dompdf = new Dompdf($options);
-
-        $html = $this->getReclamationHtml($reclamation);
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
-
-        $dompdf->render();
-
-        return $dompdf->output();
+        $this->snappy = $snappy;
+        $this->parameterBag = $parameterBag;
     }
 
-    private function getReclamationHtml($reclamation)
+    public function generateReclamationPdf($reclamation)
     {
-        // Chemin du logo
-        $logoPath = __DIR__ . '/../../public/img/logo 2.png'; // Ajuste selon ton projet
+        // Récupérer le chemin absolu de l'image
+        $imagePath = $this->parameterBag->get('kernel.project_dir') . '/public/img/logo 2.png';
+        $imageData = base64_encode(file_get_contents($imagePath));
 
-        // Vérifie si le fichier existe
-        if (file_exists($logoPath)) {
-            $logoData = base64_encode(file_get_contents($logoPath));
-            $logoSrc = 'data:image/png;base64,' . $logoData;
-        } else {
-            $logoSrc = ''; // Pas de logo si fichier manquant
-        }
+        // Générer le HTML du PDF
+        $html = $this->generateReclamationHtml($reclamation, $imageData);
 
-        return '
-        <html>
+        // Utiliser wkhtmltopdf pour générer le PDF
+        $pdfContent = $this->snappy->getOutputFromHtml($html, [
+            'enable-local-file-access' => true, // Autoriser l'accès aux fichiers locaux
+            'no-stop-slow-scripts' => true,
+            'javascript-delay' => 1000,
+            'viewport-size' => '1280x1024',
+        ]);
+
+        return $pdfContent;
+    }
+
+    private function generateReclamationHtml($reclamation, $base64Image)
+    {
+        return "
+            
+        <!DOCTYPE html>
+        <html lang='fr'>
             <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <title>Détails de la Réclamation</title>
+                <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css'>
                 <style>
                     body { font-family: Arial, sans-serif; font-size: 12px; line-height: 1.6; text-align: center; }
                     h1 { color: white; font-size: 18px; margin-bottom: 20px; text-align: center; }
@@ -51,28 +58,27 @@ class PdfService
                 </style>
             </head>
             <body>
-                <div class="header">
-                    ' . ($logoSrc ? '<img src="' . $logoSrc . '" class="logo" />' : '') . '
-                    <h1>Détails de la Réclamation</h1>
-                </div>
-                <table>
-                    <tr><th>ID :</th><td>' . $reclamation->getId() . '</td></tr>
-                    <tr><th>Titre :</th><td>' . $reclamation->getTitre() . '</td></tr>
-                    <tr><th>Description :</th><td>' . $reclamation->getDescription() . '</td></tr>
-                    <tr><th>Statut :</th><td>' . $reclamation->getStatut() . '</td></tr>
-                    <tr><th>Date :</th><td>' . $reclamation->getDateReclamation()->format('Y-m-d') . '</td></tr>
-                    <tr><th>Réponse :</th><td>' . ($reclamation->getReponse() ? $reclamation->getReponse()->getDescription() : 'Pas encore répondu') . '</td></tr>
-                    <tr><th>Date de la réponse :</th><td>' . ($reclamation->getReponse() ? $reclamation->getReponse()->getDateReponse()->format('Y-m-d') : 'Pas encore répondu') . '</td></tr>
-                </table>
-                <div class="footer">
-                    Généré le : ' . date("Y-m-d H:i:s") . '<br>
-                    <a href="https://127.0.0.1:8000/reclamation/client/liste" target="_blank" style="color: blue; text-decoration: underline;">
-                    Voir toutes les réclamations
-                    </a>
+                <div class='container'>
+                    <div class='header'>
+                        <img src='data:image/png;base64,{$base64Image}' class='logo' alt='Logo'>
+                        <h1>Détails de la Réclamation</h1>
+                    </div>
+                    <table class='table table-bordered mt-4'>
+                        <tr><th>ID :</th><td>{$reclamation->getId()}</td></tr>
+                        <tr><th>Titre :</th><td>{$reclamation->getTitre()}</td></tr>
+                        <tr><th>Description :</th><td>{$reclamation->getDescription()}</td></tr>
+                        <tr><th>Statut :</th><td>{$reclamation->getStatut()}</td></tr>
+                        <tr><th>Date :</th><td>{$reclamation->getDateReclamation()->format('Y-m-d')}</td></tr>
+                        <tr><th>Réponse :</th><td>{$reclamation->getReponse()->getDescription()}</td></tr>
+                        <tr><th>Date de la Réponse :</th><td>{$reclamation->getReponse()->getDateReponse()->format('Y-m-d')}</td></tr>
+                    </table>
+                    <p class='text-muted text-center'>
+                        Généré le : " . (new \DateTime())->format('Y-m-d H:i:s') . "<br>
+                        <a href='https://127.0.0.1:8000/reclamation/client/liste' target='_blank'>Cliquez ici pour Voir toutes vos réclamations</a>
+                    </p>
                 </div>
             </body>
-        </html>';
+        </html>
+        ";
     }
 }
-
-

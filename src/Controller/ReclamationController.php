@@ -14,17 +14,18 @@ use Knp\Component\Pager\PaginatorInterface;
 use App\Service\FiltrageService;
 use App\Service\PdfService;
 
+
 #[Route('/reclamation')]
 class ReclamationController extends AbstractController
 {
 
     private $filtrageService;
-    private $pdfService;
+    //private $pdfService;
 
     public function __construct(FiltrageService $filtrageService, PdfService $pdfService)
     {
         $this->filtrageService = $filtrageService;
-        $this->pdfService = $pdfService;
+        //$this->pdfService = $pdfService;
     }
 
 
@@ -175,7 +176,7 @@ public function consulterClient(Reclamation $reclamation, EntityManagerInterface
         'reponseExiste' => $reponseExiste,
     ]);
 }
-
+/*
 #[Route('/reclamation/{id}/pdf', name: 'app_reclamation_pdf')]
 public function generatePdf(Reclamation $reclamation): Response
 {
@@ -196,8 +197,7 @@ public function generatePdf(Reclamation $reclamation): Response
             'Content-Disposition' => 'inline; filename="reclamation_' . $reclamation->getId() . '.pdf"'
         ]
     );
-}
-
+}*/
 
 
 

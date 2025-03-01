@@ -124,7 +124,7 @@
             </form>
         </div>
     {% elseif reclamation.statut == 'Répondue' %}
-        <a href="{{ path('app_reclamation_pdf', {id: reclamation.id}) }}" class="btn btn-secondary mt-3">PDF</a>
+        <a href="{{ path('generate_pdf', {id: reclamation.id}) }}" class="btn btn-secondary mt-3">PDF</a>
     {% endif %}
 
     <a href="{{ path('app_reclamation_liste_client') }}" class="btn btn-secondary mt-3">Retour</a>
