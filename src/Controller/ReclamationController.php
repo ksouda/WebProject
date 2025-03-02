@@ -20,12 +20,12 @@ class ReclamationController extends AbstractController
 {
 
     private $filtrageService;
-    //private $pdfService;
+    
 
-    public function __construct(FiltrageService $filtrageService, PdfService $pdfService)
+    public function __construct(FiltrageService $filtrageService)
     {
         $this->filtrageService = $filtrageService;
-        //$this->pdfService = $pdfService;
+        
     }
 
 
@@ -176,28 +176,7 @@ public function consulterClient(Reclamation $reclamation, EntityManagerInterface
         'reponseExiste' => $reponseExiste,
     ]);
 }
-/*
-#[Route('/reclamation/{id}/pdf', name: 'app_reclamation_pdf')]
-public function generatePdf(Reclamation $reclamation): Response
-{
-    // Vérifier si la réclamation a une réponse
-    if ($reclamation->getStatut() !== 'Répondue') {
-        return $this->redirectToRoute('app_reclamation_consulter_client', ['id' => $reclamation->getId()]);
-    }
 
-    // Générer le PDF avec le service
-    $pdfContent = $this->pdfService->generateReclamationPdf($reclamation);
-
-    // Retourner le PDF sous forme de réponse avec le bon type MIME
-    return new Response(
-        $pdfContent,
-        200,
-        [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="reclamation_' . $reclamation->getId() . '.pdf"'
-        ]
-    );
-}*/
 
 
 
