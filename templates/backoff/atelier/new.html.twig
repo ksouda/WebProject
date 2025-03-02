@@ -1,10 +1,21 @@
 <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Atelierenligne</title>
 
-<title>New Atelierenligne</title>
+    <!-- Inclure SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
 
 {% block body %}
-
     {{ include('backoff/atelier/_form.html.twig') }}
+    <a href="{{ path('app_atelierenligne') }}">Back to list</a>
 
-    <a href="{{ path('app_atelierenligne') }}">back to list</a>
+    
 {% endblock %}
+
+</body>
+</html>

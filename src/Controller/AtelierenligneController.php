@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpClient\HttpClient;
+
 
 
 #[Route('/atelierenligne')]
@@ -120,8 +122,8 @@ final class AtelierenligneController extends AbstractController
     {
         $atelierenligne = new Atelierenligne();
 
+        // Récupérer l'utilisateur (adapte selon ta logique)
         $user = $entityManager->getRepository(User::class)->find(self::id_user);
-
         if ($user) {
             $atelierenligne->setIdUser($user);
         } else {
@@ -133,17 +135,67 @@ final class AtelierenligneController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Enregistrer les données dans la base de données avant la prédiction
             $entityManager->persist($atelierenligne);
-            $entityManager->flush();
+            $entityManager->flush(); // Commit dans la base de données
 
-            return $this->redirectToRoute('app_atelierenligne', [], Response::HTTP_SEE_OTHER);
+            // Extraire les valeurs du formulaire pour la prédiction
+            $dateCours = $atelierenligne->getDatecours();  // instance de DateTime
+            $heureDebut = (int)$dateCours->format('H');      // Extrait l'heure
+            $dureeAtelier = $atelierenligne->getDuree();
+            $categorie = $atelierenligne->getCategorie();     // Ex: "peinture"
+            $niveauDiff = $atelierenligne->getNiveauDiff();     // Ex: "débutant"
+            $jourSemaine = (int)$dateCours->format('N');      // 1 = lundi, 7 = dimanche
+
+            // Calculer l'heure pointe
+            $heurePointe = ($heureDebut >= 9 && $heureDebut <= 18) ? 1 : 0; // 1 si entre 9 et 18, sinon 0
+
+            // Préparer les données pour l'API
+            $data = [
+                'heure_debut' => $heureDebut,
+                'duree_atelier' => $dureeAtelier,
+                'heure_pointe' => $heurePointe,  // Ajouter l'heure_pointe
+                'weekend' => ($jourSemaine >= 6) ? 1 : 0,  // Weekend = 1 si samedi ou dimanche
+                'categorie_broderie' => $categorie === 'broderie' ? 1 : 0,
+                'categorie_tricot' => $categorie === 'tricot' ? 1 : 0,
+                'categorie_peinture' => $categorie === 'peinture' ? 1 : 0,
+                'categorie_poterie' => $categorie === 'poterie' ? 1 : 0,
+                'categorie_couture' => $categorie === 'couture' ? 1 : 0,
+                'categorie_bijouterie' => $categorie === 'bijouterie' ? 1 : 0,
+                'jour_semaine_1' => ($jourSemaine == 1) ? 1 : 0,
+                'jour_semaine_2' => ($jourSemaine == 2) ? 1 : 0,
+                'jour_semaine_3' => ($jourSemaine == 3) ? 1 : 0,
+                'jour_semaine_4' => ($jourSemaine == 4) ? 1 : 0,
+                'jour_semaine_5' => ($jourSemaine == 5) ? 1 : 0,
+                'jour_semaine_6' => ($jourSemaine == 6) ? 1 : 0,
+                'jour_semaine_7' => ($jourSemaine == 7) ? 1 : 0,
+                'niveau_diff_debutant' => ($niveauDiff === 'debutant') ? 1 : 0,
+                'niveau_diff_intermediaire' => ($niveauDiff === 'intermediaire') ? 1 : 0,
+                'niveau_diff_avance' => ($niveauDiff === 'avance') ? 1 : 0,
+            ];
+
+            // Appeler l'API Flask via HttpClient
+            $client = HttpClient::create();
+            $response = $client->request('POST', 'http://127.0.0.1:5000/predict', [
+                'json' => $data,
+            ]);
+
+            // Récupérer la prédiction renvoyée par l'API
+            $responseData = $response->toArray();
+            $predictedParticipants = $responseData['prediction'] ?? 'N/A';
+
+            // Optionnel : Tu peux ajouter un flash ou afficher la prédiction dans la vue
+            $this->addFlash('success', 'Prédiction de: ' . $predictedParticipants . ' participants pour votre atelier.');
+
+            return $this->redirectToRoute('app_atelierenligne');  // Redirection vers la page des ateliers
         }
 
         return $this->render('backoff/atelier/new.html.twig', [
             'atelierenligne' => $atelierenligne,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
+
 
 
     #[Route('/{id}/edit', name: 'app_atelierenligne_edit', methods: ['GET', 'POST'])]

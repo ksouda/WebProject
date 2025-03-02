@@ -21,7 +21,7 @@ use Symfony\Component\Mime\Email;
 
 class InscriptionAtelierController extends AbstractController
 {
-    const id_user = 3; 
+    const id_user = 5; 
     
 
     #[Route('/atelier/inscription/{id}', name: 'app_inscription_atelier')]
@@ -74,6 +74,7 @@ class InscriptionAtelierController extends AbstractController
     );
 
     $mailer->send($email);
+    
     $inscriptionsQuery = $entityManager->getRepository(Inscriptionatelier::class)->createQueryBuilder('i')
         ->leftJoin('i.atelier', 'a') // Jointure avec l'entité Atelier
         ->where('i.id_user = :id_user')
