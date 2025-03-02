@@ -274,8 +274,10 @@ h1 {
     <script src="{{ asset('build/assets/js/jquery.cookie.js') }}" type="text/javascript"></script>
     <script src="{{ asset('build/assets/js/dashboard.js') }}"></script>
     
-    <script>
+   <script>
    document.addEventListener('DOMContentLoaded', function() {
+    
+
     var calendarEl = document.getElementById('calendar');
     var events = {{ events|raw }}; // Les événements passés depuis Symfony
 
@@ -303,6 +305,11 @@ h1 {
         }
     });
 
+    if (FullCalendar && typeof FullCalendar.Calendar === "function") {
+    console.log("FullCalendar est bien chargé et fonctionnel !");
+    } else {
+        console.log("Problème avec FullCalendar !");
+    }
     var calendar = new FullCalendar.Calendar(calendarEl, {
         locale: 'fr',
         initialView: 'dayGridMonth', // Mode mois par défaut
@@ -348,6 +355,7 @@ h1 {
                        </div>`
             };
         }
+        
     });
 
     calendar.render();
@@ -359,6 +367,6 @@ function formatTime(date) {
     var minutes = date.getMinutes().toString().padStart(2, '0');
     return hours + ':' + minutes;
 }
-
 </script>
+
 {% endblock %}

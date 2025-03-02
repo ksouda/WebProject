@@ -7,7 +7,7 @@
     <title>{% block title %}Back Office EDAYETNA{% endblock %}</title>
     <!-- plugins:css -->
     {% block css %}
-    
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
       <link href="{{ asset('build/assets/vendors/feather/feather.css') }}" rel="stylesheet">
       <link href="{{ asset('build/assets/vendors/css/vendor.bundle.base.css') }}" rel="stylesheet">
       <link href="{{ asset('build/assets/vendors/css/vendor.bundle.base.css') }}" rel="stylesheet">
@@ -269,6 +269,20 @@
           {% endif %}
       </div>
     </div>
+    {% if app.session.flashbag.has('success') %}
+    <script>
+        // Récupérer le message flash et afficher un pop-up SweetAlert
+        var successMessage = '{{ app.session.flashbag.get('success')|first }}';
+
+        Swal.fire({
+            title: 'Atelier créé avec succès!',
+            text: successMessage,
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        });
+    </script>
+{% endif %}
+
     <!-- plugins:js -->
     {% block js %}
     <script>

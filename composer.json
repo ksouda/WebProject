@@ -1,7 +1,7 @@
 {
     "type": "project",
     "license": "proprietary",
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
         "php": ">=8.1",
@@ -31,11 +31,13 @@
         "symfony/translation": "6.4.*",
         "symfony/twig-bundle": "6.4.*",
         "symfony/validator": "6.4.*",
+        "symfony/webpack-encore-bundle": "^2.2",
         "symfony/yaml": "6.4.*",
         "twig/cssinliner-extra": "^3.20",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/inky-extra": "^3.20",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+        "yohang/calendr": "^3.0"
     },
     "config": {
         "allow-plugins": {
